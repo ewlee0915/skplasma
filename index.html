@@ -20,9 +20,7 @@
       --value-row-height: 42px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -31,9 +29,7 @@
       font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
     }
 
-    [hidden] {
-      display: none !important;
-    }
+    [hidden] { display: none !important; }
 
     .workspace {
       max-width: 800px;
@@ -66,32 +62,7 @@
       text-align: center;
     }
 
-    .intro {
-      font-size: calc(12px + 2pt);
-      text-align: center;
-    }
-
-    .app-logo {
-      margin-bottom: 16px;
-      text-align: center;
-    }
-
-    .app-logo img,
-    .brand img {
-      width: 130px;
-      height: auto;
-    }
-
-    .app-logo img {
-      display: block;
-      margin: 0 auto;
-    }
-
-    input,
-    button,
-    select {
-      font: inherit;
-    }
+    input, button, select { font: inherit; }
 
     button {
       padding: 10px 18px;
@@ -107,10 +78,51 @@
       cursor: not-allowed;
     }
 
-    /* 2. 원장 입력 및 계산 상태 */
+    .app-logo img, .brand img {
+      width: 130px;
+      height: auto;
+    }
+
+    /* 2. 메인 입력 화면 */
+    .input-panel {
+      padding: 24px 18px 28px;
+      margin-bottom: 11px;
+    }
+
+    .app-logo {
+      margin-bottom: 5px;
+      text-align: center;
+    }
+
+    .app-logo img {
+      display: block;
+      margin: 0 auto;
+    }
+
+    .input-panel h1 { margin: 0; }
+
+    .intro {
+      margin: 27px 0 16px;
+      font-size: calc(12px + 2pt);
+      line-height: 1.9;
+      text-align: center;
+    }
+
+    .input-notice {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: start;
+      column-gap: 5px;
+      margin: 0 24px 16px;
+      line-height: 1.9;
+      text-align: left;
+    }
+
     #ledger {
-      width: 100%;
-      height: 100px;
+      display: block;
+      width: 90%;
+      margin: 0 auto;
+      height: 75px;
       padding: 12px;
       border: 1px solid #ccd2da;
       border-radius: 6px;
@@ -119,15 +131,23 @@
     }
 
     #ledger::placeholder {
+      letter-spacing: 2px;
       text-align: center;
     }
 
     .controls {
       display: flex;
       align-items: center;
+      justify-content: center;
       flex-wrap: wrap;
       gap: 12px;
-      margin-top: 14px;
+      margin-top: 10px;
+    }
+
+    .controls label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .controls input {
@@ -136,11 +156,26 @@
       border-radius: 4px;
     }
 
+    #month-end-guide { white-space: nowrap; }
+
+    .input-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .input-actions button,
+    #calculation-complete {
+      padding: 12px 20px;
+    }
+
     #calculation-complete {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 10px 18px;
       border-radius: 5px;
       background: #278443;
       color: #fff;
@@ -156,23 +191,19 @@
       margin-top: 12px;
       font-size: 13px;
       white-space: pre-wrap;
+      text-align: center;
     }
 
-    #message:empty {
-      display: none;
-    }
+    #message:empty { display: none; }
 
     #message.message-error {
       color: #c00000;
       font-weight: 600;
       line-height: 1.7;
-      text-align: center;
     }
 
     /* 3. 결제청구서 */
-    .sheet-wrap {
-      overflow-x: auto;
-    }
+    .sheet-wrap { overflow-x: auto; }
 
     .sheet {
       width: 100%;
@@ -248,8 +279,7 @@
       table-layout: fixed;
     }
 
-    th,
-    td {
+    th, td {
       padding: 6px 5px;
       border: 1px solid #222;
       text-align: center;
@@ -261,13 +291,8 @@
       font-weight: 600;
     }
 
-    table tr > :first-child {
-      border-left: 0;
-    }
-
-    table tr > :last-child {
-      border-right: 0;
-    }
+    table tr > :first-child { border-left: 0; }
+    table tr > :last-child { border-right: 0; }
 
     .summary {
       border-top: 2px solid #000;
@@ -299,9 +324,7 @@
       font-weight: bold;
     }
 
-    .summary .deadline-head {
-      background: var(--brown);
-    }
+    .summary .deadline-head { background: var(--brown); }
 
     .summary td.deadline-value {
       padding-left: 9px;
@@ -321,9 +344,7 @@
       border-top: 2px solid #000;
     }
 
-    .detail th {
-      height: 32px;
-    }
+    .detail th { height: 32px; }
 
     #report .summary tbody td,
     #report .detail tbody td,
@@ -366,21 +387,10 @@
       background-size: 3px 3px;
     }
 
-    .bill-left {
-      border-left: 3px solid var(--red);
-    }
-
-    .bill-right {
-      border-right: 3px solid var(--red);
-    }
-
-    .bill-top {
-      border-top: 3px solid var(--red);
-    }
-
-    .bill-bottom {
-      border-bottom: 3px solid var(--red);
-    }
+    .bill-left { border-left: 3px solid var(--red); }
+    .bill-right { border-right: 3px solid var(--red); }
+    .bill-top { border-top: 3px solid var(--red); }
+    .bill-bottom { border-bottom: 3px solid var(--red); }
 
     .detail tbody tr:nth-child(3) > td,
     .detail tbody tr:nth-child(4) > td {
@@ -406,9 +416,7 @@
       font-weight: bold;
     }
 
-    .detail tfoot .amount {
-      border-bottom: 3px solid var(--red);
-    }
+    .detail tfoot .amount { border-bottom: 3px solid var(--red); }
 
     .note-input {
       display: block;
@@ -449,46 +457,93 @@
       overflow-wrap: anywhere;
     }
 
-    .note-input:focus,
-    .comment:focus,
-    #recipient:focus {
+    .note-input:focus, .comment:focus, #recipient:focus {
       outline: 2px solid var(--navy);
       outline-offset: 1px;
     }
 
+    /* 4. 출력 도구 모음 */
     .toolbar {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 15px;
+      gap: 12px;
+      margin-top: 20px;
+      text-align: center;
     }
 
-    #save-png:not(:disabled) {
-      background: #1769aa;
+    .toolbar-row {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .toolbar-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: nowrap;
+      gap: 10px;
+      width: max-content;
+      margin: 0 auto;
+    }
+
+    .toolbar-title {
+      flex-shrink: 0;
+      padding: 10px 12px;
+      border: 1px solid #ccd5df;
+      border-radius: 5px;
+      background: #e3e9f0;
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+
+    .toolbar-buttons button {
+      flex-shrink: 0;
+      padding: 10px 16px;
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+
+    .toolbar-arrow {
+      flex-shrink: 0;
+      color: #8393a5;
+      font-size: 11px;
+      line-height: 1;
+    }
+
+    .toolbar-divider {
+      flex-shrink: 0;
+      color: #99a5b3;
+      font-weight: 600;
+    }
+
+    #save-png:not(:disabled) { background: #1769aa; }
+
+    .print-guide {
+      width: 100%;
+      margin: 0;
+      overflow-x: auto;
+      text-align: center;
+      white-space: nowrap;
     }
 
     #export-status {
       width: 100%;
+      margin: 0;
       white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      text-align: center;
     }
 
-    #export-status:empty {
-      display: none;
-    }
+    #export-status:empty { display: none; }
+    #export-status.export-error { color: #c00000; }
 
-    #export-status.export-error {
-      color: #c00000;
-    }
-
-    /* 4. 검증 결과 */
-    #validation {
-      margin-top: 22px;
-    }
-
-    #validation summary {
-      cursor: pointer;
-    }
+    /* 5. 검증 결과 */
+    #validation { margin-top: 22px; }
+    #validation summary { cursor: pointer; }
 
     #validation > .validation-title {
       display: list-item;
@@ -496,27 +551,16 @@
       font-weight: 700;
     }
 
-    #validation[open] > .validation-title {
-      margin-bottom: 16px;
-    }
+    #validation[open] > .validation-title { margin-bottom: 16px; }
 
-    .error,
-    .warning {
+    .error, .warning {
       white-space: pre-wrap;
       line-height: 1.7;
     }
 
-    .error {
-      color: #ad1027;
-    }
-
-    .warning {
-      color: #856118;
-    }
-
-    .audit-details {
-      margin-top: 14px;
-    }
+    .error { color: #ad1027; }
+    .warning { color: #856118; }
+    .audit-details { margin-top: 14px; }
 
     .audit-scroll {
       max-height: 420px;
@@ -529,16 +573,10 @@
       font-size: 10px;
     }
 
-    .audit th {
-      background: #526276;
-    }
+    .audit th { background: #526276; }
+    .audit td { background: #fff; }
 
-    .audit td {
-      background: #fff;
-    }
-
-    .audit th,
-    .audit td {
+    .audit th, .audit td {
       padding: 5px 2px;
       line-height: 1.4;
       white-space: normal;
@@ -555,12 +593,11 @@
     .audit th:nth-child(8) { width: 8%; }
     .audit th:nth-child(9) { width: 15%; }
 
-    .audit td:nth-child(5),
-    .audit td:nth-child(6) {
+    .audit td:nth-child(5), .audit td:nth-child(6) {
       text-align: right;
     }
 
-    /* 5. 결과 탭 */
+    /* 6. 결과 탭 */
     .result-tabs {
       display: flex;
       gap: 8px;
@@ -580,7 +617,7 @@
       font-weight: 700;
     }
 
-    /* 6. 집계표 */
+    /* 7. 집계 */
     .aggregate-title {
       margin: 0 0 18px;
       font-size: calc(19px + 1pt);
@@ -605,38 +642,27 @@
       cursor: pointer;
     }
 
-    .aggregate-table,
-    .aggregate-ledger {
+    .aggregate-table, .aggregate-ledger {
       min-width: 0;
       font-size: calc(10px + 1pt);
     }
 
-    .aggregate-ledger {
-      table-layout: auto;
-    }
+    .aggregate-ledger { table-layout: auto; }
 
-    .aggregate-table th,
-    .aggregate-table td,
-    .aggregate-ledger th,
-    .aggregate-ledger td {
+    .aggregate-table th, .aggregate-table td,
+    .aggregate-ledger th, .aggregate-ledger td {
       font-size: inherit;
       white-space: normal;
       overflow-wrap: anywhere;
     }
 
-    .aggregate-table th,
-    .aggregate-table td {
+    .aggregate-table th, .aggregate-table td {
       padding: 6px 3px;
       line-height: 1.5;
     }
 
-    .aggregate-table td {
-      text-align: right;
-    }
-
-    .aggregate-table td:first-child {
-      text-align: center;
-    }
+    .aggregate-table td { text-align: right; }
+    .aggregate-table td:first-child { text-align: center; }
 
     .aggregate-table .agg-total td {
       border-top: 2px solid #222;
@@ -648,26 +674,16 @@
       border-bottom: 2px solid #222;
     }
 
-    .aggregate-table .agg-request-head {
-      background: var(--navy);
-    }
-
-    .aggregate-table .agg-paid-head {
-      background: #285615;
-    }
-
-    .aggregate-table .agg-unpaid-head {
-      background: var(--brown);
-    }
+    .aggregate-table .agg-request-head { background: var(--navy); }
+    .aggregate-table .agg-paid-head { background: #285615; }
+    .aggregate-table .agg-unpaid-head { background: var(--brown); }
 
     .aggregate-table .agg-request {
       background: var(--blue);
       color: var(--navy);
     }
 
-    .aggregate-table .agg-paid {
-      background: #e0f0d4;
-    }
+    .aggregate-table .agg-paid { background: #e0f0d4; }
 
     .aggregate-table .agg-unpaid {
       background: #fbe4d5;
@@ -690,21 +706,15 @@
       text-align: center;
     }
 
-    #aggregate-panel .small {
-      font-size: calc(12px + 1pt);
-    }
-
-    #aggregate-panel .aggregate-notice {
-      font-size: calc(12px - 1pt);
-    }
+    #aggregate-panel .small { font-size: calc(12px + 1pt); }
+    #aggregate-panel .aggregate-notice { font-size: calc(12px - 1pt); }
 
     .aggregate-scroll {
       max-height: 500px;
       overflow: auto;
     }
 
-    .aggregate-ledger th,
-    .aggregate-ledger td {
+    .aggregate-ledger th, .aggregate-ledger td {
       padding: 5px 3px;
       line-height: 1.4;
     }
@@ -728,13 +738,8 @@
       text-align: right;
     }
 
-    .aggregate-ledger tbody td:nth-child(4) {
-      background: var(--blue);
-    }
-
-    .aggregate-ledger tbody td:nth-child(5) {
-      background: #e0f0d4;
-    }
+    .aggregate-ledger tbody td:nth-child(4) { background: var(--blue); }
+    .aggregate-ledger tbody td:nth-child(5) { background: #e0f0d4; }
 
     .aggregate-ledger thead th:nth-child(1),
     .aggregate-ledger thead th:nth-child(3),
@@ -760,8 +765,7 @@
       text-align: center;
     }
 
-    #aggregate-filter-sales-total,
-    #aggregate-filter-paid-total {
+    #aggregate-filter-sales-total, #aggregate-filter-paid-total {
       text-align: right;
       white-space: nowrap;
     }
@@ -771,11 +775,9 @@
       color: var(--navy);
     }
 
-    #aggregate-filter-paid-total {
-      background: #e0f0d4;
-    }
+    #aggregate-filter-paid-total { background: #e0f0d4; }
 
-    /* 7. 필터 및 팝업 */
+    /* 8. 필터 및 팝업 */
     .aggregate-filter-button {
       width: auto;
       min-width: 0;
@@ -797,8 +799,7 @@
       color: #9b3200;
     }
 
-    #aggregate-filter-reset,
-    .aggregate-filter-actions button {
+    #aggregate-filter-reset, .aggregate-filter-actions button {
       padding: 4px 7px;
       font-size: 9px;
       line-height: 1.3;
@@ -809,8 +810,7 @@
       background: #526276;
     }
 
-    #aggregate-filter-dialog,
-    #update-note-dialog {
+    #aggregate-filter-dialog, #update-note-dialog {
       max-width: 90vw;
       max-height: 85vh;
       margin: auto;
@@ -869,9 +869,7 @@
       margin-top: 4px;
     }
 
-    .aggregate-filter-option span {
-      min-width: 0;
-    }
+    .aggregate-filter-option span { min-width: 0; }
 
     .aggregate-filter-actions {
       display: flex;
@@ -886,34 +884,25 @@
       height: auto;
     }
 
-    .aggregate-filter-secondary {
-      background: #526276;
-    }
+    .aggregate-filter-secondary { background: #526276; }
 
-    /* 8. 푸터 및 업데이트 이력 */
+    /* 9. 푸터 및 업데이트 이력 */
     footer {
-      margin: 24px 0 12px;
+      margin: 12px 0 12px;
       color: #7a8490;
       text-align: center;
       line-height: 1.8;
     }
 
-    .footer-copyright {
-      font-size: 11pt;
-    }
-
-    .footer-contact {
-      font-size: 9pt;
-    }
+    .footer-copyright { font-size: 11pt; }
+    .footer-contact { font-size: 9pt; }
 
     .footer-contact a {
       color: inherit;
       text-decoration: underline;
     }
 
-    .update-note-link {
-      margin-top: 8px;
-    }
+    .update-note-link { margin-top: 8px; }
 
     #open-update-note {
       padding: 4px 10px;
@@ -924,9 +913,7 @@
       font-size: 11px;
     }
 
-    #open-update-note:hover {
-      background: #e8eef5;
-    }
+    #open-update-note:hover { background: #e8eef5; }
 
     #update-note-dialog {
       width: 640px;
@@ -952,9 +939,7 @@
       background: #fffdeb;
     }
 
-    .update-note-history section {
-      padding: 14px 0;
-    }
+    .update-note-history section { padding: 14px 0; }
 
     .update-note-history section + section {
       border-top: 1px dotted #c9c5ad;
@@ -966,16 +951,13 @@
       font-size: 13px;
     }
 
-    .update-note-history p,
-    .update-note-history ul {
+    .update-note-history p, .update-note-history ul {
       margin: 0;
       font-size: 12px;
       line-height: 1.8;
     }
 
-    .update-note-history ul {
-      padding-left: 20px;
-    }
+    .update-note-history ul { padding-left: 20px; }
 
     .update-note-actions {
       margin-top: 16px;
@@ -988,15 +970,27 @@
       font-size: 12px;
     }
 
-    /* 9. 인쇄 */
-    .print-input-text {
-      display: none;
+    /* 10. 좁은 화면 */
+    @media screen and (max-width: 600px) {
+      .intro { margin: 28px 0; }
+      .input-notice { margin: 0 4px 28px; }
+      .toolbar-buttons { gap: 4px; }
+
+      .toolbar-title, .toolbar-buttons button {
+        padding: 9px 6px;
+        font-size: 11px;
+      }
+
+      .toolbar-arrow, .toolbar-divider, .print-guide {
+        font-size: 10px;
+      }
     }
 
+    /* 11. 인쇄 */
+    .print-input-text { display: none; }
+
     @media screen {
-      #report.aggregate-selected {
-        display: none;
-      }
+      #report.aggregate-selected { display: none; }
     }
 
     @page {
@@ -1005,13 +999,8 @@
     }
 
     @media print {
-      body {
-        background: #fff;
-      }
-
-      .no-print {
-        display: none !important;
-      }
+      body { background: #fff; }
+      .no-print { display: none !important; }
 
       .workspace {
         max-width: none;
@@ -1019,9 +1008,7 @@
         padding: 0;
       }
 
-      .sheet-wrap {
-        overflow: visible;
-      }
+      .sheet-wrap { overflow: visible; }
 
       .sheet {
         width: 174mm;
@@ -1032,30 +1019,20 @@
         font-size: 11px;
       }
 
-      .sheet,
-      .sheet * {
+      .sheet, .sheet * {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
 
-      .detail .bill-date {
-        font-size: 10px;
-      }
-
-      tr {
-        break-inside: avoid;
-      }
-
-      .comment-title {
-        break-after: avoid;
-      }
+      .detail .bill-date { font-size: 10px; }
+      tr { break-inside: avoid; }
+      .comment-title { break-after: avoid; }
 
       body:not(.print-ready) #report {
         display: none !important;
       }
 
-      #recipient,
-      .note-input {
+      #recipient, .note-input {
         display: none !important;
       }
 
@@ -1067,13 +1044,8 @@
         line-height: 1.6;
       }
 
-      .recipient-row {
-        align-items: flex-start;
-      }
-
-      .recipient-row label {
-        line-height: 1.6;
-      }
+      .recipient-row { align-items: flex-start; }
+      .recipient-row label { line-height: 1.6; }
 
       .recipient-print-text {
         width: 8cm;
@@ -1107,7 +1079,7 @@
 <body>
   <main class="workspace">
     <!-- 원장 입력 -->
-    <section class="panel no-print">
+    <section class="panel input-panel no-print">
       <div class="app-logo">
         <img src="./logo.png" alt="SK plasma">
       </div>
@@ -1120,33 +1092,43 @@
         아래 입력란에 <strong>붙여넣어(Ctrl+V)</strong> 주시기 바랍니다.
       </p>
 
-      <p class="small">
-        ※ MIS에서 거래원장 조회 시 기간은 거래내역 누락 방지를 위해 <u><strong>최근 10개월~1년 정도</strong>로 넉넉하게 설정</u>해 주시기 바랍니다.<br>
-        ※ 다운받은 거래원장 원본 데이터의 <u>행·열 순서를 변경하지 마시기 바랍니다</u>.<br>
-        ※ 입력한 거래원장 데이터는 외부 서버로 전송되지 않으며 자동 저장되지 않아 <u>정보 유출 우려 없이 이용 가능</u>합니다.
-      </p>
+      <div class="small input-notice">
+        <span aria-hidden="true">※</span>
+
+        <div>
+          <div>
+            MIS에서 거래원장 조회 시 기간은 거래내역 누락 방지를 위해
+            <u><strong>최근 10개월~1년 정도</strong>로 넉넉하게 설정</u>해 주시기 바랍니다.
+          </div>
+          <div>
+            다운받은 거래원장 원본 데이터의
+            <u>행·열 순서를 변경하지 마시기 바랍니다</u>.
+          </div>
+          <div>
+            이 도구는 입력한 거래원장을 브라우저에서 계산하며,
+            <u>원장 데이터를 외부 서버로 전송하거나 자동 저장하지 않습니다</u>.
+          </div>
+        </div>
+      </div>
 
       <textarea
         id="ledger"
         aria-label="거래원장 입력"
-        placeholder="엑셀 원장을 여기에 붙여넣어 주세요."
+        placeholder="거래원장 엑셀 파일에서 전체 데이터를 복사하여 여기에 붙여넣어 주세요"
       ></textarea>
 
       <div class="controls">
         <label for="base">
           기준월
-          <input
-            id="base"
-            type="month"
-            min="1900-01"
-            max="9999-12"
-            required
-          >
+          <input id="base" type="month" min="1900-01" max="9999-12" required>
         </label>
         <span id="month-end-guide" class="small"></span>
+      </div>
+
+      <div class="input-actions">
         <button id="calculate" type="button">계산하기</button>
         <span id="calculation-complete" role="status" hidden>계산 완료</span>
-        <button id="reset-all" type="button">초기화</button>
+        <button id="reset-all" type="button" hidden>초기화</button>
       </div>
 
       <div id="message" role="status"></div>
@@ -1154,12 +1136,8 @@
 
     <!-- 결과 탭 -->
     <div id="result-tabs" class="result-tabs no-print" hidden>
-      <button id="tab-report" type="button" aria-pressed="true">
-        결제청구서
-      </button>
-      <button id="tab-aggregate" type="button" aria-pressed="false">
-        집계
-      </button>
+      <button id="tab-report" type="button" aria-pressed="true">결제청구서</button>
+      <button id="tab-aggregate" type="button" aria-pressed="false">집계</button>
     </div>
 
     <!-- 집계 -->
@@ -1204,10 +1182,7 @@
         우선순위 조정을 반영하므로 집계의 결제청구액과 다를 수 있습니다.
       </p>
 
-      <h3 class="aggregate-subtitle">
-        결제청구액에 대한 일자별 매출 내역
-      </h3>
-
+      <h3 class="aggregate-subtitle">결제청구액에 대한 일자별 매출 내역</h3>
       <p id="aggregate-count" class="small"></p>
       <button id="aggregate-filter-reset" type="button">필터 초기화</button>
 
@@ -1261,7 +1236,8 @@
           </div>
 
           <p class="greeting">
-            1. 항상 보내주시는 협조에 감사드리며, 아래와 같이 결제청구 드리오니 기한 내 처리 부탁드립니다.
+            1. 항상 보내주시는 협조에 감사드리며, 아래와 같이 결제청구 드리오니
+            기한 내 처리 부탁드립니다.
           </p>
 
           <p class="section-title">2. 청구 내역</p>
@@ -1325,16 +1301,22 @@
         </article>
       </div>
 
+      <!-- 출력 도구 모음 -->
       <div class="toolbar no-print">
-        <button id="print" type="button" disabled>
-          청구서 인쇄 / PDF 저장
-        </button>
-        <button id="save-png" type="button" disabled>
-          이미지로 저장(PNG)
-        </button>
-        <span class="small">
+        <div class="toolbar-row">
+          <div class="toolbar-buttons">
+            <span class="toolbar-title">청구서 출력</span>
+            <span class="toolbar-arrow" aria-hidden="true">▶</span>
+            <button id="print" type="button" disabled>인쇄 / PDF 저장</button>
+            <span class="toolbar-divider" aria-hidden="true">·</span>
+            <button id="save-png" type="button" disabled>이미지(PNG)로 저장</button>
+          </div>
+        </div>
+
+        <p class="small print-guide">
           A4 세로 · 머리글/바닥글 해제 · 배경 그래픽 사용 권장
-        </span>
+        </p>
+
         <div id="export-status" class="small" role="status"></div>
       </div>
     </div>
@@ -1342,7 +1324,6 @@
     <!-- 검증 결과 -->
     <details id="validation" class="panel no-print" hidden>
       <summary class="validation-title">검증 결과</summary>
-
       <div id="errors" class="error"></div>
       <div id="warnings" class="warning"></div>
       <p id="metrics" class="small"></p>
@@ -1382,9 +1363,7 @@
       <div class="footer-contact">
         개발·문의: 마케팅지원팀 이은욱(<a href="mailto:eunwook@sk.com">eunwook@sk.com</a>)
       </div>
-      <p class="small version">
-        사내 업무용 · Version. 2.0 · 2026.11.20 배포
-      </p>
+      <p class="small version">사내 업무용 · <strong>Version. 2.0</strong> · 2026.11.20 배포</p>
       <div class="update-note-link">
         <button id="open-update-note" type="button" aria-haspopup="dialog">
           Update Note
@@ -1408,10 +1387,7 @@
       </section>
       <section>
         <h3>2026.11.16 · Ver. 2.0</h3>
-        <p>
-          SK플라즈마 결제청구 에이전트(Web) 개발 완료 및
-          배포용 버전 생성 완료
-        </p>
+        <p>SK플라즈마 결제청구 에이전트(Web) 개발 완료 및 배포용 버전 생성 완료</p>
       </section>
       <section>
         <h3>2026.10.29 · Ver. 1.1</h3>
@@ -1456,16 +1432,12 @@
         id="aggregate-filter-select-visible"
         class="aggregate-filter-secondary"
         type="button"
-      >
-        검색 항목 전체 선택
-      </button>
+      >검색 항목 전체 선택</button>
       <button
         id="aggregate-filter-clear-visible"
         class="aggregate-filter-secondary"
         type="button"
-      >
-        검색 항목 선택 해제
-      </button>
+      >검색 항목 선택 해제</button>
     </div>
 
     <div id="aggregate-filter-options" class="aggregate-filter-options"></div>
@@ -1476,20 +1448,16 @@
         id="aggregate-filter-clear"
         class="aggregate-filter-secondary"
         type="button"
-      >
-        이 열 필터 해제
-      </button>
+      >이 열 필터 해제</button>
       <button
         id="aggregate-filter-cancel"
         class="aggregate-filter-secondary"
         type="button"
-      >
-        취소
-      </button>
+      >취소</button>
     </div>
   </dialog>
 
-  <!-- 같은 폴더에 html2canvas 1.4.1 배포 파일을 업로드하세요. -->
+  <!-- index.html, logo.png와 같은 폴더에 배치 -->
   <script src="./html2canvas.min.js"></script>
 
   <script>
@@ -1516,7 +1484,6 @@
     /* 2. 날짜 */
     function dateParts(day) {
       const date = new Date(day * DAY);
-
       return [
         date.getUTCFullYear(),
         date.getUTCMonth() + 1,
@@ -1555,8 +1522,7 @@
       if (
         !Number.isFinite(day) ||
         !Number.isFinite(year) ||
-        year < 1 ||
-        year > 9999
+        year < 1 || year > 9999
       ) {
         throw new Error("지원 날짜 범위(1\~9999년)를 초과했습니다.");
       }
@@ -1612,9 +1578,7 @@
     function parseDate(value) {
       const text = String(value).trim();
 
-      if (!text) {
-        throw new Error("날짜가 비어 있습니다.");
-      }
+      if (!text) throw new Error("날짜가 비어 있습니다.");
 
       if (/^\d{5}(?:\.0+)?$/.test(text)) {
         return excelDate(Number(text));
@@ -1631,9 +1595,7 @@
 
       const [a, b, c] = parts.map(Number);
 
-      if (parts[0].length === 4) {
-        return makeDate(a, b, c);
-      }
+      if (parts[0].length === 4) return makeDate(a, b, c);
 
       if (text.includes("/")) {
         return makeDate(c >= 100 ? c : 2000 + c, a, b);
@@ -1664,7 +1626,6 @@
 
     function currentMonthValue() {
       const today = new Date();
-
       return `${today.getFullYear()}-${
         String(today.getMonth() + 1).padStart(2, "0")
       }`;
@@ -1675,7 +1636,6 @@
       if (!Number.isSafeInteger(value)) {
         throw new Error("금액이 안전한 정수 계산 범위를 초과했습니다.");
       }
-
       return value;
     }
 
@@ -1701,7 +1661,7 @@
       );
     }
 
-    /* 4. 원장 읽기 */
+    /* 4. 원장 읽기 및 기준표 */
     function readTSV(text) {
       const rows = [];
       let row = [];
@@ -1723,7 +1683,6 @@
           } else {
             field += character;
           }
-
           continue;
         }
 
@@ -1735,9 +1694,7 @@
           field = "";
           started = false;
         } else if (character === "\r" || character === "\n") {
-          if (character === "\r" && text[index + 1] === "\n") {
-            index++;
-          }
+          if (character === "\r" && text[index + 1] === "\n") index++;
 
           if (row.length || started || field) {
             row.push(field);
@@ -1878,7 +1835,6 @@
         if (productColumn >= 0) {
           positions["집계용제품명"] = productColumn;
         }
-
         break;
       }
 
@@ -1942,7 +1898,7 @@
       return { rows, warnings };
     }
 
-    /* 5. 계산: 기존 로직 유지 */
+    /* 5. 계산: 기존 수식 유지 */
     function calculate(text, baseText) {
       const base = parseDate(baseText);
 
@@ -1977,9 +1933,9 @@
         }
       }
 
+      // 음수 판매 거래의 결제조건 참조
       for (let index = 0; index < rows.length; index++) {
         const row = rows[index];
-
         if (row.type !== "판매" || row.amt >= 0) continue;
 
         const matches = candidate =>
@@ -1996,9 +1952,7 @@
           }
         }
 
-        if (!target) {
-          target = rows.slice(index + 1).find(matches);
-        }
+        if (!target) target = rows.slice(index + 1).find(matches);
 
         if (target) {
           row.aa = target.aa;
@@ -2156,10 +2110,8 @@
       const other = safe(contractTotal - sum(details, row => row.contract));
       const detailedReceived = sum(details, row => row.received);
 
-      // H19 = MAX(-C18, 0)
+      // H19 = MAX(-C18, 0), E18 = MAX(C18, 0)
       const adjustment = Math.max(safe(-other), 0);
-
-      // E18 = MAX(C18, 0)
       const otherFinal = Math.max(other, 0);
 
       for (const row of details) {
@@ -2230,6 +2182,7 @@
       const aggregateOtherCarry = safe(
         carried - sum(aggregateDetails, row => row.carry)
       );
+
       const aggregateOtherRequest = safe(
         contractTotal - sum(aggregateDetails, row => row.request)
       );
@@ -2265,7 +2218,6 @@
         ledger: aggregateLedgerRows
       };
 
-      // E19 = SUM(E13:E18)
       const finalTotal = safe(
         sum(details, row => row.final) + otherFinal
       );
@@ -2281,11 +2233,7 @@
         base: iso(base),
         rows: rows.length,
         summary: {
-          prev,
-          sales,
-          received,
-          balance,
-          carried,
+          prev, sales, received, balance, carried,
           request: requestTotal
         },
         details,
@@ -2311,9 +2259,13 @@
       };
     }
 
-    /* 6. 화면 상태 */
-    let valid = false;
-    let savingPng = false;
+    /* 6. 상태 관리 */
+    const appState = {
+      phase: "initial",
+      valid: false,
+      calculating: false,
+      savingPng: false
+    };
 
     const aggregateFilterDialog = $("aggregate-filter-dialog");
     const updateNoteDialog = $("update-note-dialog");
@@ -2331,6 +2283,25 @@
       currentKey: null,
       draft: new Set()
     };
+
+    // 버튼 표시·활성화는 이 함수에서만 관리합니다.
+    function syncButtons() {
+      const complete = appState.phase === "complete";
+      const busy = appState.calculating || appState.savingPng;
+
+      $("calculate").hidden = complete;
+      $("calculate").disabled = busy;
+
+      $("calculation-complete").hidden = !complete;
+
+      $("reset-all").hidden = appState.phase === "initial";
+      $("reset-all").disabled = busy;
+
+      $("print").disabled = !appState.valid || busy;
+      $("save-png").disabled = !appState.valid || busy;
+
+      document.body.classList.toggle("print-ready", appState.valid);
+    }
 
     function selectedMonthEnd() {
       const value = $("base").value;
@@ -2367,11 +2338,6 @@
       $("export-status").classList.toggle("export-error", isError);
     }
 
-    function updateOutputButtons() {
-      $("print").disabled = !valid || savingPng;
-      $("save-png").disabled = !valid || savingPng;
-    }
-
     function removePrintableInputs() {
       document.querySelectorAll("#report .print-input-text")
         .forEach(element => element.remove());
@@ -2386,11 +2352,9 @@
       });
     }
 
-    function invalidate() {
-      valid = false;
-      $("calculation-complete").hidden = true;
-      document.body.classList.remove("print-ready");
-      updateOutputButtons();
+    function invalidate(phase = "edited") {
+      appState.valid = false;
+      appState.phase = phase;
 
       $("report").hidden = true;
       $("validation").hidden = true;
@@ -2402,13 +2366,13 @@
       setExportStatus();
       removePrintableInputs();
 
-      if (aggregateFilterDialog.open) {
-        aggregateFilterDialog.close();
-      }
+      if (aggregateFilterDialog.open) aggregateFilterDialog.close();
+
+      syncButtons();
     }
 
     function selectResultTab(name) {
-      if (savingPng) return;
+      if (appState.savingPng) return;
 
       const aggregateSelected = name === "aggregate";
 
@@ -2526,15 +2490,9 @@
 
       $("audit").innerHTML = data.audit.map(row => {
         const values = [
-          row.line,
-          row.date,
-          row.code,
-          row.customer,
-          money(row.amount),
-          money(row.received),
-          row.aa,
-          row.ab,
-          row.billing
+          row.line, row.date, row.code, row.customer,
+          money(row.amount), money(row.received),
+          row.aa, row.ab, row.billing
         ];
 
         return "<tr>" + values.map(value =>
@@ -2553,16 +2511,15 @@
       $("validation").hidden = false;
       $("result-tabs").hidden = false;
 
-      valid = data.errors.length === 0;
-      document.body.classList.toggle("print-ready", valid);
-      updateOutputButtons();
-      $("calculation-complete").hidden = !valid;
+      appState.valid = data.errors.length === 0;
+      appState.phase = appState.valid ? "complete" : "error";
+      syncButtons();
 
       setMessage(
-        valid
+        appState.valid
           ? ""
           : "오류가 있어 인쇄 및 PNG 저장을 제한했습니다. 검증 결과를 확인해 주세요.",
-        !valid
+        !appState.valid
       );
     }
 
@@ -2591,7 +2548,6 @@
 
       if (select.selectedIndex === -1) {
         const option = document.createElement("option");
-
         option.value = selectedDate;
         option.textContent = `${selectedDate} (선택 범위 밖)`;
         option.disabled = true;
@@ -2649,7 +2605,6 @@
       if (key === "date") {
         return String(row.date ?? "").slice(2).replaceAll("-", ".");
       }
-
       return String(row[key] ?? "");
     }
 
@@ -2672,7 +2627,6 @@
     function renderAggregateFilterOptions() {
       const container = $("aggregate-filter-options");
       const values = aggregateMatchingOptions();
-
       container.replaceChildren();
 
       if (!values.length) {
@@ -2749,7 +2703,6 @@
       const filtered = state.rows.filter(row =>
         aggregateFilterColumns.every(column => {
           const selected = state.selected[column.key];
-
           return !selected ||
             selected.has(aggregateFilterValue(row, column.key));
         })
@@ -2818,16 +2771,30 @@
       const recipientText = document.createElement("span");
       recipientText.className = "print-input-text recipient-print-text";
       recipientText.textContent = $("recipient").value;
-
       $("recipient").insertAdjacentElement("afterend", recipientText);
 
       document.querySelectorAll("#report .note-input").forEach(input => {
         const noteText = document.createElement("div");
         noteText.className = "print-input-text note-print-text";
         noteText.textContent = input.value;
-
         input.insertAdjacentElement("afterend", noteText);
       });
+    }
+
+    function printReport() {
+      if (!appState.valid || appState.savingPng || appState.calculating) return;
+
+      try {
+        setExportStatus();
+        preparePrintableInputs();
+        window.print();
+      } catch (error) {
+        setExportStatus(
+          "인쇄 실행 중 오류가 발생했습니다: " +
+          (error instanceof Error ? error.message : String(error)),
+          true
+        );
+      }
     }
 
     /* 11. PNG 저장 */
@@ -2865,7 +2832,7 @@
     }
 
     async function saveReportPng() {
-      if (!valid || savingPng) return;
+      if (!appState.valid || appState.savingPng || appState.calculating) return;
 
       if (typeof window.html2canvas !== "function") {
         setExportStatus(
@@ -2887,14 +2854,15 @@
       const previousInert = workspace.inert;
       const button = $("save-png");
       const originalButtonText = button.textContent;
+
       let canvas = null;
       let downloadUrl = null;
       let captureDocument = null;
 
-      // 생성 중 원장 변경·초기화·중복 저장을 방지합니다.
-      savingPng = true;
+      appState.savingPng = true;
       workspace.inert = true;
-      updateOutputButtons();
+      syncButtons();
+
       button.textContent = "이미지 생성 중...";
       setExportStatus("청구서를 이미지로 변환하고 있습니다.");
 
@@ -2907,7 +2875,6 @@
           );
         }
 
-        // 같은 사이트의 로고가 정상적으로 준비되었는지 확인합니다.
         await Promise.all(
           [...sheet.querySelectorAll("img")].map(async image => {
             await withTimeout(
@@ -2941,16 +2908,12 @@
           logging: false,
           removeContainer: true,
 
-          // 실제 화면은 그대로 두고 복제본만 이미지용으로 정리합니다.
           onclone(clonedDocument) {
             captureDocument = clonedDocument;
 
-            const clonedReport =
-              clonedDocument.getElementById("report");
-            const clonedSheet =
-              clonedDocument.getElementById("report-sheet");
-            const clonedWrap =
-              clonedReport.querySelector(".sheet-wrap");
+            const clonedReport = clonedDocument.getElementById("report");
+            const clonedSheet = clonedDocument.getElementById("report-sheet");
+            const clonedWrap = clonedReport.querySelector(".sheet-wrap");
 
             clonedReport.hidden = false;
             clonedReport.classList.remove("aggregate-selected");
@@ -2971,12 +2934,8 @@
             clonedReport.querySelectorAll(".print-input-text")
               .forEach(element => element.remove());
 
-            // 수신을 일반 텍스트로 바꿔 입력값만 표시합니다.
-            const recipient =
-              clonedDocument.getElementById("recipient");
-            const recipientOutput =
-              clonedDocument.createElement("div");
-
+            const recipient = clonedDocument.getElementById("recipient");
+            const recipientOutput = clonedDocument.createElement("div");
             recipientOutput.textContent = recipientValue;
 
             Object.assign(recipientOutput.style, {
@@ -2995,7 +2954,6 @@
             clonedReport.querySelector(".recipient-row")
               .style.alignItems = "flex-start";
 
-            // 긴 비고는 줄바꿈하여 행 높이를 자동 확장합니다.
             clonedSheet.querySelectorAll(".note-input")
               .forEach((input, index) => {
                 const output = clonedDocument.createElement("div");
@@ -3026,7 +2984,6 @@
               outline: "none"
             });
 
-            // 과도한 크기의 단일 이미지 생성을 제한합니다.
             const bounds = clonedSheet.getBoundingClientRect();
             const pixelWidth = Math.ceil(bounds.width * 2);
             const pixelHeight = Math.ceil(bounds.height * 2);
@@ -3054,6 +3011,7 @@
         const link = document.createElement("a");
         link.href = downloadUrl;
         link.download = filename;
+
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -3066,40 +3024,42 @@
 
         setExportStatus(
           "PNG 저장에 실패했습니다. " +
-          "logo.png와 html2canvas.min.js의 배포 상태를 확인해 주세요.\n" +
+          "GitHub 웹주소에서 실행 중인지, logo.png와 html2canvas.min.js가 배포되었는지 확인해 주세요.\n" +
           detail,
           true
         );
       } finally {
-        // 예외가 발생한 경우 남아 있을 수 있는 캡처용 iframe 제거
-        if (captureDocument) {
-          const frame = captureDocument.defaultView?.frameElement;
-          if (frame?.isConnected) frame.remove();
-        }
+        try {
+          if (captureDocument) {
+            const frame = captureDocument.defaultView?.frameElement;
+            if (frame?.isConnected) frame.remove();
+          }
 
-        if (canvas) {
-          canvas.width = 0;
-          canvas.height = 0;
-        }
+          if (canvas) {
+            canvas.width = 0;
+            canvas.height = 0;
+          }
 
-        if (downloadUrl) {
-          const urlToRevoke = downloadUrl;
-          setTimeout(() => URL.revokeObjectURL(urlToRevoke), 60000);
+          if (downloadUrl) {
+            const urlToRevoke = downloadUrl;
+            setTimeout(() => URL.revokeObjectURL(urlToRevoke), 60000);
+          }
+        } finally {
+          appState.savingPng = false;
+          workspace.inert = previousInert;
+          button.textContent = originalButtonText;
+          syncButtons();
         }
-
-        savingPng = false;
-        workspace.inert = previousInert;
-        button.textContent = originalButtonText;
-        updateOutputButtons();
       }
     }
 
     /* 12. 계산 실행 */
     function runCalculation(targetTab = "report") {
-      if (savingPng) return;
+      if (appState.savingPng || appState.calculating) return;
 
-      invalidate();
-      $("calculate").disabled = true;
+      invalidate("edited");
+      appState.calculating = true;
+      syncButtons();
       setMessage("계산 중입니다...");
 
       try {
@@ -3107,16 +3067,20 @@
         render(data);
         selectResultTab(targetTab);
       } catch (error) {
-        invalidate();
-        setMessage(error.message, true);
+        invalidate("error");
+        setMessage(
+          error instanceof Error ? error.message : String(error),
+          true
+        );
       } finally {
-        $("calculate").disabled = false;
+        appState.calculating = false;
+        syncButtons();
       }
     }
 
     /* 13. 전체 초기화 */
     function resetAll() {
-      if (savingPng) return;
+      if (appState.savingPng || appState.calculating) return;
 
       const confirmed = window.confirm(
         "입력한 원장, 수신, 비고, Comment 및 계산 결과를 모두 초기화하시겠습니까?"
@@ -3128,7 +3092,7 @@
       clearUserNotes();
       $("base").value = currentMonthValue();
 
-      invalidate();
+      invalidate("initial");
       updateGuide();
 
       [
@@ -3168,14 +3132,16 @@
       $("ledger").focus();
     }
 
-    /* 14. 이벤트 */
+    /* 14. 이벤트: 한 번씩 등록 */
     $("ledger").addEventListener("input", () => {
+      if (appState.savingPng || appState.calculating) return;
       clearUserNotes();
-      invalidate();
+      invalidate("edited");
     });
 
     $("base").addEventListener("input", () => {
-      invalidate();
+      if (appState.savingPng || appState.calculating) return;
+      invalidate("edited");
       updateGuide();
     });
 
@@ -3185,10 +3151,7 @@
 
     $("reset-all").addEventListener("click", resetAll);
     $("save-png").addEventListener("click", saveReportPng);
-
-    $("print").addEventListener("click", () => {
-      if (valid && !savingPng) window.print();
-    });
+    $("print").addEventListener("click", printReport);
 
     $("tab-report").addEventListener("click", () => {
       selectResultTab("report");
@@ -3199,7 +3162,7 @@
     });
 
     $("aggregate-base").addEventListener("change", () => {
-      if (savingPng) return;
+      if (appState.savingPng || appState.calculating) return;
 
       $("base").value = $("aggregate-base").value.slice(0, 7);
       updateGuide();
@@ -3220,7 +3183,6 @@
       for (const value of aggregateMatchingOptions()) {
         aggregateFilterState.draft.add(value);
       }
-
       renderAggregateFilterOptions();
     });
 
@@ -3228,7 +3190,6 @@
       for (const value of aggregateMatchingOptions()) {
         aggregateFilterState.draft.delete(value);
       }
-
       renderAggregateFilterOptions();
     });
 
@@ -3257,9 +3218,7 @@
     });
 
     $("open-update-note").addEventListener("click", () => {
-      if (!updateNoteDialog.open) {
-        updateNoteDialog.showModal();
-      }
+      if (!updateNoteDialog.open) updateNoteDialog.showModal();
     });
 
     $("close-update-note").addEventListener("click", () => {
@@ -3272,8 +3231,8 @@
     /* 15. 초기 설정 */
     initializeFilterButtons();
     $("base").value = currentMonthValue();
+    invalidate("initial");
     updateGuide();
-    updateOutputButtons();
   </script>
 </body>
 </html>
