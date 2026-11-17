@@ -20,7 +20,9 @@
       --value-row-height: 42px;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -29,7 +31,9 @@
       font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
     }
 
-    [hidden] { display: none !important; }
+    [hidden] {
+      display: none !important;
+    }
 
     .workspace {
       max-width: 800px;
@@ -62,7 +66,11 @@
       text-align: center;
     }
 
-    input, button, select { font: inherit; }
+    input,
+    button,
+    select {
+      font: inherit;
+    }
 
     button {
       padding: 10px 18px;
@@ -78,15 +86,16 @@
       cursor: not-allowed;
     }
 
-    .app-logo img, .brand img {
+    .app-logo img,
+    .brand img {
       width: 130px;
       height: auto;
     }
 
     /* 2. 메인 입력 화면 */
     .input-panel {
-      padding: 24px 18px 28px;
       margin-bottom: 11px;
+      padding: 24px 18px 28px;
     }
 
     .app-logo {
@@ -99,7 +108,9 @@
       margin: 0 auto;
     }
 
-    .input-panel h1 { margin: 0; }
+    .input-panel h1 {
+      margin: 0;
+    }
 
     .intro {
       margin: 27px 0 16px;
@@ -121,8 +132,8 @@
     #ledger {
       display: block;
       width: 90%;
-      margin: 0 auto;
       height: 75px;
+      margin: 0 auto;
       padding: 12px;
       border: 1px solid #ccd2da;
       border-radius: 6px;
@@ -156,7 +167,9 @@
       border-radius: 4px;
     }
 
-    #month-end-guide { white-space: nowrap; }
+    #month-end-guide {
+      white-space: nowrap;
+    }
 
     .input-actions {
       display: flex;
@@ -194,7 +207,9 @@
       text-align: center;
     }
 
-    #message:empty { display: none; }
+    #message:empty {
+      display: none;
+    }
 
     #message.message-error {
       color: #c00000;
@@ -203,7 +218,9 @@
     }
 
     /* 3. 결제청구서 */
-    .sheet-wrap { overflow-x: auto; }
+    .sheet-wrap {
+      overflow-x: auto;
+    }
 
     .sheet {
       width: 100%;
@@ -279,7 +296,8 @@
       table-layout: fixed;
     }
 
-    th, td {
+    th,
+    td {
       padding: 6px 5px;
       border: 1px solid #222;
       text-align: center;
@@ -291,8 +309,13 @@
       font-weight: 600;
     }
 
-    table tr > :first-child { border-left: 0; }
-    table tr > :last-child { border-right: 0; }
+    table tr > :first-child {
+      border-left: 0;
+    }
+
+    table tr > :last-child {
+      border-right: 0;
+    }
 
     .summary {
       border-top: 2px solid #000;
@@ -324,7 +347,9 @@
       font-weight: bold;
     }
 
-    .summary .deadline-head { background: var(--brown); }
+    .summary .deadline-head {
+      background: var(--brown);
+    }
 
     .summary td.deadline-value {
       padding-left: 9px;
@@ -344,7 +369,9 @@
       border-top: 2px solid #000;
     }
 
-    .detail th { height: 32px; }
+    .detail th {
+      height: 32px;
+    }
 
     #report .summary tbody td,
     #report .detail tbody td,
@@ -387,10 +414,21 @@
       background-size: 3px 3px;
     }
 
-    .bill-left { border-left: 3px solid var(--red); }
-    .bill-right { border-right: 3px solid var(--red); }
-    .bill-top { border-top: 3px solid var(--red); }
-    .bill-bottom { border-bottom: 3px solid var(--red); }
+    .bill-left {
+      border-left: 3px solid var(--red);
+    }
+
+    .bill-right {
+      border-right: 3px solid var(--red);
+    }
+
+    .bill-top {
+      border-top: 3px solid var(--red);
+    }
+
+    .bill-bottom {
+      border-bottom: 3px solid var(--red);
+    }
 
     .detail tbody tr:nth-child(3) > td,
     .detail tbody tr:nth-child(4) > td {
@@ -416,7 +454,9 @@
       font-weight: bold;
     }
 
-    .detail tfoot .amount { border-bottom: 3px solid var(--red); }
+    .detail tfoot .amount {
+      border-bottom: 3px solid var(--red);
+    }
 
     .note-input {
       display: block;
@@ -457,7 +497,9 @@
       overflow-wrap: anywhere;
     }
 
-    .note-input:focus, .comment:focus, #recipient:focus {
+    .note-input:focus,
+    .comment:focus,
+    #recipient:focus {
       outline: 2px solid var(--navy);
       outline-offset: 1px;
     }
@@ -487,19 +529,6 @@
       margin: 0 auto;
     }
 
-    .toolbar-title {
-      flex-shrink: 0;
-      padding: 10px 12px;
-      border: 1px solid #ccd5df;
-      border-radius: 5px;
-      background: #e3e9f0;
-      color: var(--navy);
-      font-size: 14px;
-      font-weight: 700;
-      line-height: 1.4;
-      white-space: nowrap;
-    }
-
     .toolbar-buttons button {
       flex-shrink: 0;
       padding: 10px 16px;
@@ -507,20 +536,9 @@
       white-space: nowrap;
     }
 
-    .toolbar-arrow {
-      flex-shrink: 0;
-      color: #8393a5;
-      font-size: 11px;
-      line-height: 1;
+    #save-png:not(:disabled) {
+      background: #1769aa;
     }
-
-    .toolbar-divider {
-      flex-shrink: 0;
-      color: #99a5b3;
-      font-weight: 600;
-    }
-
-    #save-png:not(:disabled) { background: #1769aa; }
 
     .print-guide {
       width: 100%;
@@ -538,12 +556,22 @@
       text-align: center;
     }
 
-    #export-status:empty { display: none; }
-    #export-status.export-error { color: #c00000; }
+    #export-status:empty {
+      display: none;
+    }
+
+    #export-status.export-error {
+      color: #c00000;
+    }
 
     /* 5. 검증 결과 */
-    #validation { margin-top: 22px; }
-    #validation summary { cursor: pointer; }
+    #validation {
+      margin-top: 22px;
+    }
+
+    #validation summary {
+      cursor: pointer;
+    }
 
     #validation > .validation-title {
       display: list-item;
@@ -551,16 +579,27 @@
       font-weight: 700;
     }
 
-    #validation[open] > .validation-title { margin-bottom: 16px; }
+    #validation[open] > .validation-title {
+      margin-bottom: 16px;
+    }
 
-    .error, .warning {
+    .error,
+    .warning {
       white-space: pre-wrap;
       line-height: 1.7;
     }
 
-    .error { color: #ad1027; }
-    .warning { color: #856118; }
-    .audit-details { margin-top: 14px; }
+    .error {
+      color: #ad1027;
+    }
+
+    .warning {
+      color: #856118;
+    }
+
+    .audit-details {
+      margin-top: 14px;
+    }
 
     .audit-scroll {
       max-height: 420px;
@@ -573,10 +612,16 @@
       font-size: 10px;
     }
 
-    .audit th { background: #526276; }
-    .audit td { background: #fff; }
+    .audit th {
+      background: #526276;
+    }
 
-    .audit th, .audit td {
+    .audit td {
+      background: #fff;
+    }
+
+    .audit th,
+    .audit td {
       padding: 5px 2px;
       line-height: 1.4;
       white-space: normal;
@@ -593,7 +638,8 @@
     .audit th:nth-child(8) { width: 8%; }
     .audit th:nth-child(9) { width: 15%; }
 
-    .audit td:nth-child(5), .audit td:nth-child(6) {
+    .audit td:nth-child(5),
+    .audit td:nth-child(6) {
       text-align: right;
     }
 
@@ -642,27 +688,38 @@
       cursor: pointer;
     }
 
-    .aggregate-table, .aggregate-ledger {
+    .aggregate-table,
+    .aggregate-ledger {
       min-width: 0;
       font-size: calc(10px + 1pt);
     }
 
-    .aggregate-ledger { table-layout: auto; }
+    .aggregate-ledger {
+      table-layout: auto;
+    }
 
-    .aggregate-table th, .aggregate-table td,
-    .aggregate-ledger th, .aggregate-ledger td {
+    .aggregate-table th,
+    .aggregate-table td,
+    .aggregate-ledger th,
+    .aggregate-ledger td {
       font-size: inherit;
       white-space: normal;
       overflow-wrap: anywhere;
     }
 
-    .aggregate-table th, .aggregate-table td {
+    .aggregate-table th,
+    .aggregate-table td {
       padding: 6px 3px;
       line-height: 1.5;
     }
 
-    .aggregate-table td { text-align: right; }
-    .aggregate-table td:first-child { text-align: center; }
+    .aggregate-table td {
+      text-align: right;
+    }
+
+    .aggregate-table td:first-child {
+      text-align: center;
+    }
 
     .aggregate-table .agg-total td {
       border-top: 2px solid #222;
@@ -674,16 +731,26 @@
       border-bottom: 2px solid #222;
     }
 
-    .aggregate-table .agg-request-head { background: var(--navy); }
-    .aggregate-table .agg-paid-head { background: #285615; }
-    .aggregate-table .agg-unpaid-head { background: var(--brown); }
+    .aggregate-table .agg-request-head {
+      background: var(--navy);
+    }
+
+    .aggregate-table .agg-paid-head {
+      background: #285615;
+    }
+
+    .aggregate-table .agg-unpaid-head {
+      background: var(--brown);
+    }
 
     .aggregate-table .agg-request {
       background: var(--blue);
       color: var(--navy);
     }
 
-    .aggregate-table .agg-paid { background: #e0f0d4; }
+    .aggregate-table .agg-paid {
+      background: #e0f0d4;
+    }
 
     .aggregate-table .agg-unpaid {
       background: #fbe4d5;
@@ -691,30 +758,40 @@
     }
 
     #aggregate-summary tr:nth-child(4) > td,
-    #aggregate-summary tr:nth-child(5) > td {
+    #aggregate-summary tr:nth-child(5) > td,
+    #aggregate-summary tr:nth-child(6) > td {
       border-bottom: 1px dotted #333;
     }
 
     #aggregate-summary tr:nth-child(5) > td,
-    #aggregate-summary tr:nth-child(6) > td {
+    #aggregate-summary tr:nth-child(6) > td,
+    #aggregate-summary tr:nth-child(7) > td {
       border-top: 1px dotted #333;
     }
 
     .aggregate-subtitle {
-      margin: 24px 0 8px;
+      margin: 0 0 16px;
+      padding: 0;
+      border: 0;
       font-size: calc(15px + 1pt);
       text-align: center;
     }
 
-    #aggregate-panel .small { font-size: calc(12px + 1pt); }
-    #aggregate-panel .aggregate-notice { font-size: calc(12px - 1pt); }
+    #aggregate-panel .small {
+      font-size: calc(12px + 1pt);
+    }
+
+    #aggregate-panel .aggregate-notice {
+      font-size: calc(12px - 1pt);
+    }
 
     .aggregate-scroll {
       max-height: 500px;
       overflow: auto;
     }
 
-    .aggregate-ledger th, .aggregate-ledger td {
+    .aggregate-ledger th,
+    .aggregate-ledger td {
       padding: 5px 3px;
       line-height: 1.4;
     }
@@ -738,8 +815,13 @@
       text-align: right;
     }
 
-    .aggregate-ledger tbody td:nth-child(4) { background: var(--blue); }
-    .aggregate-ledger tbody td:nth-child(5) { background: #e0f0d4; }
+    .aggregate-ledger tbody td:nth-child(4) {
+      background: var(--blue);
+    }
+
+    .aggregate-ledger tbody td:nth-child(5) {
+      background: #e0f0d4;
+    }
 
     .aggregate-ledger thead th:nth-child(1),
     .aggregate-ledger thead th:nth-child(3),
@@ -765,7 +847,8 @@
       text-align: center;
     }
 
-    #aggregate-filter-sales-total, #aggregate-filter-paid-total {
+    #aggregate-filter-sales-total,
+    #aggregate-filter-paid-total {
       text-align: right;
       white-space: nowrap;
     }
@@ -775,7 +858,9 @@
       color: var(--navy);
     }
 
-    #aggregate-filter-paid-total { background: #e0f0d4; }
+    #aggregate-filter-paid-total {
+      background: #e0f0d4;
+    }
 
     /* 8. 필터 및 팝업 */
     .aggregate-filter-button {
@@ -799,7 +884,8 @@
       color: #9b3200;
     }
 
-    #aggregate-filter-reset, .aggregate-filter-actions button {
+    #aggregate-filter-reset,
+    .aggregate-filter-actions button {
       padding: 4px 7px;
       font-size: 9px;
       line-height: 1.3;
@@ -810,7 +896,8 @@
       background: #526276;
     }
 
-    #aggregate-filter-dialog, #update-note-dialog {
+    #aggregate-filter-dialog,
+    #update-note-dialog {
       max-width: 90vw;
       max-height: 85vh;
       margin: auto;
@@ -869,7 +956,9 @@
       margin-top: 4px;
     }
 
-    .aggregate-filter-option span { min-width: 0; }
+    .aggregate-filter-option span {
+      min-width: 0;
+    }
 
     .aggregate-filter-actions {
       display: flex;
@@ -884,25 +973,34 @@
       height: auto;
     }
 
-    .aggregate-filter-secondary { background: #526276; }
+    .aggregate-filter-secondary {
+      background: #526276;
+    }
 
     /* 9. 푸터 및 업데이트 이력 */
     footer {
-      margin: 12px 0 12px;
+      margin: 12px 0;
       color: #7a8490;
       text-align: center;
       line-height: 1.8;
     }
 
-    .footer-copyright { font-size: 11pt; }
-    .footer-contact { font-size: 9pt; }
+    .footer-copyright {
+      font-size: 11pt;
+    }
+
+    .footer-contact {
+      font-size: 9pt;
+    }
 
     .footer-contact a {
       color: inherit;
       text-decoration: underline;
     }
 
-    .update-note-link { margin-top: 8px; }
+    .update-note-link {
+      margin-top: 8px;
+    }
 
     #open-update-note {
       padding: 4px 10px;
@@ -913,7 +1011,9 @@
       font-size: 11px;
     }
 
-    #open-update-note:hover { background: #e8eef5; }
+    #open-update-note:hover {
+      background: #e8eef5;
+    }
 
     #update-note-dialog {
       width: 640px;
@@ -939,7 +1039,9 @@
       background: #fffdeb;
     }
 
-    .update-note-history section { padding: 14px 0; }
+    .update-note-history section {
+      padding: 14px 0;
+    }
 
     .update-note-history section + section {
       border-top: 1px dotted #c9c5ad;
@@ -951,13 +1053,16 @@
       font-size: 13px;
     }
 
-    .update-note-history p, .update-note-history ul {
+    .update-note-history p,
+    .update-note-history ul {
       margin: 0;
       font-size: 12px;
       line-height: 1.8;
     }
 
-    .update-note-history ul { padding-left: 20px; }
+    .update-note-history ul {
+      padding-left: 20px;
+    }
 
     .update-note-actions {
       margin-top: 16px;
@@ -970,27 +1075,44 @@
       font-size: 12px;
     }
 
-    /* 10. 좁은 화면 */
-    @media screen and (max-width: 600px) {
-      .intro { margin: 28px 0; }
-      .input-notice { margin: 0 4px 28px; }
-      .toolbar-buttons { gap: 4px; }
+    /* 10. 화면 전용 */
+    @media screen {
+      #report.aggregate-selected {
+        display: none;
+      }
 
-      .toolbar-title, .toolbar-buttons button {
+      #report > .sheet-wrap {
+        border-radius: 12px;
+        box-shadow: 0 3px 18px #00000008;
+      }
+    }
+
+    @media screen and (max-width: 600px) {
+      .intro {
+        margin: 28px 0;
+      }
+
+      .input-notice {
+        margin: 0 4px 28px;
+      }
+
+      .toolbar-buttons {
+        gap: 4px;
+      }
+
+      .toolbar-buttons button {
         padding: 9px 6px;
         font-size: 11px;
       }
 
-      .toolbar-arrow, .toolbar-divider, .print-guide {
+      .print-guide {
         font-size: 10px;
       }
     }
 
     /* 11. 인쇄 */
-    .print-input-text { display: none; }
-
-    @media screen {
-      #report.aggregate-selected { display: none; }
+    .print-input-text {
+      display: none;
     }
 
     @page {
@@ -999,8 +1121,13 @@
     }
 
     @media print {
-      body { background: #fff; }
-      .no-print { display: none !important; }
+      body {
+        background: #fff;
+      }
+
+      .no-print {
+        display: none !important;
+      }
 
       .workspace {
         max-width: none;
@@ -1008,7 +1135,9 @@
         padding: 0;
       }
 
-      .sheet-wrap { overflow: visible; }
+      .sheet-wrap {
+        overflow: visible;
+      }
 
       .sheet {
         width: 174mm;
@@ -1019,20 +1148,30 @@
         font-size: 11px;
       }
 
-      .sheet, .sheet * {
+      .sheet,
+      .sheet * {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
 
-      .detail .bill-date { font-size: 10px; }
-      tr { break-inside: avoid; }
-      .comment-title { break-after: avoid; }
+      .detail .bill-date {
+        font-size: 10px;
+      }
+
+      tr {
+        break-inside: avoid;
+      }
+
+      .comment-title {
+        break-after: avoid;
+      }
 
       body:not(.print-ready) #report {
         display: none !important;
       }
 
-      #recipient, .note-input {
+      #recipient,
+      .note-input {
         display: none !important;
       }
 
@@ -1044,8 +1183,13 @@
         line-height: 1.6;
       }
 
-      .recipient-row { align-items: flex-start; }
-      .recipient-row label { line-height: 1.6; }
+      .recipient-row {
+        align-items: flex-start;
+      }
+
+      .recipient-row label {
+        line-height: 1.6;
+      }
 
       .recipient-print-text {
         width: 8cm;
@@ -1120,7 +1264,13 @@
       <div class="controls">
         <label for="base">
           기준월
-          <input id="base" type="month" min="1900-01" max="9999-12" required>
+          <input
+            id="base"
+            type="month"
+            min="1900-01"
+            max="9999-12"
+            required
+          >
         </label>
         <span id="month-end-guide" class="small"></span>
       </div>
@@ -1136,82 +1286,92 @@
 
     <!-- 결과 탭 -->
     <div id="result-tabs" class="result-tabs no-print" hidden>
-      <button id="tab-report" type="button" aria-pressed="true">결제청구서</button>
-      <button id="tab-aggregate" type="button" aria-pressed="false">집계</button>
+      <button id="tab-report" type="button" aria-pressed="true">
+        결제청구서
+      </button>
+      <button id="tab-aggregate" type="button" aria-pressed="false">
+        집계
+      </button>
     </div>
 
-    <!-- 집계 -->
-    <section id="aggregate-panel" class="panel no-print" hidden>
-      <h2 class="aggregate-title">결제청구액 계산 시트</h2>
+    <!-- 집계: 상단 계산 시트와 하단 일자별 내역을 별도 카드로 표시 -->
+    <section id="aggregate-panel" class="no-print" hidden>
+      <div class="panel">
+        <h2 class="aggregate-title">결제청구액 계산 시트</h2>
 
-      <div class="aggregate-meta">
-        <label for="aggregate-base">
-          기준일:
-          <select id="aggregate-base" aria-label="집계 기준일 선택"></select>
-        </label>
-        <span>[단위: 원]</span>
-      </div>
+        <div class="aggregate-meta">
+          <label for="aggregate-base">
+            기준일:
+            <select id="aggregate-base" aria-label="집계 기준일 선택"></select>
+          </label>
+          <span>[단위: 원]</span>
+        </div>
 
-      <table class="aggregate-table">
-        <colgroup>
-          <col style="width: 13%">
-          <col style="width: 14%">
-          <col style="width: 14%">
-          <col style="width: 14%">
-          <col style="width: 15%">
-          <col style="width: 15%">
-          <col style="width: 15%">
-        </colgroup>
-        <thead>
-          <tr>
-            <th>구분</th>
-            <th>전월말<br>외매잔액<br>ⓐ</th>
-            <th>당월<br>매출액<br>ⓑ</th>
-            <th>이월<br>결제액<br>ⓒ</th>
-            <th class="agg-request-head">당월<br>결제청구액<br>ⓐ+ⓑ-ⓒ</th>
-            <th class="agg-paid-head">당월<br>결제액(확정)<br>ⓓ</th>
-            <th class="agg-unpaid-head">당월<br>미결제액<br>ⓐ+ⓑ-ⓒ-ⓓ</th>
-          </tr>
-        </thead>
-        <tbody id="aggregate-summary"></tbody>
-      </table>
-
-      <p class="small aggregate-notice">
-        ※ 집계의 결제청구액은 기결제액 차감 전 금액입니다.
-        결제청구서의 청구금액(최종)은 기결제액 차감, 기타 잔액 및
-        우선순위 조정을 반영하므로 집계의 결제청구액과 다를 수 있습니다.
-      </p>
-
-      <h3 class="aggregate-subtitle">결제청구액에 대한 일자별 매출 내역</h3>
-      <p id="aggregate-count" class="small"></p>
-      <button id="aggregate-filter-reset" type="button">필터 초기화</button>
-
-      <div class="aggregate-scroll">
-        <table class="aggregate-ledger">
+        <table class="aggregate-table">
+          <colgroup>
+            <col style="width: 13%">
+            <col style="width: 14%">
+            <col style="width: 14%">
+            <col style="width: 14%">
+            <col style="width: 15%">
+            <col style="width: 15%">
+            <col style="width: 15%">
+          </colgroup>
           <thead>
             <tr>
-              <th>매출일자</th>
-              <th>내역</th>
-              <th>수량</th>
-              <th>매출액</th>
-              <th>결제액</th>
-              <th>연결처</th>
-              <th>수금조건</th>
+              <th>구분</th>
+              <th>전월말<br>외매잔액<br>ⓐ</th>
+              <th>당월<br>매출액<br>ⓑ</th>
+              <th>이월<br>외매잔액<br>ⓒ</th>
+              <th class="agg-request-head">당월<br>결제청구액<br>ⓐ+ⓑ-ⓒ</th>
+              <th class="agg-paid-head">당월<br>결제액(확정)<br>ⓓ</th>
+              <th class="agg-unpaid-head">당월<br>미결제액<br>ⓐ+ⓑ-ⓒ-ⓓ</th>
             </tr>
           </thead>
-          <tbody id="aggregate-ledger-body"></tbody>
-          <tfoot>
-            <tr>
-              <td>합계</td>
-              <td>표시 내역 기준</td>
-              <td></td>
-              <td id="aggregate-filter-sales-total">-</td>
-              <td id="aggregate-filter-paid-total">-</td>
-              <td></td>
-              <td></td>
-            </tr>
-          </tfoot>
+          <tbody id="aggregate-summary"></tbody>
         </table>
+
+        <p class="small aggregate-notice">
+          ※ 당월 결제 내역은 ‘당월 결제액(확정)’에서,
+          결제 후 남은 금액은 ‘당월 미결제액’에서 확인할 수 있습니다.
+        </p>
+      </div>
+
+      <div class="panel">
+        <h3 class="aggregate-subtitle">
+          결제청구액에 대한 일자별 매출 내역
+        </h3>
+
+        <p id="aggregate-count" class="small"></p>
+        <button id="aggregate-filter-reset" type="button">필터 초기화</button>
+
+        <div class="aggregate-scroll">
+          <table class="aggregate-ledger">
+            <thead>
+              <tr>
+                <th>매출일자</th>
+                <th>내역</th>
+                <th>수량</th>
+                <th>매출액</th>
+                <th>결제액</th>
+                <th>연결처</th>
+                <th>수금조건</th>
+              </tr>
+            </thead>
+            <tbody id="aggregate-ledger-body"></tbody>
+            <tfoot>
+              <tr>
+                <td>합계</td>
+                <td>표시 내역 기준</td>
+                <td></td>
+                <td id="aggregate-filter-sales-total">-</td>
+                <td id="aggregate-filter-paid-total">-</td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
     </section>
 
@@ -1259,8 +1419,8 @@
               <tr>
                 <th>전월말<br>외상매출금 잔액</th>
                 <th>현재<br>외상매출금 잔액</th>
-                <th>이월<br>외상매출금</th>
                 <th class="request-head">당월<br>결제청구액</th>
+                <th>이월<br>외상매출금</th>
                 <th class="deadline-head">결제기한</th>
               </tr>
             </thead>
@@ -1305,11 +1465,12 @@
       <div class="toolbar no-print">
         <div class="toolbar-row">
           <div class="toolbar-buttons">
-            <span class="toolbar-title">청구서 출력</span>
-            <span class="toolbar-arrow" aria-hidden="true">▶</span>
-            <button id="print" type="button" disabled>인쇄 / PDF 저장</button>
-            <span class="toolbar-divider" aria-hidden="true">·</span>
-            <button id="save-png" type="button" disabled>이미지(PNG)로 저장</button>
+            <button id="print" type="button" disabled>
+              청구서 - 인쇄 / PDF 저장
+            </button>
+            <button id="save-png" type="button" disabled>
+              청구서 - 이미지(PNG)로 저장
+            </button>
           </div>
         </div>
 
@@ -1321,9 +1482,10 @@
       </div>
     </div>
 
-    <!-- 검증 결과 -->
+    <!-- 검증 결과: report 외부에 배치 -->
     <details id="validation" class="panel no-print" hidden>
       <summary class="validation-title">검증 결과</summary>
+
       <div id="errors" class="error"></div>
       <div id="warnings" class="warning"></div>
       <p id="metrics" class="small"></p>
@@ -1335,6 +1497,7 @@
 
       <details class="audit-details">
         <summary>거래별 계산 근거 보기</summary>
+
         <div class="audit-scroll">
           <table class="audit">
             <thead>
@@ -1360,10 +1523,15 @@
       <div class="footer-copyright">
         © 2026 SK Plasma Co., Ltd. All rights reserved.
       </div>
+
       <div class="footer-contact">
         개발·문의: 마케팅지원팀 이은욱(<a href="mailto:eunwook@sk.com">eunwook@sk.com</a>)
       </div>
-      <p class="small version">사내 업무용 · <strong>Version. 2.1</strong> · 2026.11.20 배포</p>
+
+      <p class="small version">
+        사내 업무용 · <strong>Version. 2.1</strong> · 2026.11.20 배포
+      </p>
+
       <div class="update-note-link">
         <button id="open-update-note" type="button" aria-haspopup="dialog">
           Update Note
@@ -1383,12 +1551,14 @@
     <div class="update-note-history">
       <section>
         <h3>2026.11.17 · Ver. 2.1</h3>
-        <p>기능 추가, 수신·비고·Comment를 포함한 결제청구서 PNG 저장 기능 추가</p>
+        <p>기능 추가 → 수신 · 비고 · Comment를 포함한 결제청구서 PNG 저장 기능</p>
       </section>
+
       <section>
         <h3>2026.11.16 · Ver. 2.0</h3>
         <p>SK플라즈마 결제청구 에이전트(Web) 개발 완료 및 배포용 버전 생성 완료</p>
       </section>
+
       <section>
         <h3>2026.10.29 · Ver. 1.1</h3>
         <p>결제청구서 시트 용어 수정 및 배포용 버전 생성 완료</p>
@@ -1398,10 +1568,12 @@
           <li>어음(X차월) → 어음(X개월)</li>
         </ul>
       </section>
+
       <section>
         <h3>2026.10.26</h3>
         <p>용어 수정: 수금 → 결제</p>
       </section>
+
       <section>
         <h3>2026.10.22 · Ver. 1.0</h3>
         <p>배포용 버전 생성 완료</p>
@@ -1420,6 +1592,7 @@
     aria-labelledby="aggregate-filter-title"
   >
     <h3 id="aggregate-filter-title">필터</h3>
+
     <input
       id="aggregate-filter-search"
       type="search"
@@ -1432,12 +1605,16 @@
         id="aggregate-filter-select-visible"
         class="aggregate-filter-secondary"
         type="button"
-      >검색 항목 전체 선택</button>
+      >
+        검색 항목 전체 선택
+      </button>
       <button
         id="aggregate-filter-clear-visible"
         class="aggregate-filter-secondary"
         type="button"
-      >검색 항목 선택 해제</button>
+      >
+        검색 항목 선택 해제
+      </button>
     </div>
 
     <div id="aggregate-filter-options" class="aggregate-filter-options"></div>
@@ -1448,12 +1625,16 @@
         id="aggregate-filter-clear"
         class="aggregate-filter-secondary"
         type="button"
-      >이 열 필터 해제</button>
+      >
+        이 열 필터 해제
+      </button>
       <button
         id="aggregate-filter-cancel"
         class="aggregate-filter-secondary"
         type="button"
-      >취소</button>
+      >
+        취소
+      </button>
     </div>
   </dialog>
 
@@ -1484,6 +1665,7 @@
     /* 2. 날짜 */
     function dateParts(day) {
       const date = new Date(day * DAY);
+
       return [
         date.getUTCFullYear(),
         date.getUTCMonth() + 1,
@@ -1578,7 +1760,9 @@
     function parseDate(value) {
       const text = String(value).trim();
 
-      if (!text) throw new Error("날짜가 비어 있습니다.");
+      if (!text) {
+        throw new Error("날짜가 비어 있습니다.");
+      }
 
       if (/^\d{5}(?:\.0+)?$/.test(text)) {
         return excelDate(Number(text));
@@ -1595,7 +1779,9 @@
 
       const [a, b, c] = parts.map(Number);
 
-      if (parts[0].length === 4) return makeDate(a, b, c);
+      if (parts[0].length === 4) {
+        return makeDate(a, b, c);
+      }
 
       if (text.includes("/")) {
         return makeDate(c >= 100 ? c : 2000 + c, a, b);
@@ -1604,7 +1790,7 @@
       return makeDate(a >= 100 ? a : 2000 + a, b, c);
     }
 
-    // 기존 계산과 동일하게 토요일·일요일만 제외
+    // 기존 계산과 동일하게 토요일·일요일만 제외합니다.
     function previousWorkday(day) {
       day = checkedDay(day - 1);
 
@@ -1616,7 +1802,9 @@
     }
 
     function dateWithDay(value) {
-      if (!value) return "";
+      if (!value) {
+        return "";
+      }
 
       const days = ["일", "월", "화", "수", "목", "금", "토"];
       const weekday = new Date(parseDate(value) * DAY).getUTCDay();
@@ -1626,6 +1814,7 @@
 
     function currentMonthValue() {
       const today = new Date();
+
       return `${today.getFullYear()}-${
         String(today.getMonth() + 1).padStart(2, "0")
       }`;
@@ -1636,6 +1825,7 @@
       if (!Number.isSafeInteger(value)) {
         throw new Error("금액이 안전한 정수 계산 범위를 초과했습니다.");
       }
+
       return value;
     }
 
@@ -1645,7 +1835,9 @@
         .replaceAll(",", "")
         .replaceAll(" ", "");
 
-      if (["", "-", "—"].includes(text)) return 0;
+      if (["", "-", "—"].includes(text)) {
+        return 0;
+      }
 
       if (!/^[+-]?\d+(?:\.0+)?$/.test(text)) {
         throw new Error(`정수 원화 금액으로 읽을 수 없습니다: ${value}`);
@@ -1683,6 +1875,7 @@
           } else {
             field += character;
           }
+
           continue;
         }
 
@@ -1694,7 +1887,9 @@
           field = "";
           started = false;
         } else if (character === "\r" || character === "\n") {
-          if (character === "\r" && text[index + 1] === "\n") index++;
+          if (character === "\r" && text[index + 1] === "\n") {
+            index++;
+          }
 
           if (row.length || started || field) {
             row.push(field);
@@ -1776,9 +1971,15 @@
     );
 
     const EXCHANGE = new Set(["L3", "L5", "L6"]);
+
     const LABELS = [
-      "현금", "카드", "어음(3개월)", "어음(2개월)", "어음(1개월)"
+      "현금",
+      "카드",
+      "어음(3개월)",
+      "어음(2개월)",
+      "어음(1개월)"
     ];
+
     const PRIORITY = [5, 4, 1, 2, 3];
 
     function conditionPart(text, index) {
@@ -1820,13 +2021,17 @@
           value.replace(/\s+/g, "").replace(/^\uFEFF/, "")
         );
 
-        if (!required.every(key => keys.includes(key))) continue;
+        if (!required.every(key => keys.includes(key))) {
+          continue;
+        }
 
         headerIndex = index;
         positions = Object.create(null);
 
         keys.forEach((key, column) => {
-          if (!has(positions, key)) positions[key] = column;
+          if (!has(positions, key)) {
+            positions[key] = column;
+          }
         });
 
         const firstTypeColumn = keys.indexOf("구분");
@@ -1835,6 +2040,7 @@
         if (productColumn >= 0) {
           positions["집계용제품명"] = productColumn;
         }
+
         break;
       }
 
@@ -1854,7 +2060,10 @@
           has(positions, key) ? (values[positions[key]] ?? "") : "";
 
         const code = get("제품코드").trim();
-        if (!code) continue;
+
+        if (!code) {
+          continue;
+        }
 
         if (index - headerIndex - 1 >= 2997) {
           throw new Error(
@@ -1921,12 +2130,22 @@
         });
 
         try {
-          if (row.remark) row.y = conditionPart(row.remark, 0);
-          if (row.y) row.z = conditionPart(row.remark, 1);
+          if (row.remark) {
+            row.y = conditionPart(row.remark, 0);
+          }
+
+          if (row.y) {
+            row.z = conditionPart(row.remark, 1);
+          }
 
           if (!(row.type === "판매" && row.amt < 0)) {
-            if (row.z) row.aa = conditionPart(row.remark, 2);
-            if (row.aa) row.ab = conditionPart(row.remark, 3);
+            if (row.z) {
+              row.aa = conditionPart(row.remark, 2);
+            }
+
+            if (row.aa) {
+              row.ab = conditionPart(row.remark, 3);
+            }
           }
         } catch (error) {
           errors.push(`${row.line}행 조건 추출: ${error.message}`);
@@ -1936,7 +2155,10 @@
       // 음수 판매 거래의 결제조건 참조
       for (let index = 0; index < rows.length; index++) {
         const row = rows[index];
-        if (row.type !== "판매" || row.amt >= 0) continue;
+
+        if (row.type !== "판매" || row.amt >= 0) {
+          continue;
+        }
 
         const matches = candidate =>
           candidate.amt > 0 &&
@@ -1952,7 +2174,9 @@
           }
         }
 
-        if (!target) target = rows.slice(index + 1).find(matches);
+        if (!target) {
+          target = rows.slice(index + 1).find(matches);
+        }
 
         if (target) {
           row.aa = target.aa;
@@ -2126,7 +2350,9 @@
         row.issue_date = "";
         row.maturity_date = "";
 
-        if (!row.label.startsWith("어음") || row.contract === 0) continue;
+        if (!row.label.startsWith("어음") || row.contract === 0) {
+          continue;
+        }
 
         const issue = previousWorkday(checkedDay(base + 1));
         let maturity;
@@ -2148,8 +2374,12 @@
       }
 
       const aggregateLabels = [
-        "현금", "카드",
-        "어음(3개월)", "어음(2개월)", "어음(1개월)", "어음(0개월)"
+        "현금",
+        "카드",
+        "어음(3개월)",
+        "어음(2개월)",
+        "어음(1개월)",
+        "어음(0개월)"
       ];
 
       const aggregateDetails = aggregateLabels.map(label => {
@@ -2233,7 +2463,11 @@
         base: iso(base),
         rows: rows.length,
         summary: {
-          prev, sales, received, balance, carried,
+          prev,
+          sales,
+          received,
+          balance,
+          carried,
           request: requestTotal
         },
         details,
@@ -2291,7 +2525,6 @@
 
       $("calculate").hidden = complete;
       $("calculate").disabled = busy;
-
       $("calculation-complete").hidden = !complete;
 
       $("reset-all").hidden = appState.phase === "initial";
@@ -2366,13 +2599,17 @@
       setExportStatus();
       removePrintableInputs();
 
-      if (aggregateFilterDialog.open) aggregateFilterDialog.close();
+      if (aggregateFilterDialog.open) {
+        aggregateFilterDialog.close();
+      }
 
       syncButtons();
     }
 
     function selectResultTab(name) {
-      if (appState.savingPng) return;
+      if (appState.savingPng) {
+        return;
+      }
 
       const aggregateSelected = name === "aggregate";
 
@@ -2408,8 +2645,8 @@
         <tr>
           <td>${displayMoney(summary.prev)}</td>
           <td>${displayMoney(summary.balance)}</td>
-          <td>${displayMoney(summary.carried)}</td>
           <td class="request-value">${displayMoney(summary.request)}</td>
+          <td>${displayMoney(summary.carried)}</td>
           <td class="deadline-value">
             <strong>${escapeHtml(data.base.replaceAll("-", "."))}</strong>
           </td>
@@ -2490,9 +2727,15 @@
 
       $("audit").innerHTML = data.audit.map(row => {
         const values = [
-          row.line, row.date, row.code, row.customer,
-          money(row.amount), money(row.received),
-          row.aa, row.ab, row.billing
+          row.line,
+          row.date,
+          row.code,
+          row.customer,
+          money(row.amount),
+          money(row.received),
+          row.aa,
+          row.ab,
+          row.billing
         ];
 
         return "<tr>" + values.map(value =>
@@ -2548,6 +2791,7 @@
 
       if (select.selectedIndex === -1) {
         const option = document.createElement("option");
+
         option.value = selectedDate;
         option.textContent = `${selectedDate} (선택 범위 밖)`;
         option.disabled = true;
@@ -2605,6 +2849,7 @@
       if (key === "date") {
         return String(row.date ?? "").slice(2).replaceAll("-", ".");
       }
+
       return String(row[key] ?? "");
     }
 
@@ -2693,6 +2938,7 @@
     function updateFilteredTotals(rows) {
       $("aggregate-filter-sales-total").textContent =
         displayMoney(sum(rows, row => row.sales));
+
       $("aggregate-filter-paid-total").textContent =
         displayMoney(sum(rows, row => row.paid));
     }
@@ -2703,6 +2949,7 @@
       const filtered = state.rows.filter(row =>
         aggregateFilterColumns.every(column => {
           const selected = state.selected[column.key];
+
           return !selected ||
             selected.has(aggregateFilterValue(row, column.key));
         })
@@ -2747,7 +2994,10 @@
 
       for (const column of aggregateFilterColumns) {
         const id = `aggregate-filter-button-${column.key}`;
-        if ($(id)) continue;
+
+        if ($(id)) {
+          continue;
+        }
 
         const button = document.createElement("button");
         button.id = id;
@@ -2782,11 +3032,12 @@
     }
 
     function printReport() {
-      if (!appState.valid || appState.savingPng || appState.calculating) return;
+      if (!appState.valid || appState.savingPng || appState.calculating) {
+        return;
+      }
 
       try {
         setExportStatus();
-        preparePrintableInputs();
         window.print();
       } catch (error) {
         setExportStatus(
@@ -2832,7 +3083,9 @@
     }
 
     async function saveReportPng() {
-      if (!appState.valid || appState.savingPng || appState.calculating) return;
+      if (!appState.valid || appState.savingPng || appState.calculating) {
+        return;
+      }
 
       if (typeof window.html2canvas !== "function") {
         setExportStatus(
@@ -2918,7 +3171,13 @@
             clonedReport.hidden = false;
             clonedReport.classList.remove("aggregate-selected");
 
-            clonedWrap.style.overflow = "visible";
+            // 화면 카드의 라운드·그림자는 PNG에 반영하지 않습니다.
+            Object.assign(clonedWrap.style, {
+              overflow: "visible",
+              borderRadius: "0",
+              boxShadow: "none"
+            });
+
             clonedWrap.scrollLeft = 0;
             clonedWrap.scrollTop = 0;
 
@@ -3032,7 +3291,10 @@
         try {
           if (captureDocument) {
             const frame = captureDocument.defaultView?.frameElement;
-            if (frame?.isConnected) frame.remove();
+
+            if (frame?.isConnected) {
+              frame.remove();
+            }
           }
 
           if (canvas) {
@@ -3055,7 +3317,9 @@
 
     /* 12. 계산 실행 */
     function runCalculation(targetTab = "report") {
-      if (appState.savingPng || appState.calculating) return;
+      if (appState.savingPng || appState.calculating) {
+        return;
+      }
 
       invalidate("edited");
       appState.calculating = true;
@@ -3080,13 +3344,17 @@
 
     /* 13. 전체 초기화 */
     function resetAll() {
-      if (appState.savingPng || appState.calculating) return;
+      if (appState.savingPng || appState.calculating) {
+        return;
+      }
 
       const confirmed = window.confirm(
         "입력한 원장, 수신, 비고, Comment 및 계산 결과를 모두 초기화하시겠습니까?"
       );
 
-      if (!confirmed) return;
+      if (!confirmed) {
+        return;
+      }
 
       $("ledger").value = "";
       clearUserNotes();
@@ -3132,15 +3400,21 @@
       $("ledger").focus();
     }
 
-    /* 14. 이벤트: 한 번씩 등록 */
+    /* 14. 이벤트 */
     $("ledger").addEventListener("input", () => {
-      if (appState.savingPng || appState.calculating) return;
+      if (appState.savingPng || appState.calculating) {
+        return;
+      }
+
       clearUserNotes();
       invalidate("edited");
     });
 
     $("base").addEventListener("input", () => {
-      if (appState.savingPng || appState.calculating) return;
+      if (appState.savingPng || appState.calculating) {
+        return;
+      }
+
       invalidate("edited");
       updateGuide();
     });
@@ -3162,7 +3436,9 @@
     });
 
     $("aggregate-base").addEventListener("change", () => {
-      if (appState.savingPng || appState.calculating) return;
+      if (appState.savingPng || appState.calculating) {
+        return;
+      }
 
       $("base").value = $("aggregate-base").value.slice(0, 7);
       updateGuide();
@@ -3183,6 +3459,7 @@
       for (const value of aggregateMatchingOptions()) {
         aggregateFilterState.draft.add(value);
       }
+
       renderAggregateFilterOptions();
     });
 
@@ -3190,6 +3467,7 @@
       for (const value of aggregateMatchingOptions()) {
         aggregateFilterState.draft.delete(value);
       }
+
       renderAggregateFilterOptions();
     });
 
@@ -3218,13 +3496,16 @@
     });
 
     $("open-update-note").addEventListener("click", () => {
-      if (!updateNoteDialog.open) updateNoteDialog.showModal();
+      if (!updateNoteDialog.open) {
+        updateNoteDialog.showModal();
+      }
     });
 
     $("close-update-note").addEventListener("click", () => {
       updateNoteDialog.close();
     });
 
+    // 버튼 인쇄와 Ctrl+P 모두 이 이벤트에서 입력값을 출력용 텍스트로 준비합니다.
     window.addEventListener("beforeprint", preparePrintableInputs);
     window.addEventListener("afterprint", removePrintableInputs);
 
