@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta
     http-equiv="Content-Security-Policy"
-    content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' file: data: blob:; frame-src 'self' about:; connect-src https://skplasma-holidays.eunwook.workers.dev; object-src 'none'; base-uri 'none'; form-action 'none'"
+    content="default-src 'none'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com; style-src 'unsafe-inline'; img-src 'self' file: data: blob:; frame-src 'self' about: https://challenges.cloudflare.com; connect-src https://skplasma-holidays.eunwook.workers.dev https://skplasma-guestbook.eunwook.workers.dev https://challenges.cloudflare.com; object-src 'none'; base-uri 'none'; form-action 'none'"
   >
   <title>SK플라즈마 결제청구 에이전트</title>
 
@@ -68,7 +68,8 @@
 
     input,
     button,
-    select {
+    select,
+    textarea {
       font: inherit;
     }
 
@@ -92,10 +93,60 @@
       height: auto;
     }
 
-    /* 2. 메인 입력 화면 */
+    /* 2. 원장 입력 및 상단 바로가기 */
     .input-panel {
+      position: relative;
       margin-bottom: 11px;
-      padding: 24px 18px 28px;
+      padding: 52px 18px 28px;
+    }
+
+    .input-top-actions {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      left: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .input-top-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .input-top-actions button,
+    .input-top-actions a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 6px 10px;
+      border: 1px solid #d3dae3;
+      border-radius: 6px;
+      background: #fff;
+      color: #526276;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.4;
+      text-decoration: none;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .input-top-actions button:hover,
+    .input-top-actions a:hover {
+      border-color: var(--navy);
+      background: #eef5fc;
+      color: var(--navy);
+    }
+
+    .input-top-actions button:focus-visible,
+    .input-top-actions a:focus-visible {
+      outline: 2px solid var(--navy);
+      outline-offset: 3px;
     }
 
     .app-logo {
@@ -207,7 +258,8 @@
       text-align: center;
     }
 
-    #message:empty {
+    #message:empty,
+    #export-status:empty {
       display: none;
     }
 
@@ -279,7 +331,7 @@
 
     .section-title {
       margin: 0 2px 8px;
-      font-weight: bold;
+      font-weight: 700;
     }
 
     .meta {
@@ -344,7 +396,7 @@
       border-top: 0;
       background: var(--blue);
       font-size: 14px;
-      font-weight: bold;
+      font-weight: 700;
     }
 
     .summary .deadline-head {
@@ -398,8 +450,8 @@
     }
 
     .detail .bill-date {
-      padding-left: 5px;
       padding-right: 5px;
+      padding-left: 5px;
       background: var(--blue);
       color: #00396d;
       font-size: 11px;
@@ -410,7 +462,10 @@
 
     .pattern {
       background-color: #edf1f4;
-      background-image: radial-gradient(#79838e 0.55px, transparent 0.7px);
+      background-image: radial-gradient(
+        #79838e 0.55px,
+        transparent 0.7px
+      );
       background-size: 3px 3px;
     }
 
@@ -451,7 +506,7 @@
     .detail tfoot td {
       border-top: 3px double #000;
       border-bottom: 2px solid #000;
-      font-weight: bold;
+      font-weight: 700;
     }
 
     .detail tfoot .amount {
@@ -473,6 +528,9 @@
     }
 
     .footnote {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      column-gap: 4px;
       margin: 6px 10px 17px;
       color: #244564;
       font-size: 10px;
@@ -482,7 +540,7 @@
     .comment-title {
       padding: 0 3px 3px;
       border-bottom: 1px solid #000;
-      font-weight: bold;
+      font-weight: 700;
     }
 
     .comment {
@@ -504,7 +562,7 @@
       outline-offset: 1px;
     }
 
-    /* 4. 출력 도구 모음 */
+    /* 4. 출력 도구 */
     .toolbar {
       display: flex;
       flex-direction: column;
@@ -556,15 +614,11 @@
       text-align: center;
     }
 
-    #export-status:empty {
-      display: none;
-    }
-
     #export-status.export-error {
       color: #c00000;
     }
 
-    /* 5. 검증 결과 */
+    /* 5. 검증 */
     #validation {
       margin-top: 22px;
     }
@@ -862,7 +916,7 @@
       background: #e0f0d4;
     }
 
-    /* 8. 필터 및 팝업 */
+    /* 8. 필터 팝업 */
     .aggregate-filter-button {
       width: auto;
       min-width: 0;
@@ -897,8 +951,9 @@
     }
 
     #aggregate-filter-dialog,
-    #update-note-dialog {
-      max-width: 90vw;
+    #update-note-dialog,
+    #guestbook-dialog {
+      max-width: calc(100vw - 24px);
       max-height: 85vh;
       margin: auto;
       border: 1px solid #bcc5ce;
@@ -914,8 +969,10 @@
       border-radius: 10px;
     }
 
-    #aggregate-filter-dialog::backdrop {
-      background: rgba(0, 0, 0, 0.33);
+    #aggregate-filter-dialog::backdrop,
+    #update-note-dialog::backdrop,
+    #guestbook-dialog::backdrop {
+      background: rgba(0, 0, 0, 0.35);
     }
 
     #aggregate-filter-dialog h3 {
@@ -1021,10 +1078,6 @@
       border-radius: 12px;
     }
 
-    #update-note-dialog::backdrop {
-      background: rgba(0, 0, 0, 0.35);
-    }
-
     #update-note-title {
       margin: 0 0 16px;
       color: var(--navy);
@@ -1066,7 +1119,7 @@
 
     .update-note-actions {
       margin-top: 16px;
-      text-align: right;
+      text-align: center;
     }
 
     #close-update-note {
@@ -1075,7 +1128,250 @@
       font-size: 12px;
     }
 
-    /* 10. 화면 전용 */
+    /* 10. 의견 및 댓글 팝업 */
+    #guestbook-dialog {
+      width: 680px;
+      padding: 22px;
+      border-radius: 12px;
+    }
+
+    #guestbook-title {
+      margin: 0 0 10px;
+      color: var(--navy);
+      font-size: 20px;
+      text-align: center;
+    }
+
+    .gb-intro {
+      margin: 0 0 14px;
+      color: #526276;
+      font-size: 13px;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .gb-notice {
+      margin-bottom: 16px;
+      padding: 10px 12px;
+      border: 1px solid #e5dfbd;
+      border-radius: 6px;
+      background: #fffdeb;
+      color: #665624;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .gb-editor {
+      min-width: 0;
+      margin: 0 0 20px;
+      padding: 16px;
+      border: 1px solid #d8e0e8;
+      border-radius: 8px;
+      background: #f7f9fc;
+    }
+
+    .gb-editor legend {
+      padding: 0 5px;
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .gb-editor label {
+      display: block;
+      color: #36465a;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .gb-fields {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .gb-editor input,
+    .gb-editor textarea {
+      display: block;
+      width: 100%;
+      margin-top: 5px;
+      padding: 9px 10px;
+      border: 1px solid #bcc5ce;
+      border-radius: 5px;
+      background: #fff;
+      color: #111;
+      font: inherit;
+    }
+
+    .gb-editor textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .gb-editor input:focus,
+    .gb-editor textarea:focus {
+      outline: 2px solid var(--navy);
+      outline-offset: 1px;
+    }
+
+    #gb-target {
+      margin: 0 0 12px;
+      color: var(--navy);
+      font-size: 12px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .gb-help {
+      margin: 8px 0;
+      color: #606975;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    #gb-count {
+      display: block;
+      margin-top: 4px;
+      color: #606975;
+      font-size: 11px;
+      text-align: right;
+    }
+
+    #gb-turnstile {
+      min-height: 65px;
+      margin-top: 12px;
+      overflow-x: auto;
+    }
+
+    .gb-editor-actions,
+    .gb-list-heading,
+    .gb-card-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .gb-editor-actions {
+      margin-top: 12px;
+    }
+
+    .gb-list-heading {
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .gb-list-heading h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 15px;
+    }
+
+    #guestbook-dialog .gb-secondary {
+      background: #526276;
+    }
+
+    #guestbook-dialog .gb-danger {
+      background: #a62638;
+    }
+
+    #guestbook-dialog button {
+      font-size: 12px;
+    }
+
+    #guestbook-dialog button:disabled {
+      background: #999;
+      color: #fff;
+      cursor: not-allowed;
+    }
+
+    #gb-status {
+      margin: 10px 0 14px;
+      color: #245f3a;
+      font-size: 12px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    #gb-status:empty {
+      display: none;
+    }
+
+    #gb-status.gb-error {
+      color: #b71935;
+    }
+
+    .gb-card {
+      margin-bottom: 12px;
+      padding: 14px;
+      border: 1px solid #d8e0e8;
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .gb-card-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .gb-name {
+      color: var(--navy);
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+
+    .gb-date {
+      color: #7a8490;
+      font-size: 11px;
+    }
+
+    .gb-text {
+      margin: 10px 0;
+      font-size: 13px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .gb-card-actions button {
+      padding: 4px 8px;
+      border: 1px solid #ccd5df;
+      background: #f5f7fa;
+      color: #526276;
+      font-size: 11px;
+    }
+
+    .gb-replies {
+      margin-top: 12px;
+      padding-left: 12px;
+      border-left: 3px solid #dcebf7;
+    }
+
+    .gb-reply {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 6px;
+      background: #f5f8fc;
+    }
+
+    .gb-empty {
+      margin: 12px 0;
+      color: #606975;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .gb-close-actions {
+      margin-top: 18px;
+      text-align: center;
+    }
+
+    /* 11. 화면 전용 */
     @media screen {
       #report.aggregate-selected {
         display: none;
@@ -1110,7 +1406,39 @@
       }
     }
 
-    /* 11. 인쇄 */
+    @media screen and (max-width: 480px) {
+      .input-panel {
+        padding-top: 16px;
+      }
+
+      .input-top-actions {
+        position: static;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+      }
+
+      .input-top-right {
+        margin-left: auto;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .input-top-actions button,
+      .input-top-actions a {
+        padding: 6px 7px;
+        font-size: 11px;
+      }
+
+      #guestbook-dialog {
+        padding: 16px;
+      }
+
+      .gb-fields {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    /* 12. 인쇄 */
     .print-input-text {
       display: none;
     }
@@ -1217,50 +1545,43 @@
         background: transparent;
       }
     }
-/* 입력 카드 오른쪽 위 즐겨찾기 버튼 */
-.input-panel {
-  position: relative;
-  padding-top: 52px;
-}
-
-#add-bookmark {
-  position: absolute;
-  top: 12px;
-  right: 14px;
-  padding: 6px 10px;
-  border: 1px solid #d3dae3;
-  border-radius: 6px;
-  background: #fff;
-  color: #526276;
-  font-size: 12px;
-  line-height: 1.4;
-}
-
-#add-bookmark:hover {
-  border-color: #073b72;
-  background: #eef5fc;
-  color: #073b72;
-}
-
-#add-bookmark:focus-visible {
-  outline: 2px solid #073b72;
-  outline-offset: 3px;
-}
   </style>
 </head>
 
 <body>
   <main class="workspace">
-    <!-- 원장 입력 -->
+    <!-- 1. 원장 입력 -->
     <section class="panel input-panel no-print">
+      <div class="input-top-actions">
+        <button
+          id="add-bookmark"
+          type="button"
+          title="브라우저 즐겨찾기 등록 방법 안내"
+        >
+          ⭐ 즐겨찾기 안내
+        </button>
 
-    <button
-      id="add-bookmark"
-      type="button"
-      title="브라우저 즐겨찾기 등록 방법 안내"
-    >
-      ☆ 즐겨찾기 추가
-    </button>
+        <div class="input-top-right">
+          <a
+            id="open-manual"
+            href="./manual.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="사용 매뉴얼 PDF 새 탭에서 열기"
+          >
+            📖 사용 매뉴얼
+          </a>
+
+          <button
+            id="open-guestbook"
+            type="button"
+            aria-haspopup="dialog"
+            aria-controls="guestbook-dialog"
+          >
+            💬 의견 남기기
+          </button>
+        </div>
+      </div>
 
       <div class="app-logo">
         <img src="./logo.png" alt="SK plasma">
@@ -1280,12 +1601,15 @@
         <div>
           <div>
             MIS에서 거래원장 조회 시 기간은 거래내역 누락 방지를 위해
-            <u><strong>최근 10개월~1년 정도</strong>로 넉넉하게 설정</u>해 주시기 바랍니다.
+            <u><strong>최근 10개월~1년 정도</strong>로 넉넉하게 설정</u>해
+            주시기 바랍니다.
           </div>
+
           <div>
-            다운받은 거래원장 원본 데이터의
+            다운로드한 거래원장 원본 데이터의
             <u>행·열 순서를 변경하지 마시기 바랍니다</u>.
           </div>
+
           <div>
             이 도구는 입력한 거래원장을 브라우저에서 계산하며,
             <u>원장 데이터를 외부 서버로 전송하거나 자동 저장하지 않습니다</u>.
@@ -1310,29 +1634,35 @@
             required
           >
         </label>
+
         <span id="month-end-guide" class="small"></span>
       </div>
 
       <div class="input-actions">
         <button id="calculate" type="button">계산하기</button>
-        <span id="calculation-complete" role="status" hidden>계산 완료</span>
+
+        <span id="calculation-complete" role="status" hidden>
+          계산 완료
+        </span>
+
         <button id="reset-all" type="button" hidden>초기화</button>
       </div>
 
       <div id="message" role="status"></div>
     </section>
 
-    <!-- 결과 탭 -->
+    <!-- 2. 결과 탭 -->
     <div id="result-tabs" class="result-tabs no-print" hidden>
       <button id="tab-report" type="button" aria-pressed="true">
         결제청구서
       </button>
+
       <button id="tab-aggregate" type="button" aria-pressed="false">
         집계
       </button>
     </div>
 
-    <!-- 집계: 상단 계산 시트와 하단 일자별 내역을 별도 카드로 표시 -->
+    <!-- 3. 집계 -->
     <section id="aggregate-panel" class="no-print" hidden>
       <div class="panel">
         <h2 class="aggregate-title">결제청구액 계산 시트</h2>
@@ -1340,8 +1670,12 @@
         <div class="aggregate-meta">
           <label for="aggregate-base">
             기준일:
-            <select id="aggregate-base" aria-label="집계 기준일 선택"></select>
+            <select
+              id="aggregate-base"
+              aria-label="집계 기준일 선택"
+            ></select>
           </label>
+
           <span>[단위: 원]</span>
         </div>
 
@@ -1355,17 +1689,25 @@
             <col style="width: 15%">
             <col style="width: 15%">
           </colgroup>
+
           <thead>
             <tr>
               <th>구분</th>
               <th>전월말<br>외매잔액<br>ⓐ</th>
               <th>당월<br>매출액<br>ⓑ</th>
               <th>이월<br>외매잔액<br>ⓒ</th>
-              <th class="agg-request-head">당월<br>결제청구액<br>ⓐ+ⓑ-ⓒ</th>
-              <th class="agg-paid-head">당월<br>결제액(확정)<br>ⓓ</th>
-              <th class="agg-unpaid-head">당월<br>미결제액<br>ⓐ+ⓑ-ⓒ-ⓓ</th>
+              <th class="agg-request-head">
+                당월<br>결제청구액<br>ⓐ+ⓑ-ⓒ
+              </th>
+              <th class="agg-paid-head">
+                당월<br>결제액(확정)<br>ⓓ
+              </th>
+              <th class="agg-unpaid-head">
+                당월<br>미결제액<br>ⓐ+ⓑ-ⓒ-ⓓ
+              </th>
             </tr>
           </thead>
+
           <tbody id="aggregate-summary"></tbody>
         </table>
 
@@ -1381,7 +1723,10 @@
         </h3>
 
         <p id="aggregate-count" class="small"></p>
-        <button id="aggregate-filter-reset" type="button">필터 초기화</button>
+
+        <button id="aggregate-filter-reset" type="button">
+          필터 초기화
+        </button>
 
         <div class="aggregate-scroll">
           <table class="aggregate-ledger">
@@ -1396,7 +1741,9 @@
                 <th>수금조건</th>
               </tr>
             </thead>
+
             <tbody id="aggregate-ledger-body"></tbody>
+
             <tfoot>
               <tr>
                 <td>합계</td>
@@ -1413,7 +1760,7 @@
       </div>
     </section>
 
-    <!-- 결제청구서 -->
+    <!-- 4. 결제청구서 -->
     <div id="report" hidden>
       <div class="sheet-wrap">
         <article id="report-sheet" class="sheet">
@@ -1421,10 +1768,13 @@
             <img id="logo" src="./logo.png" alt="SK plasma">
           </div>
 
-          <div id="document-title" class="document-title">결제청구서</div>
+          <div id="document-title" class="document-title">
+            결제청구서
+          </div>
 
           <div class="recipient-row">
             <label for="recipient">수신:</label>
+
             <input
               id="recipient"
               type="text"
@@ -1453,6 +1803,7 @@
               <col style="width: 17%">
               <col style="width: 32%">
             </colgroup>
+
             <thead>
               <tr>
                 <th>전월말<br>외상매출금 잔액</th>
@@ -1462,6 +1813,7 @@
                 <th class="deadline-head">결제기한</th>
               </tr>
             </thead>
+
             <tbody id="summary"></tbody>
           </table>
 
@@ -1473,6 +1825,7 @@
               <col style="width: 17%">
               <col style="width: 32%">
             </colgroup>
+
             <thead>
               <tr>
                 <th>구분(결제조건별)</th>
@@ -1482,15 +1835,24 @@
                 <th>비고</th>
               </tr>
             </thead>
+
             <tbody id="details"></tbody>
             <tfoot id="totals"></tfoot>
           </table>
 
-          <p class="footnote">
-            ※ 당월 중 이미 결제하신 금액은 결제청구액에 포함되지 않습니다.
-          </p>
+          <div class="footnote">
+            <span aria-hidden="true">※</span>
+
+            <div>
+              당월 결제액 중 원장에 반영된 금액은
+              위 결제청구액에서 제외되었습니다.<br>
+              어음 발행·만기 요청일은 결제조건에 따라 산정하며,
+              <u>주말·공휴일이면 직전 영업일로 안내</u>드립니다.
+            </div>
+          </div>
 
           <div class="comment-title">Comment</div>
+
           <div
             class="comment"
             contenteditable="plaintext-only"
@@ -1499,13 +1861,14 @@
         </article>
       </div>
 
-      <!-- 출력 도구 모음 -->
+      <!-- 출력 도구 -->
       <div class="toolbar no-print">
         <div class="toolbar-row">
           <div class="toolbar-buttons">
             <button id="print" type="button" disabled>
               청구서 - 인쇄 / PDF 저장
             </button>
+
             <button id="save-png" type="button" disabled>
               청구서 - 이미지(PNG)로 저장
             </button>
@@ -1520,7 +1883,7 @@
       </div>
     </div>
 
-    <!-- 검증 결과: report 외부에 배치 -->
+    <!-- 5. 검증 결과 -->
     <details id="validation" class="panel no-print" hidden>
       <summary class="validation-title">검증 결과</summary>
 
@@ -1551,55 +1914,89 @@
                 <th>청구기준일</th>
               </tr>
             </thead>
+
             <tbody id="audit"></tbody>
           </table>
         </div>
       </details>
     </details>
 
+    <!-- 6. 푸터 -->
     <footer class="no-print">
       <div class="footer-copyright">
         © 2026 SK Plasma Co., Ltd. All rights reserved.
       </div>
 
       <div class="footer-contact">
-        개발·문의: 마케팅지원팀 이은욱 (<a href="mailto:eunwook@sk.com">eunwook@sk.com</a>)
+        개발·문의: 마케팅지원팀 이은욱
+        (<a href="mailto:eunwook@sk.com">eunwook@sk.com</a>)
       </div>
 
       <p class="small version">
-        사내 업무용 · <strong>Version. 2.1</strong> · 2026.11.20 배포
+        사내 업무용 · <strong>Version. 2.2</strong> · 2026.11.20. 배포
       </p>
 
       <div class="update-note-link">
-        <button id="open-update-note" type="button" aria-haspopup="dialog">
+        <button
+          id="open-update-note"
+          type="button"
+          aria-haspopup="dialog"
+          aria-controls="update-note-dialog"
+        >
           Update Note
         </button>
       </div>
     </footer>
   </main>
 
-  <!-- 업데이트 이력 -->
+  <!-- 7. 업데이트 이력 팝업 -->
   <dialog
     id="update-note-dialog"
     class="no-print"
     aria-labelledby="update-note-title"
   >
-    <h2 id="update-note-title">Update Note</h2>
+    <h2 id="update-note-title" tabindex="-1" autofocus>
+      Update Note
+    </h2>
 
     <div class="update-note-history">
       <section>
-        <h3>2026.11.17 · Ver. 2.1</h3>
-        <p>기능 추가 → 수신 · 비고 · Comment를 포함한 결제청구서 PNG 저장 기능</p>
+        <h3>Ver. 2.2 - 2026.11.18.</h3>
+        <p>기능 추가</p>
+
+        <ul>
+          <li>
+            공휴일 연동: 연도별 공휴일 자동 조회 및
+            어음 발행·만기 요청일 계산 시 자동 반영
+          </li>
+          <li>
+            편의 기능: 메인 화면에서 즐겨찾기 추가 안내 및
+            사용 매뉴얼 열기 버튼 추가
+          </li>
+        </ul>
       </section>
 
       <section>
-        <h3>2026.11.16 · Ver. 2.0</h3>
-        <p>SK플라즈마 결제청구 에이전트(Web) 개발 완료 및 배포용 버전 생성 완료</p>
+        <h3>Ver. 2.1 - 2026.11.17.</h3>
+        <p>기능 추가</p>
+
+        <ul>
+          <li>결제청구서 PNG 저장 기능</li>
+        </ul>
       </section>
 
       <section>
-        <h3>2026.10.29 · Ver. 1.1</h3>
+        <h3>Ver. 2.0 - 2026.11.16.</h3>
+        <p>
+          SK플라즈마 결제청구 에이전트(Web) 개발 완료 및
+          배포용 버전 생성 완료
+        </p>
+      </section>
+
+      <section>
+        <h3>Ver. 1.1 - 2026.10.29.</h3>
         <p>결제청구서 시트 용어 수정 및 배포용 버전 생성 완료</p>
+
         <ul>
           <li>채권잔액 → 외상매출액</li>
           <li>월 수금액 → 이월 외상매출액</li>
@@ -1608,12 +2005,12 @@
       </section>
 
       <section>
-        <h3>2026.10.26</h3>
+        <h3>Ver. 1.0 - 2026.10.26.</h3>
         <p>용어 수정: 수금 → 결제</p>
       </section>
 
       <section>
-        <h3>2026.10.22 · Ver. 1.0</h3>
+        <h3>Ver. 1.0 - 2026.10.22.</h3>
         <p>배포용 버전 생성 완료</p>
       </section>
     </div>
@@ -1623,7 +2020,7 @@
     </div>
   </dialog>
 
-  <!-- 필터 팝업 -->
+  <!-- 8. 집계 필터 팝업 -->
   <dialog
     id="aggregate-filter-dialog"
     class="no-print"
@@ -1646,6 +2043,7 @@
       >
         검색 항목 전체 선택
       </button>
+
       <button
         id="aggregate-filter-clear-visible"
         class="aggregate-filter-secondary"
@@ -1655,10 +2053,14 @@
       </button>
     </div>
 
-    <div id="aggregate-filter-options" class="aggregate-filter-options"></div>
+    <div
+      id="aggregate-filter-options"
+      class="aggregate-filter-options"
+    ></div>
 
     <div class="aggregate-filter-actions">
       <button id="aggregate-filter-apply" type="button">적용</button>
+
       <button
         id="aggregate-filter-clear"
         class="aggregate-filter-secondary"
@@ -1666,6 +2068,7 @@
       >
         이 열 필터 해제
       </button>
+
       <button
         id="aggregate-filter-cancel"
         class="aggregate-filter-secondary"
@@ -1676,163 +2079,284 @@
     </div>
   </dialog>
 
-  <!-- index.html, logo.png와 같은 폴더에 배치 -->
+  <!-- 9. 의견·댓글 팝업 -->
+  <dialog
+    id="guestbook-dialog"
+    class="no-print"
+    aria-labelledby="guestbook-title"
+  >
+    <h2 id="guestbook-title" tabindex="-1">
+      한줄 의견
+    </h2>
+
+    <p class="gb-intro">
+      사용 소감이나 개선 아이디어를 자유롭게 남겨주세요.
+    </p>
+
+    <div class="gb-notice">
+      ※ 작성한 이름과 의견·댓글은 다른 사용자에게 공개됩니다.<br>
+      별명을 사용하시고, 거래처명·금액·원장 등 업무상 민감정보는
+      입력하지 마세요.<br>
+      의견과 댓글은 서버에 저장되며, 거래원장은 전송하지 않습니다.
+    </div>
+
+    <fieldset id="gb-editor" class="gb-editor">
+      <legend id="gb-editor-title">새 의견 작성</legend>
+
+      <p id="gb-target" hidden></p>
+
+      <div class="gb-fields">
+        <label id="gb-name-field" for="gb-nickname">
+          이름 또는 별명
+
+          <input
+            id="gb-nickname"
+            type="text"
+            maxlength="20"
+            autocomplete="off"
+            placeholder="최대 20자"
+          >
+        </label>
+
+        <label for="gb-password">
+          비밀번호
+
+          <input
+            id="gb-password"
+            type="password"
+            minlength="8"
+            maxlength="128"
+            autocomplete="new-password"
+            placeholder="8자 이상"
+          >
+        </label>
+      </div>
+
+      <div id="gb-content-field">
+        <label for="gb-comment">
+          의견 또는 댓글
+
+          <textarea
+            id="gb-comment"
+            maxlength="100"
+            placeholder="100자 이내로 남겨주세요."
+          ></textarea>
+        </label>
+
+        <span id="gb-count">0 / 100자</span>
+      </div>
+
+      <p id="gb-password-help" class="gb-help">
+        수정·삭제 시 필요한 비밀번호입니다.
+        다른 서비스의 비밀번호를 사용하지 마세요.
+        비밀번호 분실 시 직접 수정·삭제할 수 없습니다.
+      </p>
+
+      <div id="gb-turnstile"></div>
+
+      <div class="gb-editor-actions">
+        <button id="gb-submit" type="button" disabled>
+          의견 등록
+        </button>
+
+        <button
+          id="gb-cancel"
+          class="gb-secondary"
+          type="button"
+          hidden
+        >
+          취소
+        </button>
+      </div>
+    </fieldset>
+
+    <div
+      id="gb-status"
+      role="status"
+      aria-live="polite"
+    ></div>
+
+    <div class="gb-list-heading">
+      <h3>최근 의견</h3>
+
+      <button
+        id="gb-refresh"
+        class="gb-secondary"
+        type="button"
+      >
+        새로고침
+      </button>
+    </div>
+
+    <p class="gb-help">
+      최신 의견 20개를 표시합니다.
+      댓글은 원글별로 최대 100개까지 표시합니다.
+    </p>
+
+    <div id="gb-list" aria-label="등록된 의견 목록"></div>
+
+    <div class="gb-close-actions">
+      <button
+        id="gb-close"
+        class="gb-secondary"
+        type="button"
+      >
+        닫기
+      </button>
+    </div>
+  </dialog>
+
+  <!-- index.html과 같은 폴더에 배치 -->
   <script src="./html2canvas.min.js"></script>
 
-  <script>
-    "use strict";
+<script>
+"use strict";
 
-    /* 1. 공통 */
-    const $ = id => document.getElementById(id);
-    const DAY = 86400000;
-    const has = (object, key) => Object.hasOwn(object, key);
-    const money = value => value.toLocaleString("ko-KR");
-    const displayMoney = value => value === 0 ? "-" : money(value);
+/* 1. 공통 */
+const $ = id => document.getElementById(id);
+const DAY = 86400000;
+const has = (object, key) => Object.hasOwn(object, key);
+const money = value => value.toLocaleString("ko-KR");
+const displayMoney = value => value === 0 ? "-" : money(value);
 
-    const escapeHtml = value => String(value ?? "").replace(
-      /[&<>"']/g,
-      character => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;"
-      }[character])
+const escapeHtml = value => String(value ?? "").replace(
+  /[&<>"']/g,
+  character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  }[character])
+);
+
+/* 2. 날짜 */
+function dateParts(day) {
+  const date = new Date(day * DAY);
+  return [
+    date.getUTCFullYear(),
+    date.getUTCMonth() + 1,
+    date.getUTCDate()
+  ];
+}
+
+function makeDate(year, month, day) {
+  if (
+    ![year, month, day].every(Number.isInteger) ||
+    year < 1 || year > 9999 ||
+    month < 1 || month > 12 ||
+    day < 1 || day > 31
+  ) {
+    throw new Error("유효하지 않은 날짜입니다.");
+  }
+
+  const value = new Date(0);
+  value.setUTCHours(0, 0, 0, 0);
+  value.setUTCFullYear(year, month - 1, day);
+
+  if (
+    value.getUTCFullYear() !== year ||
+    value.getUTCMonth() !== month - 1 ||
+    value.getUTCDate() !== day
+  ) {
+    throw new Error(`유효하지 않은 날짜: ${year}-${month}-${day}`);
+  }
+
+  return value.getTime() / DAY;
+}
+
+function checkedDay(day) {
+  const [year] = dateParts(day);
+
+  if (
+    !Number.isFinite(day) ||
+    !Number.isFinite(year) ||
+    year < 1 || year > 9999
+  ) {
+    throw new Error("지원 날짜 범위(1\~9999년)를 초과했습니다.");
+  }
+
+  return day;
+}
+
+function iso(day) {
+  const [year, month, date] = dateParts(checkedDay(day));
+  return [
+    String(year).padStart(4, "0"),
+    String(month).padStart(2, "0"),
+    String(date).padStart(2, "0")
+  ].join("-");
+}
+
+function monthEnd(day, offset = 0) {
+  const [year, month] = dateParts(day);
+  const count = year * 12 + month - 1 + offset;
+  const targetYear = Math.floor(count / 12);
+  const targetMonth = count - targetYear * 12 + 1;
+  const leap = targetYear % 4 === 0 &&
+    (targetYear % 100 !== 0 || targetYear % 400 === 0);
+
+  const days = [
+    31, leap ? 29 : 28, 31, 30, 31, 30,
+    31, 31, 30, 31, 30, 31
+  ];
+
+  return makeDate(targetYear, targetMonth, days[targetMonth - 1]);
+}
+
+function excelDate(serial) {
+  const day = Math.trunc(serial);
+
+  if (day === 60) {
+    throw new Error(
+      "Excel의 가상 날짜 1900-02-29는 거래일로 지원하지 않습니다."
     );
+  }
 
-    /* 2. 날짜 */
-    function dateParts(day) {
-      const date = new Date(day * DAY);
+  return checkedDay(makeDate(1899, 12, day < 60 ? 31 : 30) + day);
+}
 
-      return [
-        date.getUTCFullYear(),
-        date.getUTCMonth() + 1,
-        date.getUTCDate()
-      ];
-    }
+function excelMonth(day) {
+  return day === 60 ? 2 : dateParts(excelDate(day))[1];
+}
 
-    function makeDate(year, month, day) {
-      if (
-        ![year, month, day].every(Number.isInteger) ||
-        year < 1 || year > 9999 ||
-        month < 1 || month > 12 ||
-        day < 1 || day > 31
-      ) {
-        throw new Error("유효하지 않은 날짜입니다.");
-      }
+function parseDate(value) {
+  const text = String(value).trim();
 
-      const value = new Date(0);
-      value.setUTCHours(0, 0, 0, 0);
-      value.setUTCFullYear(year, month - 1, day);
+  if (!text) throw new Error("날짜가 비어 있습니다.");
 
-      if (
-        value.getUTCFullYear() !== year ||
-        value.getUTCMonth() !== month - 1 ||
-        value.getUTCDate() !== day
-      ) {
-        throw new Error(`유효하지 않은 날짜: ${year}-${month}-${day}`);
-      }
+  if (/^\d{5}(?:\.0+)?$/.test(text)) {
+    return excelDate(Number(text));
+  }
 
-      return value.getTime() / DAY;
-    }
+  const parts = text.replace(/\.+$/, "").split(/[-./]/);
 
-    function checkedDay(day) {
-      const [year] = dateParts(day);
+  if (parts.length !== 3 || !parts.every(part => /^\d+$/.test(part))) {
+    throw new Error(`지원하지 않는 날짜 형식: ${text}`);
+  }
 
-      if (
-        !Number.isFinite(day) ||
-        !Number.isFinite(year) ||
-        year < 1 || year > 9999
-      ) {
-        throw new Error("지원 날짜 범위(1\~9999년)를 초과했습니다.");
-      }
+  const [a, b, c] = parts.map(Number);
 
-      return day;
-    }
+  if (parts[0].length === 4) return makeDate(a, b, c);
+  if (text.includes("/")) return makeDate(c >= 100 ? c : 2000 + c, a, b);
+  return makeDate(a >= 100 ? a : 2000 + a, b, c);
+}
 
-    function iso(day) {
-      const [year, month, date] = dateParts(checkedDay(day));
+function dateWithDay(value) {
+  if (!value) return "";
+  const days = ["일", "월", "화", "수", "목", "금", "토"];
+  return `${value} (${days[new Date(parseDate(value) * DAY).getUTCDay()]})`;
+}
 
-      return [
-        String(year).padStart(4, "0"),
-        String(month).padStart(2, "0"),
-        String(date).padStart(2, "0")
-      ].join("-");
-    }
+function currentMonthValue() {
+  const today = new Date();
+  return `${today.getFullYear()}-${
+    String(today.getMonth() + 1).padStart(2, "0")
+  }`;
+}
 
-    function monthEnd(day, offset = 0) {
-      const [year, month] = dateParts(day);
-      const count = year * 12 + month - 1 + offset;
-      const targetYear = Math.floor(count / 12);
-      const targetMonth = count - targetYear * 12 + 1;
-
-      const leap = targetYear % 4 === 0 &&
-        (targetYear % 100 !== 0 || targetYear % 400 === 0);
-
-      const days = [
-        31, leap ? 29 : 28, 31, 30, 31, 30,
-        31, 31, 30, 31, 30, 31
-      ];
-
-      return makeDate(targetYear, targetMonth, days[targetMonth - 1]);
-    }
-
-    function excelDate(serial) {
-      const day = Math.trunc(serial);
-
-      if (day === 60) {
-        throw new Error(
-          "Excel의 가상 날짜 1900-02-29는 거래일로 지원하지 않습니다."
-        );
-      }
-
-      return checkedDay(
-        makeDate(1899, 12, day < 60 ? 31 : 30) + day
-      );
-    }
-
-    function excelMonth(day) {
-      return day === 60 ? 2 : dateParts(excelDate(day))[1];
-    }
-
-    function parseDate(value) {
-      const text = String(value).trim();
-
-      if (!text) {
-        throw new Error("날짜가 비어 있습니다.");
-      }
-
-      if (/^\d{5}(?:\.0+)?$/.test(text)) {
-        return excelDate(Number(text));
-      }
-
-      const parts = text.replace(/\.+$/, "").split(/[-./]/);
-
-      if (
-        parts.length !== 3 ||
-        !parts.every(part => /^\d+$/.test(part))
-      ) {
-        throw new Error(`지원하지 않는 날짜 형식: ${text}`);
-      }
-
-      const [a, b, c] = parts.map(Number);
-
-      if (parts[0].length === 4) {
-        return makeDate(a, b, c);
-      }
-
-      if (text.includes("/")) {
-        return makeDate(c >= 100 ? c : 2000 + c, a, b);
-      }
-
-      return makeDate(a >= 100 ? a : 2000 + a, b, c);
-    }
-
-    // 공휴일 정보는 메모리에만 보관합니다.
-// 거래원장·거래처·금액은 외부로 전송하지 않습니다.
-const HOLIDAY_API =
-  "https://skplasma-holidays.eunwook.workers.dev/";
-
+/* 3. 공휴일: 연도만 전송하며 원장 데이터는 전송하지 않습니다. */
+const HOLIDAY_API = "https://skplasma-holidays.eunwook.workers.dev/";
 const holidayCache = new Map();
 const HOLIDAY_CACHE_TTL = 60 * 60 * 1000;
 
@@ -1862,13 +2386,10 @@ async function loadHolidayYear(year) {
     });
 
     let payload;
-
     try {
       payload = await response.json();
     } catch {
-      throw new Error(
-        `${year}년 공휴일 응답을 읽지 못했습니다. Worker 배포 상태를 확인해 주세요.`
-      );
+      throw new Error(`${year}년 공휴일 응답을 읽지 못했습니다.`);
     }
 
     if (!response.ok || payload?.success !== true) {
@@ -1885,9 +2406,7 @@ async function loadHolidayYear(year) {
       !Array.isArray(payload.holidays) ||
       payload.holidays.length === 0
     ) {
-      throw new Error(
-        `${year}년 공휴일 목록이 비어 있거나 응답 연도가 다릅니다.`
-      );
+      throw new Error(`${year}년 공휴일 목록 또는 응답 연도를 확인해 주세요.`);
     }
 
     const dates = new Set();
@@ -1897,47 +2416,30 @@ async function loadHolidayYear(year) {
         !item ||
         typeof item.date !== "string" ||
         !/^\d{4}-\d{2}-\d{2}$/.test(item.date) ||
-        !item.date.startsWith(`${year}-`)
+        !item.date.startsWith(`${year}-`) ||
+        iso(parseDate(item.date)) !== item.date
       ) {
-        throw new Error(
-          `${year}년 공휴일 목록의 날짜 형식이 올바르지 않습니다.`
-        );
+        throw new Error("공휴일 날짜 형식이 올바르지 않습니다.");
       }
-
-      const parsed = parseDate(item.date);
-
-      if (iso(parsed) !== item.date) {
-        throw new Error("유효하지 않은 공휴일 날짜가 있습니다.");
-      }
-
       dates.add(item.date);
     }
 
-    holidayCache.set(year, {
-      dates,
-      loadedAt: Date.now()
-    });
+    holidayCache.set(year, { dates, loadedAt: Date.now() });
   } catch (error) {
-    if (error?.name === "AbortError") {
-      throw new Error(
-        `${year}년 공휴일 조회 시간이 초과되었습니다. 다시 계산해 주세요.`
-      );
+    if (error.name === "AbortError") {
+      throw new Error(`${year}년 공휴일 조회 시간이 초과되었습니다.`);
     }
-
     if (error instanceof TypeError) {
       throw new Error(
-        "공휴일 서버에 연결하지 못했습니다. 인터넷 연결, HTML의 CSP와 Worker의 CORS 설정을 확인해 주세요."
+        "공휴일 서버에 연결하지 못했습니다. 인터넷 연결과 CSP·CORS 설정을 확인해 주세요."
       );
     }
-
     throw error;
   } finally {
     clearTimeout(timer);
   }
 }
 
-// 입력일의 전날부터 역산합니다.
-// 기존 날짜 산정 공식은 유지하고 공휴일 제외만 추가합니다.
 function previousWorkday(day) {
   day = checkedDay(day - 1);
 
@@ -1945,31 +2447,22 @@ function previousWorkday(day) {
     const year = dateParts(day)[0];
     const cached = holidayCache.get(year);
 
-    if (
-      !cached ||
-      Date.now() - cached.loadedAt >= HOLIDAY_CACHE_TTL
-    ) {
+    if (!cached || Date.now() - cached.loadedAt >= HOLIDAY_CACHE_TTL) {
       throw new HolidayYearRequired(year);
     }
 
     const weekday = new Date(day * DAY).getUTCDay();
-    const weekend = weekday === 0 || weekday === 6;
-    const holiday = cached.dates.has(iso(day));
 
-    if (!weekend && !holiday) {
+    if (weekday !== 0 && weekday !== 6 && !cached.dates.has(iso(day))) {
       return day;
     }
 
     day = checkedDay(day - 1);
   }
 
-  throw new Error(
-    "영업일을 찾지 못했습니다. 공휴일 목록을 확인해 주세요."
-  );
+  throw new Error("영업일을 찾지 못했습니다. 공휴일 목록을 확인해 주세요.");
 }
 
-// 실제 날짜 계산에 필요한 연도만 조회합니다.
-// 연말·연초를 넘으면 해당 연도의 목록도 자동 조회합니다.
 async function calculateWithHolidays(text, baseText) {
   const requestedYears = new Set();
 
@@ -1977,14 +2470,10 @@ async function calculateWithHolidays(text, baseText) {
     try {
       return calculate(text, baseText);
     } catch (error) {
-      if (!(error instanceof HolidayYearRequired)) {
-        throw error;
-      }
+      if (!(error instanceof HolidayYearRequired)) throw error;
 
       if (requestedYears.has(error.year)) {
-        throw new Error(
-          `${error.year}년 공휴일 정보를 사용할 수 없습니다. 다시 계산해 주세요.`
-        );
+        throw new Error(`${error.year}년 공휴일 정보를 사용할 수 없습니다.`);
       }
 
       requestedYears.add(error.year);
@@ -1993,1779 +2482,1982 @@ async function calculateWithHolidays(text, baseText) {
     }
   }
 
-  throw new Error(
-    "조회할 연도 범위가 예상보다 넓습니다. 기준월을 확인해 주세요."
-  );
+  throw new Error("조회할 연도 범위가 예상보다 넓습니다. 기준월을 확인해 주세요.");
 }
 
-    function dateWithDay(value) {
-      if (!value) {
-        return "";
-      }
+/* 4. 금액 및 원장 읽기 */
+function safe(value) {
+  if (!Number.isSafeInteger(value)) {
+    throw new Error("금액이 안전한 정수 계산 범위를 초과했습니다.");
+  }
+  return value;
+}
 
-      const days = ["일", "월", "화", "수", "목", "금", "토"];
-      const weekday = new Date(parseDate(value) * DAY).getUTCDay();
+function amount(value) {
+  const text = String(value).trim().replaceAll(",", "").replaceAll(" ", "");
+  if (["", "-", "—"].includes(text)) return 0;
 
-      return `${value} (${days[weekday]})`;
-    }
+  if (!/^[+-]?\d+(?:\.0+)?$/.test(text)) {
+    throw new Error(`정수 원화 금액으로 읽을 수 없습니다: ${value}`);
+  }
 
-    function currentMonthValue() {
-      const today = new Date();
+  return safe(Number(text));
+}
 
-      return `${today.getFullYear()}-${
-        String(today.getMonth() + 1).padStart(2, "0")
-      }`;
-    }
+function sum(rows, getValue) {
+  return rows.reduce((total, row) => safe(total + getValue(row)), 0);
+}
 
-    /* 3. 금액 */
-    function safe(value) {
-      if (!Number.isSafeInteger(value)) {
-        throw new Error("금액이 안전한 정수 계산 범위를 초과했습니다.");
-      }
+function readTSV(text) {
+  const rows = [];
+  let row = [];
+  let field = "";
+  let quoted = false;
+  let started = false;
 
-      return value;
-    }
+  for (let index = 0; index < text.length; index++) {
+    const character = text[index];
 
-    function amount(value) {
-      const text = String(value)
-        .trim()
-        .replaceAll(",", "")
-        .replaceAll(" ", "");
-
-      if (["", "-", "—"].includes(text)) {
-        return 0;
-      }
-
-      if (!/^[+-]?\d+(?:\.0+)?$/.test(text)) {
-        throw new Error(`정수 원화 금액으로 읽을 수 없습니다: ${value}`);
-      }
-
-      return safe(Number(text));
-    }
-
-    function sum(rows, getValue) {
-      return rows.reduce(
-        (total, row) => safe(total + getValue(row)),
-        0
-      );
-    }
-
-    /* 4. 원장 읽기 및 기준표 */
-    function readTSV(text) {
-      const rows = [];
-      let row = [];
-      let field = "";
-      let quoted = false;
-      let started = false;
-
-      for (let index = 0; index < text.length; index++) {
-        const character = text[index];
-
-        if (quoted) {
-          if (character === '"') {
-            if (text[index + 1] === '"') {
-              field += '"';
-              index++;
-            } else {
-              quoted = false;
-            }
-          } else {
-            field += character;
-          }
-
-          continue;
-        }
-
-        if (character === '"' && !started) {
-          quoted = true;
-          started = true;
-        } else if (character === "\t") {
-          row.push(field);
-          field = "";
-          started = false;
-        } else if (character === "\r" || character === "\n") {
-          if (character === "\r" && text[index + 1] === "\n") {
-            index++;
-          }
-
-          if (row.length || started || field) {
-            row.push(field);
-            rows.push(row);
-          } else {
-            rows.push([]);
-          }
-
-          row = [];
-          field = "";
-          started = false;
+    if (quoted) {
+      if (character === '"') {
+        if (text[index + 1] === '"') {
+          field += '"';
+          index++;
         } else {
-          field += character;
-          started = true;
+          quoted = false;
         }
+      } else {
+        field += character;
       }
+      continue;
+    }
 
-      if (quoted) {
-        throw new Error(
-          "닫히지 않은 따옴표가 있습니다. 원장을 다시 복사해 주세요."
-        );
-      }
+    if (character === '"' && !started) {
+      quoted = true;
+      started = true;
+    } else if (character === "\t") {
+      row.push(field);
+      field = "";
+      started = false;
+    } else if (character === "\r" || character === "\n") {
+      if (character === "\r" && text[index + 1] === "\n") index++;
 
       if (row.length || started || field) {
         row.push(field);
         rows.push(row);
+      } else {
+        rows.push([]);
       }
 
-      return rows;
+      row = [];
+      field = "";
+      started = false;
+    } else {
+      field += character;
+      started = true;
+    }
+  }
+
+  if (quoted) {
+    throw new Error("닫히지 않은 따옴표가 있습니다. 원장을 다시 복사해 주세요.");
+  }
+
+  if (row.length || started || field) {
+    row.push(field);
+    rows.push(row);
+  }
+
+  return rows;
+}
+
+const CODE_NAMES = `A1 A2 A3 A4 A5 A6 A7 A8
+  B1 B2 B3 B4 B5 B6 B7 B8 B9 BA C2 C3 C4 C5 D1 F1 G1 G2 H1 H2 H3 H4
+  I1 I2 I3 I4 I5 I6 I7 I8 J1 J2 K1 L1 L2 L3 L4 L5 L6
+  M1 M2 M3 M4 M5 N1 N2 N3 N4 N5 O1 O2 P1 P2 P3 HZZZZ05`.split(/\s+/);
+
+const KINDS = Object.assign(
+  Object.create(null),
+  Object.fromEntries(CODE_NAMES.map(code => [code, 0])),
+  {
+    A5: "현금", B4: "카드", B8: "카드", BA: "어음",
+    I2: "현금", I4: "현금", I5: "현금", I7: "현금",
+    L3: "교환", L5: "교환", L6: "교환",
+    O1: "현금", O2: "현금", P2: "현금", HZZZZ05: "현금"
+  }
+);
+
+const MONTH_RULES = Object.assign(
+  Object.create(null),
+  { "선수금": 0, "당월": 0, "전월": 1 }
+);
+
+for (const month of [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14]) {
+  MONTH_RULES[`${month}개월이전`] = month;
+}
+
+const DAY_RULES = Object.assign(
+  Object.create(null),
+  Object.fromEntries([0, 10, 15, 20, 25, 30].map(day => [`${day}일`, day]))
+);
+
+const BILL_RULES = Object.assign(
+  Object.create(null),
+  { "1개월": 1, "2개월": 2, "3개월": 3 }
+);
+
+const EXCHANGE = new Set(["L3", "L5", "L6"]);
+const LABELS = ["현금", "카드", "어음(3개월)", "어음(2개월)", "어음(1개월)"];
+const PRIORITY = [5, 4, 1, 2, 3];
+
+function conditionPart(text, index) {
+  const characters = Array.from(text);
+
+  if (characters.length < 2) {
+    throw new Error("비고 길이가 2자 미만이라 Excel MID 계산 오류가 발생합니다.");
+  }
+
+  const expanded = characters.slice(1, -1).join("")
+    .replaceAll("/", " ".repeat(100));
+
+  return Array.from(expanded).slice(index * 100, (index + 1) * 100)
+    .join("").replace(/^ +| +$/g, "").replace(/ +/g, " ");
+}
+
+function readLedger(text) {
+  if (new TextEncoder().encode(text).length > 8 * 1024 * 1024) {
+    throw new Error("입력 데이터가 최대 크기 8MB를 초과했습니다.");
+  }
+
+  const table = readTSV(text);
+  const required = ["일자", "구분", "제품코드", "합계금액", "수금액", "잔고"];
+  let headerIndex = -1;
+  let positions;
+
+  for (let index = 0; index < table.length; index++) {
+    const keys = table[index].map(value =>
+      value.replace(/\s+/g, "").replace(/^\uFEFF/, "")
+    );
+
+    if (!required.every(key => keys.includes(key))) continue;
+
+    headerIndex = index;
+    positions = Object.create(null);
+
+    keys.forEach((key, column) => {
+      if (!has(positions, key)) positions[key] = column;
+    });
+
+    const productColumn = keys.indexOf("구분", keys.indexOf("구분") + 1);
+    if (productColumn >= 0) positions["집계용제품명"] = productColumn;
+    break;
+  }
+
+  if (headerIndex < 0) {
+    throw new Error(
+      "원장의 헤더를 찾지 못했습니다. 일자·구분·제품코드·합계금액·수금액·잔고를 포함해 복사해 주세요."
+    );
+  }
+
+  const rows = [];
+  const warnings = [];
+
+  for (let index = headerIndex + 1; index < table.length; index++) {
+    const values = table[index];
+    const line = index + 1;
+    const get = key => has(positions, key) ? (values[positions[key]] ?? "") : "";
+    const code = get("제품코드").trim();
+
+    if (!code) continue;
+
+    if (index - headerIndex - 1 >= 2997) {
+      throw new Error("엑셀 수식의 처리 범위(2997개 원본 행)를 초과했습니다.");
     }
 
-    const CODE_NAMES = `A1 A2 A3 A4 A5 A6 A7 A8
-      B1 B2 B3 B4 B5 B6 B7 B8 B9 BA C2 C3 C4 C5 D1 F1 G1 G2 H1 H2 H3 H4
-      I1 I2 I3 I4 I5 I6 I7 I8 J1 J2 K1 L1 L2 L3 L4 L5 L6
-      M1 M2 M3 M4 M5 N1 N2 N3 N4 N5 O1 O2 P1 P2 P3 HZZZZ05`
-      .split(/\s+/);
-
-    const KINDS = Object.assign(
-      Object.create(null),
-      Object.fromEntries(CODE_NAMES.map(code => [code, 0])),
-      {
-        A5: "현금",
-        B4: "카드",
-        B8: "카드",
-        BA: "어음",
-        I2: "현금",
-        I4: "현금",
-        I5: "현금",
-        I7: "현금",
-        L3: "교환",
-        L5: "교환",
-        L6: "교환",
-        O1: "현금",
-        O2: "현금",
-        P2: "현금",
-        HZZZZ05: "현금"
-      }
-    );
-
-    const MONTH_RULES = Object.assign(
-      Object.create(null),
-      { "선수금": 0, "당월": 0, "전월": 1 }
-    );
-
-    for (const month of [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14]) {
-      MONTH_RULES[`${month}개월이전`] = month;
+    try {
+      rows.push({
+        line,
+        date: parseDate(get("일자")),
+        type: get("구분").trim(),
+        code,
+        amt: amount(get("합계금액")),
+        rec: amount(get("수금액")),
+        balance: get("잔고") === "" ? null : amount(get("잔고")),
+        customer: get("연결거래처코드"),
+        customer_name: get("연결거래처명"),
+        remark: get("비고"),
+        description: get("적요"),
+        product_name: get("집계용제품명"),
+        quantity: get("수량")
+      });
+    } catch (error) {
+      throw new Error(`붙여넣기 ${line}행: ${error.message}`);
     }
+  }
 
-    const DAY_RULES = Object.assign(
-      Object.create(null),
-      Object.fromEntries(
-        [0, 10, 15, 20, 25, 30].map(day => [`${day}일`, day])
-      )
+  if (!rows.length) throw new Error("제품코드와 거래일이 있는 거래가 없습니다.");
+
+  if (rows.some((row, index) => index > 0 && rows[index - 1].date > row.date)) {
+    warnings.push(
+      "원장이 날짜순이 아닙니다. Excel LOOKUP과 동일하게 원본 행 순서를 유지합니다."
     );
+  }
 
-    const BILL_RULES = Object.assign(
-      Object.create(null),
-      { "1개월": 1, "2개월": 2, "3개월": 3 }
-    );
+  return { rows, warnings };
+}
 
-    const EXCHANGE = new Set(["L3", "L5", "L6"]);
+/* 5. 계산: 기존 산정식 유지 */
+function calculate(text, baseText) {
+  const base = parseDate(baseText);
+  if (base !== monthEnd(base)) {
+    throw new Error("기준일은 해당 월 말일로 선택해 주세요.");
+  }
 
-    const LABELS = [
-      "현금",
-      "카드",
-      "어음(3개월)",
-      "어음(2개월)",
-      "어음(1개월)"
-    ];
+  const { rows, warnings } = readLedger(text);
+  const errors = [];
 
-    const PRIORITY = [5, 4, 1, 2, 3];
+  for (const row of rows) {
+    Object.assign(row, {
+      y: "", z: "", aa: "", ab: "", kind: "",
+      billing: null, exchange: null
+    });
 
-    function conditionPart(text, index) {
-      const characters = Array.from(text);
+    try {
+      if (row.remark) row.y = conditionPart(row.remark, 0);
+      if (row.y) row.z = conditionPart(row.remark, 1);
 
-      if (characters.length < 2) {
-        throw new Error(
-          "비고 길이가 2자 미만이라 Excel MID 계산 오류가 발생합니다."
-        );
+      if (!(row.type === "판매" && row.amt < 0)) {
+        if (row.z) row.aa = conditionPart(row.remark, 2);
+        if (row.aa) row.ab = conditionPart(row.remark, 3);
       }
-
-      const expanded = characters
-        .slice(1, -1)
-        .join("")
-        .replaceAll("/", " ".repeat(100));
-
-      return Array.from(expanded)
-        .slice(index * 100, (index + 1) * 100)
-        .join("")
-        .replace(/^ +| +$/g, "")
-        .replace(/ +/g, " ");
+    } catch (error) {
+      errors.push(`${row.line}행 조건 추출: ${error.message}`);
     }
+  }
 
-    function readLedger(text) {
-      if (new TextEncoder().encode(text).length > 8 * 1024 * 1024) {
-        throw new Error("입력 데이터가 최대 크기 8MB를 초과했습니다.");
-      }
+  for (let index = 0; index < rows.length; index++) {
+    const row = rows[index];
+    if (row.type !== "판매" || row.amt >= 0) continue;
 
-      const table = readTSV(text);
-      const required = [
-        "일자", "구분", "제품코드", "합계금액", "수금액", "잔고"
-      ];
+    const matches = candidate =>
+      candidate.amt > 0 &&
+      candidate.customer === row.customer &&
+      (row.code === "HZZZZ05" || candidate.code === row.code);
 
-      let headerIndex = -1;
-      let positions;
+    let target = null;
 
-      for (let index = 0; index < table.length; index++) {
-        const keys = table[index].map(value =>
-          value.replace(/\s+/g, "").replace(/^\uFEFF/, "")
-        );
-
-        if (!required.every(key => keys.includes(key))) {
-          continue;
-        }
-
-        headerIndex = index;
-        positions = Object.create(null);
-
-        keys.forEach((key, column) => {
-          if (!has(positions, key)) {
-            positions[key] = column;
-          }
-        });
-
-        const firstTypeColumn = keys.indexOf("구분");
-        const productColumn = keys.indexOf("구분", firstTypeColumn + 1);
-
-        if (productColumn >= 0) {
-          positions["집계용제품명"] = productColumn;
-        }
-
+    for (let previous = index - 1; previous >= 0; previous--) {
+      if (matches(rows[previous])) {
+        target = rows[previous];
         break;
       }
-
-      if (headerIndex < 0) {
-        throw new Error(
-          "원장의 헤더를 찾지 못했습니다. 일자·구분·제품코드·합계금액·수금액·잔고를 포함해 복사해 주세요."
-        );
-      }
-
-      const rows = [];
-      const warnings = [];
-
-      for (let index = headerIndex + 1; index < table.length; index++) {
-        const values = table[index];
-        const line = index + 1;
-        const get = key =>
-          has(positions, key) ? (values[positions[key]] ?? "") : "";
-
-        const code = get("제품코드").trim();
-
-        if (!code) {
-          continue;
-        }
-
-        if (index - headerIndex - 1 >= 2997) {
-          throw new Error(
-            "엑셀 수식의 처리 범위(2997개 원본 행)를 초과했습니다."
-          );
-        }
-
-        try {
-          rows.push({
-            line,
-            date: parseDate(get("일자")),
-            type: get("구분").trim(),
-            code,
-            amt: amount(get("합계금액")),
-            rec: amount(get("수금액")),
-            balance: get("잔고") === "" ? null : amount(get("잔고")),
-            customer: get("연결거래처코드"),
-            customer_name: get("연결거래처명"),
-            remark: get("비고"),
-            description: get("적요"),
-            product_name: get("집계용제품명"),
-            quantity: get("수량")
-          });
-        } catch (error) {
-          throw new Error(`붙여넣기 ${line}행: ${error.message}`);
-        }
-      }
-
-      if (!rows.length) {
-        throw new Error("제품코드와 거래일이 있는 거래가 없습니다.");
-      }
-
-      if (rows.some((row, index) =>
-        index > 0 && rows[index - 1].date > row.date
-      )) {
-        warnings.push(
-          "원장이 날짜순이 아닙니다. Excel LOOKUP과 동일하게 원본 행 순서를 유지합니다."
-        );
-      }
-
-      return { rows, warnings };
     }
 
-    /* 5. 계산: 기존 수식 유지 */
-    function calculate(text, baseText) {
-      const base = parseDate(baseText);
+    if (!target) target = rows.slice(index + 1).find(matches);
 
-      if (base !== monthEnd(base)) {
-        throw new Error("기준일은 해당 월 말일로 선택해 주세요.");
+    if (target) {
+      row.aa = target.aa;
+      row.ab = target.ab;
+    }
+  }
+
+  for (const row of rows) {
+    const date = row.date;
+
+    if (row.type === "수금") {
+      row.kind = has(KINDS, row.code) ? KINDS[row.code] : "";
+      if (!has(KINDS, row.code)) {
+        warnings.push(`${row.line}행: 기준표에 없는 수금 코드 ${row.code}`);
       }
-
-      const { rows, warnings } = readLedger(text);
-      const errors = [];
-
-      for (const row of rows) {
-        Object.assign(row, {
-          y: "",
-          z: "",
-          aa: "",
-          ab: "",
-          kind: "",
-          billing: null,
-          exchange: null
-        });
-
-        try {
-          if (row.remark) {
-            row.y = conditionPart(row.remark, 0);
-          }
-
-          if (row.y) {
-            row.z = conditionPart(row.remark, 1);
-          }
-
-          if (!(row.type === "판매" && row.amt < 0)) {
-            if (row.z) {
-              row.aa = conditionPart(row.remark, 2);
-            }
-
-            if (row.aa) {
-              row.ab = conditionPart(row.remark, 3);
-            }
-          }
-        } catch (error) {
-          errors.push(`${row.line}행 조건 추출: ${error.message}`);
-        }
-      }
-
-      // 음수 판매 거래의 결제조건 참조
-      for (let index = 0; index < rows.length; index++) {
-        const row = rows[index];
-
-        if (row.type !== "판매" || row.amt >= 0) {
-          continue;
-        }
-
-        const matches = candidate =>
-          candidate.amt > 0 &&
-          candidate.customer === row.customer &&
-          (row.code === "HZZZZ05" || candidate.code === row.code);
-
-        let target = null;
-
-        for (let previous = index - 1; previous >= 0; previous--) {
-          if (matches(rows[previous])) {
-            target = rows[previous];
-            break;
-          }
-        }
-
-        if (!target) {
-          target = rows.slice(index + 1).find(matches);
-        }
-
-        if (target) {
-          row.aa = target.aa;
-          row.ab = target.ab;
-        }
-      }
-
-      for (const row of rows) {
-        const date = row.date;
-
-        if (row.type === "수금") {
-          row.kind = has(KINDS, row.code) ? KINDS[row.code] : "";
-
-          if (!has(KINDS, row.code)) {
-            warnings.push(
-              `${row.line}행: 기준표에 없는 수금 코드 ${row.code}`
-            );
-          }
-        }
-
-        if (EXCHANGE.has(row.code)) {
-          row.billing = null;
-        } else if (row.y === "선수금" && row.z === "0일") {
-          row.billing = date;
-        } else if (row.type === "수금" || row.amt < 0) {
-          row.billing = monthEnd(date);
-        } else if (has(MONTH_RULES, row.y) && has(DAY_RULES, row.z)) {
-          row.billing = monthEnd(
-            date,
-            MONTH_RULES[row.y] +
-              (DAY_RULES[row.z] >= dateParts(date)[2] ? 0 : 1)
-          );
-        } else {
-          row.billing = monthEnd(date);
-          warnings.push(
-            `${row.line}행: 조건 조회 실패 → Excel AD IFERROR에 따라 거래월 말일 적용`
-          );
-        }
-
-        try {
-          let maturity = null;
-
-          if (row.description) {
-            const left = row.description.indexOf("(");
-            const right = row.description.indexOf(")");
-
-            if (left < 0 || right <= left) {
-              throw new Error("적요에서 만기일 괄호를 찾지 못했습니다.");
-            }
-
-            maturity = parseDate(row.description.slice(left + 1, right));
-          }
-
-          if (row.code === "BA") {
-            row.exchange = maturity;
-          } else if (row.aa === "어음") {
-            if (!has(BILL_RULES, row.ab)) {
-              throw new Error(`어음 개월 기준표 조회 실패: ${row.ab}`);
-            }
-
-            if (row.billing === null) {
-              throw new Error("어음 거래의 청구기준일이 비어 있습니다.");
-            }
-
-            row.exchange = monthEnd(row.billing, BILL_RULES[row.ab]);
-          } else {
-            row.exchange = row.billing;
-          }
-        } catch (error) {
-          errors.push(`${row.line}행 G/AE 계산: ${error.message}`);
-        }
-
-        row.bill_months = "";
-
-        if (row.type === "수금" && row.kind === "어음") {
-          if (row.exchange === null || row.billing === null) {
-            errors.push(
-              `${row.line}행: 어음 개월수 계산에 필요한 날짜가 없습니다.`
-            );
-          } else {
-            const days = Math.max(row.exchange - row.billing - 3, 0);
-            row.bill_months =
-              days === 0 ? "0개월" : `${excelMonth(days)}개월`;
-          }
-        }
-      }
-
-      const prevEnd = monthEnd(base, -1);
-      const prevRows = rows.filter(row => row.date <= prevEnd);
-
-      if (!prevRows.length) {
-        throw new Error(
-          "전월말 이전 유효 거래가 없습니다. 전월말 잔고를 확인할 수 있는 기간까지 원장을 붙여넣어 주세요."
-        );
-      }
-
-      const prev = prevRows[prevRows.length - 1].balance;
-
-      if (prev === null) {
-        throw new Error("전월말 LOOKUP 대상 행의 잔고가 비어 있습니다.");
-      }
-
-      const current = rows.filter(row =>
-        prevEnd < row.date && row.date <= base
-      );
-
-      const sales = sum(current, row => row.amt);
-      const received = sum(
-        current.filter(row => !EXCHANGE.has(row.code)),
-        row => row.rec
-      );
-
-      const carriedRows = rows.filter(row =>
-        row.date <= base &&
-        row.billing !== null &&
-        row.billing > base
-      );
-
-      const carried = sum(carriedRows, row => row.amt);
-      const contractTotal = safe(safe(prev + sales) - carried);
-      const balance = safe(safe(prev + sales) - received);
-      const requestTotal = Math.max(safe(balance - carried), 0);
-
-      const due = rows.filter(row =>
-        row.date <= base && row.billing === base
-      );
-
-      function saleCategory(row, label) {
-        return ["현금", "카드"].includes(label)
-          ? row.aa === label
-          : row.aa === "어음" && row.ab === label.slice(3, -1);
-      }
-
-      function receivedCategory(row, label) {
-        return ["현금", "카드"].includes(label)
-          ? row.kind === label
-          : row.kind === "어음" && row.bill_months === label.slice(3, -1);
-      }
-
-      const details = LABELS.map((label, index) => ({
-        label,
-        priority: PRIORITY[index],
-        contract: sum(
-          due.filter(row => saleCategory(row, label)),
-          row => row.amt
-        ),
-        received: sum(
-          current.filter(row =>
-            row.code !== "L6" && receivedCategory(row, label)
-          ),
-          row => row.rec
-        )
-      }));
-
-      const other = safe(contractTotal - sum(details, row => row.contract));
-      const detailedReceived = sum(details, row => row.received);
-
-      // H19 = MAX(-C18, 0), E18 = MAX(C18, 0)
-      const adjustment = Math.max(safe(-other), 0);
-      const otherFinal = Math.max(other, 0);
-
-      for (const row of details) {
-        const net = safe(row.contract - row.received);
-        const earlier = sum(
-          details.filter(candidate => candidate.priority < row.priority),
-          candidate => safe(candidate.contract - candidate.received)
-        );
-
-        const remaining = Math.max(safe(adjustment - earlier), 0);
-        row.final = Math.max(0, safe(net - Math.min(net, remaining)));
-        row.issue_date = "";
-        row.maturity_date = "";
-
-        if (!row.label.startsWith("어음") || row.contract === 0) {
-          continue;
-        }
-
-        const issue = previousWorkday(checkedDay(base + 1));
-        let maturity;
-
-        if (row.label === "어음(3개월)") {
-          maturity = previousWorkday(checkedDay(issue + 91));
-        } else if (row.label === "어음(2개월)") {
-          maturity = previousWorkday(
-            checkedDay(monthEnd(checkedDay(issue + 61)) + 1)
-          );
-        } else {
-          maturity = previousWorkday(
-            checkedDay(monthEnd(checkedDay(issue + 31)) + 1)
-          );
-        }
-
-        row.issue_date = iso(issue);
-        row.maturity_date = iso(maturity);
-      }
-
-      const aggregateLabels = [
-        "현금",
-        "카드",
-        "어음(3개월)",
-        "어음(2개월)",
-        "어음(1개월)",
-        "어음(0개월)"
-      ];
-
-      const aggregateDetails = aggregateLabels.map(label => {
-        const carry = sum(
-          carriedRows.filter(row => saleCategory(row, label)),
-          row => row.amt
-        );
-
-        const request = sum(
-          due.filter(row => saleCategory(row, label)),
-          row => row.amt
-        );
-
-        const paid = sum(
-          current.filter(row =>
-            row.code !== "L6" && receivedCategory(row, label)
-          ),
-          row => row.rec
-        );
-
-        return {
-          label,
-          carry,
-          request,
-          paid,
-          unpaid: safe(request - paid)
-        };
-      });
-
-      const aggregateOtherCarry = safe(
-        carried - sum(aggregateDetails, row => row.carry)
-      );
-
-      const aggregateOtherRequest = safe(
-        contractTotal - sum(aggregateDetails, row => row.request)
-      );
-
-      aggregateDetails.push({
-        label: "기타",
-        carry: aggregateOtherCarry,
-        request: aggregateOtherRequest,
-        paid: 0,
-        unpaid: aggregateOtherRequest
-      });
-
-      const aggregateLedgerRows = rows
-        .filter(row => row.billing === base)
-        .map(row => ({
-          date: iso(row.date),
-          product: row.product_name,
-          quantity: row.quantity,
-          sales: row.amt,
-          paid: row.rec,
-          customer: row.customer_name,
-          condition: row.remark
-        }));
-
-      const aggregation = {
-        prev,
-        sales,
-        carried,
-        request: contractTotal,
-        paid: received,
-        unpaid: safe(contractTotal - received),
-        details: aggregateDetails,
-        ledger: aggregateLedgerRows
-      };
-
-      const finalTotal = safe(
-        sum(details, row => row.final) + otherFinal
-      );
-
-      if (finalTotal !== requestTotal) {
-        warnings.push(
-          "상단 결제청구액과 상세 최종 합계가 다릅니다. 결제조건별 기수금액, 기타 잔액 및 우선순위 차감 결과를 확인해 주세요."
-        );
-      }
-
-      return {
-        aggregation,
-        base: iso(base),
-        rows: rows.length,
-        summary: {
-          prev,
-          sales,
-          received,
-          balance,
-          carried,
-          request: requestTotal
-        },
-        details,
-        other,
-        other_final: otherFinal,
-        contract_total: contractTotal,
-        detailed_received: detailedReceived,
-        adjustment,
-        final_total: finalTotal,
-        warnings: [...new Set(warnings)],
-        errors: [...new Set(errors)],
-        audit: rows.map(row => ({
-          line: row.line,
-          date: iso(row.date),
-          code: row.code,
-          customer: row.customer_name,
-          amount: row.amt,
-          received: row.rec,
-          aa: row.aa,
-          ab: row.ab,
-          billing: row.billing === null ? "" : iso(row.billing)
-        }))
-      };
     }
 
-    /* 6. 상태 관리 */
-    const appState = {
-      phase: "initial",
-      valid: false,
-      calculating: false,
-      savingPng: false
-    };
+    if (EXCHANGE.has(row.code)) {
+      row.billing = null;
+    } else if (row.y === "선수금" && row.z === "0일") {
+      row.billing = date;
+    } else if (row.type === "수금" || row.amt < 0) {
+      row.billing = monthEnd(date);
+    } else if (has(MONTH_RULES, row.y) && has(DAY_RULES, row.z)) {
+      row.billing = monthEnd(
+        date,
+        MONTH_RULES[row.y] + (DAY_RULES[row.z] >= dateParts(date)[2] ? 0 : 1)
+      );
+    } else {
+      row.billing = monthEnd(date);
+      warnings.push(
+        `${row.line}행: 조건 조회 실패 → Excel AD IFERROR에 따라 거래월 말일 적용`
+      );
+    }
 
-    const aggregateFilterDialog = $("aggregate-filter-dialog");
-    const updateNoteDialog = $("update-note-dialog");
+    try {
+      let maturity = null;
 
-    const aggregateFilterColumns = [
-      { index: 1, key: "product", label: "내역" },
-      { index: 5, key: "customer", label: "연결처" },
-      { index: 6, key: "condition", label: "수금조건" }
+      if (row.description) {
+        const left = row.description.indexOf("(");
+        const right = row.description.indexOf(")");
+
+        if (left < 0 || right <= left) {
+          throw new Error("적요에서 만기일 괄호를 찾지 못했습니다.");
+        }
+        maturity = parseDate(row.description.slice(left + 1, right));
+      }
+
+      if (row.code === "BA") {
+        row.exchange = maturity;
+      } else if (row.aa === "어음") {
+        if (!has(BILL_RULES, row.ab)) {
+          throw new Error(`어음 개월 기준표 조회 실패: ${row.ab}`);
+        }
+        if (row.billing === null) {
+          throw new Error("어음 거래의 청구기준일이 비어 있습니다.");
+        }
+        row.exchange = monthEnd(row.billing, BILL_RULES[row.ab]);
+      } else {
+        row.exchange = row.billing;
+      }
+    } catch (error) {
+      errors.push(`${row.line}행 G/AE 계산: ${error.message}`);
+    }
+
+    row.bill_months = "";
+
+    if (row.type === "수금" && row.kind === "어음") {
+      if (row.exchange === null || row.billing === null) {
+        errors.push(`${row.line}행: 어음 개월수 계산에 필요한 날짜가 없습니다.`);
+      } else {
+        const days = Math.max(row.exchange - row.billing - 3, 0);
+        row.bill_months = days === 0 ? "0개월" : `${excelMonth(days)}개월`;
+      }
+    }
+  }
+
+  const prevEnd = monthEnd(base, -1);
+  const prevRows = rows.filter(row => row.date <= prevEnd);
+
+  if (!prevRows.length) {
+    throw new Error(
+      "전월말 이전 유효 거래가 없습니다. 전월말 잔고를 확인할 수 있는 기간까지 원장을 붙여넣어 주세요."
+    );
+  }
+
+  const prev = prevRows[prevRows.length - 1].balance;
+  if (prev === null) {
+    throw new Error("전월말 LOOKUP 대상 행의 잔고가 비어 있습니다.");
+  }
+
+  const current = rows.filter(row => prevEnd < row.date && row.date <= base);
+  const sales = sum(current, row => row.amt);
+  const received = sum(
+    current.filter(row => !EXCHANGE.has(row.code)),
+    row => row.rec
+  );
+
+  const carriedRows = rows.filter(row =>
+    row.date <= base && row.billing !== null && row.billing > base
+  );
+
+  const carried = sum(carriedRows, row => row.amt);
+  const contractTotal = safe(safe(prev + sales) - carried);
+  const balance = safe(safe(prev + sales) - received);
+  const requestTotal = Math.max(safe(balance - carried), 0);
+  const due = rows.filter(row => row.date <= base && row.billing === base);
+
+  function saleCategory(row, label) {
+    return ["현금", "카드"].includes(label)
+      ? row.aa === label
+      : row.aa === "어음" && row.ab === label.slice(3, -1);
+  }
+
+  function receivedCategory(row, label) {
+    return ["현금", "카드"].includes(label)
+      ? row.kind === label
+      : row.kind === "어음" && row.bill_months === label.slice(3, -1);
+  }
+
+  const details = LABELS.map((label, index) => ({
+    label,
+    priority: PRIORITY[index],
+    contract: sum(due.filter(row => saleCategory(row, label)), row => row.amt),
+    received: sum(
+      current.filter(row => row.code !== "L6" && receivedCategory(row, label)),
+      row => row.rec
+    )
+  }));
+
+  const other = safe(contractTotal - sum(details, row => row.contract));
+  const detailedReceived = sum(details, row => row.received);
+  const adjustment = Math.max(safe(-other), 0);
+  const otherFinal = Math.max(other, 0);
+
+  for (const row of details) {
+    const net = safe(row.contract - row.received);
+    const earlier = sum(
+      details.filter(candidate => candidate.priority < row.priority),
+      candidate => safe(candidate.contract - candidate.received)
+    );
+
+    const remaining = Math.max(safe(adjustment - earlier), 0);
+    row.final = Math.max(0, safe(net - Math.min(net, remaining)));
+    row.issue_date = "";
+    row.maturity_date = "";
+
+    if (!row.label.startsWith("어음") || row.contract === 0) continue;
+
+    const issue = previousWorkday(checkedDay(base + 1));
+    let maturity;
+
+    if (row.label === "어음(3개월)") {
+      maturity = previousWorkday(checkedDay(issue + 91));
+    } else if (row.label === "어음(2개월)") {
+      maturity = previousWorkday(
+        checkedDay(monthEnd(checkedDay(issue + 61)) + 1)
+      );
+    } else {
+      maturity = previousWorkday(
+        checkedDay(monthEnd(checkedDay(issue + 31)) + 1)
+      );
+    }
+
+    row.issue_date = iso(issue);
+    row.maturity_date = iso(maturity);
+  }
+
+  const aggregateLabels = [...LABELS, "어음(0개월)"];
+  const aggregateDetails = aggregateLabels.map(label => {
+    const carry = sum(
+      carriedRows.filter(row => saleCategory(row, label)), row => row.amt
+    );
+    const request = sum(
+      due.filter(row => saleCategory(row, label)), row => row.amt
+    );
+    const paid = sum(
+      current.filter(row => row.code !== "L6" && receivedCategory(row, label)),
+      row => row.rec
+    );
+
+    return { label, carry, request, paid, unpaid: safe(request - paid) };
+  });
+
+  const aggregateOtherCarry = safe(
+    carried - sum(aggregateDetails, row => row.carry)
+  );
+  const aggregateOtherRequest = safe(
+    contractTotal - sum(aggregateDetails, row => row.request)
+  );
+
+  aggregateDetails.push({
+    label: "기타",
+    carry: aggregateOtherCarry,
+    request: aggregateOtherRequest,
+    paid: 0,
+    unpaid: aggregateOtherRequest
+  });
+
+  const aggregation = {
+    prev,
+    sales,
+    carried,
+    request: contractTotal,
+    paid: received,
+    unpaid: safe(contractTotal - received),
+    details: aggregateDetails,
+    ledger: rows.filter(row => row.billing === base).map(row => ({
+      date: iso(row.date),
+      product: row.product_name,
+      quantity: row.quantity,
+      sales: row.amt,
+      paid: row.rec,
+      customer: row.customer_name,
+      condition: row.remark
+    }))
+  };
+
+  const finalTotal = safe(sum(details, row => row.final) + otherFinal);
+
+  if (finalTotal !== requestTotal) {
+    warnings.push(
+      "상단 결제청구액과 상세 최종 합계가 다릅니다. 결제조건별 기수금액, 기타 잔액 및 우선순위 차감 결과를 확인해 주세요."
+    );
+  }
+
+  return {
+    aggregation,
+    base: iso(base),
+    rows: rows.length,
+    summary: { prev, sales, received, balance, carried, request: requestTotal },
+    details,
+    other,
+    other_final: otherFinal,
+    contract_total: contractTotal,
+    detailed_received: detailedReceived,
+    adjustment,
+    final_total: finalTotal,
+    warnings: [...new Set(warnings)],
+    errors: [...new Set(errors)],
+    audit: rows.map(row => ({
+      line: row.line,
+      date: iso(row.date),
+      code: row.code,
+      customer: row.customer_name,
+      amount: row.amt,
+      received: row.rec,
+      aa: row.aa,
+      ab: row.ab,
+      billing: row.billing === null ? "" : iso(row.billing)
+    }))
+  };
+}
+
+/* 6. 화면 상태 */
+const appState = {
+  phase: "initial",
+  valid: false,
+  calculating: false,
+  savingPng: false
+};
+
+const aggregateFilterDialog = $("aggregate-filter-dialog");
+const updateNoteDialog = $("update-note-dialog");
+
+const aggregateFilterColumns = [
+  { index: 1, key: "product", label: "내역" },
+  { index: 5, key: "customer", label: "연결처" },
+  { index: 6, key: "condition", label: "수금조건" }
+];
+
+const aggregateFilterState = {
+  rows: [],
+  base: "",
+  selected: Object.create(null),
+  currentKey: null,
+  draft: new Set()
+};
+
+function syncButtons() {
+  const complete = appState.phase === "complete";
+  const busy = appState.calculating || appState.savingPng;
+
+  $("calculate").hidden = complete;
+  $("calculate").disabled = busy;
+  $("calculation-complete").hidden = !complete;
+  $("reset-all").hidden = appState.phase === "initial";
+  $("reset-all").disabled = busy;
+  $("print").disabled = !appState.valid || busy;
+  $("save-png").disabled = !appState.valid || busy;
+
+  document.body.classList.toggle("print-ready", appState.valid);
+}
+
+function selectedMonthEnd() {
+  const value = $("base").value;
+
+  if (!/^\d{4}-\d{2}$/.test(value)) {
+    throw new Error("기준월을 선택해 주세요.");
+  }
+
+  const [year, month] = value.split("-").map(Number);
+  if (year < 1900 || year > 9999) {
+    throw new Error("기준월은 1900\~9999년 사이로 선택해 주세요.");
+  }
+
+  return iso(monthEnd(makeDate(year, month, 1)));
+}
+
+function updateGuide() {
+  try {
+    $("month-end-guide").textContent = `청구 기준일: ${selectedMonthEnd()}`;
+  } catch {
+    $("month-end-guide").textContent = "기준월을 선택해 주세요.";
+  }
+}
+
+function setMessage(text = "", isError = false) {
+  $("message").textContent = text;
+  $("message").classList.toggle("message-error", isError);
+}
+
+function setExportStatus(text = "", isError = false) {
+  $("export-status").textContent = text;
+  $("export-status").classList.toggle("export-error", isError);
+}
+
+function removePrintableInputs() {
+  document.querySelectorAll("#report .print-input-text")
+    .forEach(element => element.remove());
+}
+
+function clearUserNotes() {
+  $("recipient").value = "";
+  document.querySelector("#report .comment").textContent = "";
+  document.querySelectorAll("#report .note-input")
+    .forEach(input => { input.value = ""; });
+}
+
+function invalidate(phase = "edited") {
+  appState.valid = false;
+  appState.phase = phase;
+
+  for (const id of ["report", "validation", "result-tabs", "aggregate-panel"]) {
+    $(id).hidden = true;
+  }
+
+  $("report").classList.remove("aggregate-selected");
+  setMessage();
+  setExportStatus();
+  removePrintableInputs();
+
+  if (aggregateFilterDialog.open) aggregateFilterDialog.close();
+  syncButtons();
+}
+
+function selectResultTab(name) {
+  if (appState.savingPng) return;
+  const selected = name === "aggregate";
+  $("report").classList.toggle("aggregate-selected", selected);
+  $("aggregate-panel").hidden = !selected;
+  $("tab-report").setAttribute("aria-pressed", String(!selected));
+  $("tab-aggregate").setAttribute("aria-pressed", String(selected));
+}
+
+/* 7. 결제청구서 표시 */
+function render(data) {
+  const savedNotes = new Map(
+    [...document.querySelectorAll("#report .note-input")].map(input => [
+      input.getAttribute("aria-label"), input.value
+    ])
+  );
+
+  const summary = data.summary;
+  const [year, month] = data.base.split("-");
+  $("document-title").textContent = `( ${year}.${month}월 ) 결제청구서`;
+
+  const today = new Date();
+  $("written-date").textContent =
+    `[${today.getFullYear()}.` +
+    `${String(today.getMonth() + 1).padStart(2, "0")}.` +
+    `${String(today.getDate()).padStart(2, "0")}. 작성 기준]`;
+
+  $("summary").innerHTML = `
+    <tr>
+      <td>${displayMoney(summary.prev)}</td>
+      <td>${displayMoney(summary.balance)}</td>
+      <td class="request-value">${displayMoney(summary.request)}</td>
+      <td>${displayMoney(summary.carried)}</td>
+      <td class="deadline-value">
+        <strong>${escapeHtml(data.base.replaceAll("-", "."))}.</strong>
+      </td>
+    </tr>
+  `;
+
+  $("details").innerHTML = data.details.map((row, index) => {
+    const top = index === 2 ? " bill-top" : "";
+    const bottom = index === 4 ? " bill-bottom" : "";
+
+    const dates = row.label.startsWith("어음")
+      ? `
+        <td class="bill-date bill-left${top}${bottom}">
+          ${escapeHtml(dateWithDay(row.issue_date))}
+        </td>
+        <td class="bill-date bill-right${top}${bottom}">
+          ${escapeHtml(dateWithDay(row.maturity_date))}
+        </td>
+      `
+      : '<td class="pattern"></td><td class="pattern"></td>';
+
+    return `
+      <tr>
+        <td>${escapeHtml(row.label)}</td>
+        <td class="amount">${displayMoney(row.final)}</td>
+        ${dates}
+        <td>
+          <input class="note-input" aria-label="${escapeHtml(row.label)} 비고">
+        </td>
+      </tr>
+    `;
+  }).join("") + `
+    <tr>
+      <td>기타</td>
+      <td class="amount">${displayMoney(data.other_final)}</td>
+      <td class="pattern"></td>
+      <td class="pattern"></td>
+      <td><input class="note-input" aria-label="기타 비고"></td>
+    </tr>
+  `;
+
+  $("totals").innerHTML = `
+    <tr>
+      <td>계</td>
+      <td class="amount">${displayMoney(data.final_total)}</td>
+      <td class="pattern"></td>
+      <td class="pattern"></td>
+      <td class="pattern"></td>
+    </tr>
+  `;
+
+  $("errors").textContent = data.errors.length
+    ? "출력 전 확인이 필요한 오류:\n" + data.errors.join("\n")
+    : "";
+
+  const warnings = [...data.warnings];
+  if ($("logo").complete && !$("logo").naturalWidth) {
+    warnings.push(
+      "로고를 읽지 못했습니다. 같은 폴더의 logo.png 파일명과 대소문자를 확인해 주세요."
+    );
+  }
+
+  $("warnings").textContent = warnings.join("\n");
+  $("metrics").textContent =
+    `처리 거래 ${data.rows}건 · H19 조정금액 ${money(data.adjustment)}원`;
+
+  $("hidden-values").textContent =
+    `금월 매출액 ${money(summary.sales)}원 / ` +
+    `당월 기수금액 ${money(summary.received)}원 / ` +
+    `계약상 합계 ${money(data.contract_total)}원 / ` +
+    `기타 계약상 금액 ${money(data.other)}원 / ` +
+    `상세 기수금액 합계 ${money(data.detailed_received)}원`;
+
+  $("audit").innerHTML = data.audit.map(row => {
+    const values = [
+      row.line, row.date, row.code, row.customer,
+      money(row.amount), money(row.received), row.aa, row.ab, row.billing
     ];
-
-    const aggregateFilterState = {
-      rows: [],
-      base: "",
-      selected: Object.create(null),
-      currentKey: null,
-      draft: new Set()
-    };
-
-    // 버튼 표시·활성화는 이 함수에서만 관리합니다.
-    function syncButtons() {
-      const complete = appState.phase === "complete";
-      const busy = appState.calculating || appState.savingPng;
-
-      $("calculate").hidden = complete;
-      $("calculate").disabled = busy;
-      $("calculation-complete").hidden = !complete;
-
-      $("reset-all").hidden = appState.phase === "initial";
-      $("reset-all").disabled = busy;
-
-      $("print").disabled = !appState.valid || busy;
-      $("save-png").disabled = !appState.valid || busy;
-
-      document.body.classList.toggle("print-ready", appState.valid);
-    }
-
-    function selectedMonthEnd() {
-      const value = $("base").value;
-
-      if (!/^\d{4}-\d{2}$/.test(value)) {
-        throw new Error("기준월을 선택해 주세요.");
-      }
-
-      const [year, month] = value.split("-").map(Number);
-
-      if (year < 1900 || year > 9999) {
-        throw new Error("기준월은 1900\~9999년 사이로 선택해 주세요.");
-      }
-
-      return iso(monthEnd(makeDate(year, month, 1)));
-    }
-
-    function updateGuide() {
-      try {
-        $("month-end-guide").textContent =
-          `청구 기준일: ${selectedMonthEnd()}`;
-      } catch {
-        $("month-end-guide").textContent = "기준월을 선택해 주세요.";
-      }
-    }
-
-    function setMessage(text = "", isError = false) {
-      $("message").textContent = text;
-      $("message").classList.toggle("message-error", isError);
-    }
-
-    function setExportStatus(text = "", isError = false) {
-      $("export-status").textContent = text;
-      $("export-status").classList.toggle("export-error", isError);
-    }
-
-    function removePrintableInputs() {
-      document.querySelectorAll("#report .print-input-text")
-        .forEach(element => element.remove());
-    }
-
-    function clearUserNotes() {
-      $("recipient").value = "";
-      document.querySelector("#report .comment").textContent = "";
-
-      document.querySelectorAll("#report .note-input").forEach(input => {
-        input.value = "";
-      });
-    }
-
-    function invalidate(phase = "edited") {
-      appState.valid = false;
-      appState.phase = phase;
-
-      $("report").hidden = true;
-      $("validation").hidden = true;
-      $("result-tabs").hidden = true;
-      $("aggregate-panel").hidden = true;
-      $("report").classList.remove("aggregate-selected");
-
-      setMessage();
-      setExportStatus();
-      removePrintableInputs();
-
-      if (aggregateFilterDialog.open) {
-        aggregateFilterDialog.close();
-      }
-
-      syncButtons();
-    }
-
-    function selectResultTab(name) {
-      if (appState.savingPng) {
-        return;
-      }
-
-      const aggregateSelected = name === "aggregate";
-
-      $("report").classList.toggle("aggregate-selected", aggregateSelected);
-      $("aggregate-panel").hidden = !aggregateSelected;
-      $("tab-report").setAttribute("aria-pressed", String(!aggregateSelected));
-      $("tab-aggregate").setAttribute("aria-pressed", String(aggregateSelected));
-    }
-
-    /* 7. 결제청구서 표시 */
-    function render(data) {
-      const savedNotes = new Map(
-        [...document.querySelectorAll("#report .note-input")].map(input => [
-          input.getAttribute("aria-label"),
-          input.value
-        ])
-      );
-
-      const summary = data.summary;
-      const [year, month] = data.base.split("-");
-
-      $("document-title").textContent =
-        `( ${year}.${month}월 ) 결제청구서`;
-
-      const today = new Date();
-
-      $("written-date").textContent =
-        `[${today.getFullYear()}.` +
-        `${String(today.getMonth() + 1).padStart(2, "0")}.` +
-        `${String(today.getDate()).padStart(2, "0")}. 작성 기준]`;
-
-      $("summary").innerHTML = `
-        <tr>
-          <td>${displayMoney(summary.prev)}</td>
-          <td>${displayMoney(summary.balance)}</td>
-          <td class="request-value">${displayMoney(summary.request)}</td>
-          <td>${displayMoney(summary.carried)}</td>
-          <td class="deadline-value">
-            <strong>${escapeHtml(data.base.replaceAll("-", "."))}</strong>
-          </td>
-        </tr>
-      `;
-
-      $("details").innerHTML = data.details.map((row, index) => {
-        const top = index === 2 ? " bill-top" : "";
-        const bottom = index === 4 ? " bill-bottom" : "";
-
-        const dates = row.label.startsWith("어음")
-          ? `
-            <td class="bill-date bill-left${top}${bottom}">
-              ${escapeHtml(dateWithDay(row.issue_date))}
-            </td>
-            <td class="bill-date bill-right${top}${bottom}">
-              ${escapeHtml(dateWithDay(row.maturity_date))}
-            </td>
-          `
-          : '<td class="pattern"></td><td class="pattern"></td>';
-
-        return `
-          <tr>
-            <td>${escapeHtml(row.label)}</td>
-            <td class="amount">${displayMoney(row.final)}</td>
-            ${dates}
-            <td>
-              <input
-                class="note-input"
-                aria-label="${escapeHtml(row.label)} 비고"
-              >
-            </td>
-          </tr>
-        `;
-      }).join("") + `
-        <tr>
-          <td>기타</td>
-          <td class="amount">${displayMoney(data.other_final)}</td>
-          <td class="pattern"></td>
-          <td class="pattern"></td>
-          <td><input class="note-input" aria-label="기타 비고"></td>
-        </tr>
-      `;
-
-      $("totals").innerHTML = `
-        <tr>
-          <td>계</td>
-          <td class="amount">${displayMoney(data.final_total)}</td>
-          <td class="pattern"></td>
-          <td class="pattern"></td>
-          <td class="pattern"></td>
-        </tr>
-      `;
-
-      $("errors").textContent = data.errors.length
-        ? "출력 전 확인이 필요한 오류:\n" + data.errors.join("\n")
-        : "";
-
-      const warnings = [...data.warnings];
-      const logo = $("logo");
-
-      if (logo.complete && !logo.naturalWidth) {
-        warnings.push(
-          "로고를 읽지 못했습니다. index.html과 같은 폴더에 logo.png가 있는지, 파일명과 대소문자가 일치하는지 확인해 주세요."
-        );
-      }
-
-      $("warnings").textContent = warnings.join("\n");
-      $("metrics").textContent =
-        `처리 거래 ${data.rows}건 · H19 조정금액 ${money(data.adjustment)}원`;
-
-      $("hidden-values").textContent =
-        `금월 매출액 ${money(summary.sales)}원 / ` +
-        `당월 기수금액 ${money(summary.received)}원 / ` +
-        `계약상 합계 ${money(data.contract_total)}원 / ` +
-        `기타 계약상 금액 ${money(data.other)}원 / ` +
-        `상세 기수금액 합계 ${money(data.detailed_received)}원`;
-
-      $("audit").innerHTML = data.audit.map(row => {
-        const values = [
-          row.line,
-          row.date,
-          row.code,
-          row.customer,
-          money(row.amount),
-          money(row.received),
-          row.aa,
-          row.ab,
-          row.billing
-        ];
-
-        return "<tr>" + values.map(value =>
-          `<td>${escapeHtml(value)}</td>`
-        ).join("") + "</tr>";
-      }).join("");
-
-      document.querySelectorAll("#report .note-input").forEach(input => {
-        input.value =
-          savedNotes.get(input.getAttribute("aria-label")) ?? "";
-      });
-
-      renderAggregation(data);
-
-      $("report").hidden = false;
-      $("validation").hidden = false;
-      $("result-tabs").hidden = false;
-
-      appState.valid = data.errors.length === 0;
-      appState.phase = appState.valid ? "complete" : "error";
-      syncButtons();
-
-      setMessage(
-        appState.valid
-          ? ""
-          : "오류가 있어 인쇄 및 PNG 저장을 제한했습니다. 검증 결과를 확인해 주세요.",
-        !appState.valid
-      );
-    }
-
-    /* 8. 집계 및 기준일 선택 */
-    function renderBaseOptions(selectedDate) {
-      const today = new Date();
-      const currentMonth = makeDate(
-        today.getFullYear(),
-        today.getMonth() + 1,
-        1
-      );
-
-      const select = $("aggregate-base");
-      select.replaceChildren();
-
-      for (let offset = 0; offset >= -6; offset--) {
-        const date = iso(monthEnd(currentMonth, offset));
-        const option = document.createElement("option");
-
-        option.value = date;
-        option.textContent = date;
-        select.appendChild(option);
-      }
-
-      select.value = selectedDate;
-
-      if (select.selectedIndex === -1) {
-        const option = document.createElement("option");
-
-        option.value = selectedDate;
-        option.textContent = `${selectedDate} (선택 범위 밖)`;
-        option.disabled = true;
-        option.selected = true;
-        select.prepend(option);
-      }
-    }
-
-    function resetFilterState(rows = [], base = "") {
-      aggregateFilterState.rows = rows;
-      aggregateFilterState.base = base;
-      aggregateFilterState.selected = Object.create(null);
-      aggregateFilterState.currentKey = null;
-      aggregateFilterState.draft = new Set();
-
-      $("aggregate-filter-search").value = "";
-      $("aggregate-filter-options").replaceChildren();
-      $("aggregate-filter-title").textContent = "필터";
-    }
-
-    function renderAggregation(data) {
-      const aggregate = data.aggregation;
-      const formatted = value => escapeHtml(displayMoney(value));
-
-      renderBaseOptions(data.base);
-
-      $("aggregate-summary").innerHTML = `
-        <tr class="agg-total">
-          <td>계</td>
-          <td>${formatted(aggregate.prev)}</td>
-          <td>${formatted(aggregate.sales)}</td>
-          <td>${formatted(aggregate.carried)}</td>
-          <td class="agg-request">${formatted(aggregate.request)}</td>
-          <td class="agg-paid">${formatted(aggregate.paid)}</td>
-          <td class="agg-unpaid">${formatted(aggregate.unpaid)}</td>
-        </tr>
-      ` + aggregate.details.map(row => `
-        <tr>
-          <td>${escapeHtml(row.label)}</td>
-          <td class="pattern"></td>
-          <td class="pattern"></td>
-          <td>${formatted(row.carry)}</td>
-          <td class="agg-request">${formatted(row.request)}</td>
-          <td class="agg-paid">${formatted(row.paid)}</td>
-          <td class="agg-unpaid">${formatted(row.unpaid)}</td>
-        </tr>
-      `).join("");
-
-      resetFilterState(aggregate.ledger, data.base);
-      applyAggregateFilters();
-    }
-
-    /* 9. 집계 필터 */
-    function aggregateFilterValue(row, key) {
-      if (key === "date") {
-        return String(row.date ?? "").slice(2).replaceAll("-", ".");
-      }
-
-      return String(row[key] ?? "");
-    }
-
-    function aggregateFilterValues(key) {
-      return [...new Set(
-        aggregateFilterState.rows.map(row => aggregateFilterValue(row, key))
-      )].sort((a, b) => a.localeCompare(b, "ko", { numeric: true }));
-    }
-
-    function aggregateMatchingOptions() {
-      const query = $("aggregate-filter-search")
-        .value.trim().toLocaleLowerCase();
-
-      return aggregateFilterValues(aggregateFilterState.currentKey)
-        .filter(value =>
-          (value || "(빈 값)").toLocaleLowerCase().includes(query)
-        );
-    }
-
-    function renderAggregateFilterOptions() {
-      const container = $("aggregate-filter-options");
-      const values = aggregateMatchingOptions();
-      container.replaceChildren();
-
-      if (!values.length) {
-        container.textContent = "검색 결과가 없습니다.";
-        return;
-      }
-
-      for (const value of values) {
-        const label = document.createElement("label");
-        label.className = "aggregate-filter-option";
-
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.checked = aggregateFilterState.draft.has(value);
-
-        checkbox.addEventListener("change", () => {
-          if (checkbox.checked) {
-            aggregateFilterState.draft.add(value);
-          } else {
-            aggregateFilterState.draft.delete(value);
-          }
-        });
-
-        const text = document.createElement("span");
-        text.textContent = value || "(빈 값)";
-
-        label.append(checkbox, text);
-        container.appendChild(label);
-      }
-    }
-
-    function openAggregateFilter(column) {
-      aggregateFilterState.currentKey = column.key;
-      const existing = aggregateFilterState.selected[column.key];
-
-      aggregateFilterState.draft = new Set(
-        existing ?? aggregateFilterValues(column.key)
-      );
-
-      $("aggregate-filter-title").textContent = `${column.label} 필터`;
-      $("aggregate-filter-search").value = "";
-
-      renderAggregateFilterOptions();
-
-      if (!aggregateFilterDialog.open) {
-        aggregateFilterDialog.showModal();
-      }
-
-      $("aggregate-filter-search").focus();
-    }
-
-    function updateFilterButtons() {
-      for (const column of aggregateFilterColumns) {
-        const button = $(`aggregate-filter-button-${column.key}`);
-        const enabled =
-          aggregateFilterState.selected[column.key] !== undefined;
-
-        button.classList.toggle("active", enabled);
-        button.title =
-          `${column.label} 필터` + (enabled ? " — 적용 중" : "");
-      }
-    }
-
-    function updateFilteredTotals(rows) {
-      $("aggregate-filter-sales-total").textContent =
-        displayMoney(sum(rows, row => row.sales));
-
-      $("aggregate-filter-paid-total").textContent =
-        displayMoney(sum(rows, row => row.paid));
-    }
-
-    function applyAggregateFilters() {
-      const state = aggregateFilterState;
-
-      const filtered = state.rows.filter(row =>
-        aggregateFilterColumns.every(column => {
-          const selected = state.selected[column.key];
-
-          return !selected ||
-            selected.has(aggregateFilterValue(row, column.key));
-        })
-      );
-
-      $("aggregate-ledger-body").innerHTML = filtered.length
-        ? filtered.map(row => {
-          const values = [
-            aggregateFilterValue(row, "date"),
-            row.product,
-            row.quantity,
-            displayMoney(row.sales),
-            displayMoney(row.paid),
-            row.customer,
-            row.condition
-          ];
-
-          return "<tr>" + values.map(value =>
-            `<td>${escapeHtml(value)}</td>`
-          ).join("") + "</tr>";
-        }).join("")
-        : '<tr><td colspan="7">조건에 맞는 거래가 없습니다.</td></tr>';
-
-      updateFilteredTotals(filtered);
-
-      const active = aggregateFilterColumns.some(column =>
-        state.selected[column.key] !== undefined
-      );
-
-      $("aggregate-count").textContent =
-        `청구 기준일 ${state.base} · 전체 ${state.rows.length}건 중 ` +
-        `${filtered.length}건 표시 · 수금 거래 포함` +
-        (active ? " · 필터 적용 중 (상단 집계 금액은 전체 기준)" : "");
-
-      updateFilterButtons();
-    }
-
-    function initializeFilterButtons() {
-      const headers = document.querySelectorAll(
-        ".aggregate-ledger thead tr:first-child th"
-      );
-
-      for (const column of aggregateFilterColumns) {
-        const id = `aggregate-filter-button-${column.key}`;
-
-        if ($(id)) {
-          continue;
-        }
-
-        const button = document.createElement("button");
-        button.id = id;
-        button.type = "button";
-        button.className = "aggregate-filter-button";
-        button.textContent = "▼";
-        button.setAttribute("aria-label", `${column.label} 필터 열기`);
-        button.setAttribute("aria-haspopup", "dialog");
-        button.addEventListener("click", () => openAggregateFilter(column));
-
-        headers[column.index].appendChild(button);
-      }
-
-      updateFilterButtons();
-    }
-
-    /* 10. 인쇄 */
-    function preparePrintableInputs() {
-      removePrintableInputs();
-
-      const recipientText = document.createElement("span");
-      recipientText.className = "print-input-text recipient-print-text";
-      recipientText.textContent = $("recipient").value;
-      $("recipient").insertAdjacentElement("afterend", recipientText);
-
-      document.querySelectorAll("#report .note-input").forEach(input => {
-        const noteText = document.createElement("div");
-        noteText.className = "print-input-text note-print-text";
-        noteText.textContent = input.value;
-        input.insertAdjacentElement("afterend", noteText);
-      });
-    }
-
-    function printReport() {
-      if (!appState.valid || appState.savingPng || appState.calculating) {
-        return;
-      }
-
-      try {
-        setExportStatus();
-        window.print();
-      } catch (error) {
-        setExportStatus(
-          "인쇄 실행 중 오류가 발생했습니다: " +
-          (error instanceof Error ? error.message : String(error)),
-          true
-        );
-      }
-    }
-
-    /* 11. PNG 저장 */
-    function withTimeout(promise, milliseconds, message) {
-      let timer;
-
-      return Promise.race([
-        promise,
-        new Promise((resolve, reject) => {
-          timer = setTimeout(
-            () => reject(new Error(message)),
-            milliseconds
-          );
-        })
-      ]).finally(() => clearTimeout(timer));
-    }
-
-    function filenamePart(value) {
-      return String(value)
-        .replace(/[\/:*?"<>|\u0000-\u001F]/g, "_")
-        .trim()
-        .slice(0, 80);
-    }
-
-    function canvasToPngBlob(canvas) {
-      return new Promise((resolve, reject) => {
-        canvas.toBlob(blob => {
-          if (blob) {
-            resolve(blob);
-          } else {
-            reject(new Error("PNG 이미지 생성에 실패했습니다."));
-          }
-        }, "image/png");
-      });
-    }
-
-    async function saveReportPng() {
-      if (!appState.valid || appState.savingPng || appState.calculating) {
-        return;
-      }
-
-      if (typeof window.html2canvas !== "function") {
-        setExportStatus(
-          "html2canvas.min.js를 불러오지 못했습니다. " +
-          "같은 폴더의 파일명, Pages 배포 상태 및 CSP 설정을 확인해 주세요.",
-          true
-        );
-        return;
-      }
-
-      const sheet = $("report-sheet");
-
-      if ($("report").hidden || sheet.getBoundingClientRect().width === 0) {
-        setExportStatus("결제청구서 탭을 연 뒤 다시 시도해 주세요.", true);
-        return;
-      }
-
-      const workspace = document.querySelector(".workspace");
-      const previousInert = workspace.inert;
-      const button = $("save-png");
-      const originalButtonText = button.textContent;
-
-      let canvas = null;
-      let downloadUrl = null;
-      let captureDocument = null;
-
-      appState.savingPng = true;
-      workspace.inert = true;
-      syncButtons();
-
-      button.textContent = "이미지 생성 중...";
-      setExportStatus("청구서를 이미지로 변환하고 있습니다.");
-
-      try {
-        if (document.fonts) {
-          await withTimeout(
-            document.fonts.ready,
-            15000,
-            "글꼴 로딩 시간이 초과되었습니다. 새로고침 후 다시 시도해 주세요."
-          );
-        }
-
-        await Promise.all(
-          [...sheet.querySelectorAll("img")].map(async image => {
-            await withTimeout(
-              image.decode(),
-              15000,
-              "로고 로딩 시간이 초과되었습니다."
-            );
-
-            if (!image.naturalWidth) {
-              throw new Error("logo.png를 읽지 못했습니다.");
-            }
-          })
-        );
-
-        const width = Math.ceil(sheet.getBoundingClientRect().width);
-        const recipientValue = $("recipient").value;
-        const commentValue = sheet.querySelector(".comment").innerText;
-        const noteValues = [...sheet.querySelectorAll(".note-input")]
-          .map(input => input.value);
-
-        const filename =
-          `결제청구서_${filenamePart($("base").value)}_` +
-          `${filenamePart(recipientValue) || "거래처"}.png`;
-
-        canvas = await window.html2canvas(sheet, {
-          backgroundColor: "#ffffff",
-          scale: 2,
-          useCORS: true,
-          allowTaint: false,
-          imageTimeout: 15000,
-          logging: false,
-          removeContainer: true,
-
-          onclone(clonedDocument) {
-            captureDocument = clonedDocument;
-
-            const clonedReport = clonedDocument.getElementById("report");
-            const clonedSheet = clonedDocument.getElementById("report-sheet");
-            const clonedWrap = clonedReport.querySelector(".sheet-wrap");
-
-            clonedReport.hidden = false;
-            clonedReport.classList.remove("aggregate-selected");
-
-            // 화면 카드의 라운드·그림자는 PNG에 반영하지 않습니다.
-            Object.assign(clonedWrap.style, {
-              overflow: "visible",
-              borderRadius: "0",
-              boxShadow: "none"
-            });
-
-            clonedWrap.scrollLeft = 0;
-            clonedWrap.scrollTop = 0;
-
-            Object.assign(clonedSheet.style, {
-              width: `${width}px`,
-              minWidth: "0",
-              maxWidth: "none",
-              height: "auto",
-              maxHeight: "none",
-              overflow: "visible"
-            });
-
-            clonedReport.querySelectorAll(".print-input-text")
-              .forEach(element => element.remove());
-
-            const recipient = clonedDocument.getElementById("recipient");
-            const recipientOutput = clonedDocument.createElement("div");
-            recipientOutput.textContent = recipientValue;
-
-            Object.assign(recipientOutput.style, {
-              width: "8cm",
-              maxWidth: "calc(100% - 45px)",
-              minWidth: "0",
-              padding: "6px 8px",
-              fontWeight: "700",
-              lineHeight: "1.6",
-              whiteSpace: "pre-wrap",
-              overflowWrap: "anywhere"
-            });
-
-            recipient.replaceWith(recipientOutput);
-
-            clonedReport.querySelector(".recipient-row")
-              .style.alignItems = "flex-start";
-
-            clonedSheet.querySelectorAll(".note-input")
-              .forEach((input, index) => {
-                const output = clonedDocument.createElement("div");
-                output.textContent = noteValues[index] ?? "";
-
-                Object.assign(output.style, {
-                  width: "100%",
-                  minHeight: "28px",
-                  padding: "4px 6px",
-                  fontSize: "12px",
-                  lineHeight: "1.6",
-                  textAlign: "center",
-                  whiteSpace: "pre-wrap",
-                  overflowWrap: "anywhere"
-                });
-
-                input.replaceWith(output);
-              });
-
-            const comment = clonedSheet.querySelector(".comment");
-            comment.textContent = commentValue;
-            comment.removeAttribute("contenteditable");
-
-            Object.assign(comment.style, {
-              height: "auto",
-              maxHeight: "none",
-              overflow: "visible",
-              outline: "none"
-            });
-
-            const bounds = clonedSheet.getBoundingClientRect();
-            const pixelWidth = Math.ceil(bounds.width * 2);
-            const pixelHeight = Math.ceil(bounds.height * 2);
-
-            if (
-              pixelWidth > 16000 ||
-              pixelHeight > 16000 ||
-              pixelWidth * pixelHeight > 20000000
-            ) {
-              throw new Error(
-                "청구서가 단일 PNG로 저장하기에 너무 큽니다. " +
-                "비고·Comment를 줄이거나 PDF 저장을 이용해 주세요."
-              );
-            }
-          }
-        });
-
-        if (!canvas.width || !canvas.height) {
-          throw new Error("빈 이미지가 생성되었습니다.");
-        }
-
-        const blob = await canvasToPngBlob(canvas);
-        downloadUrl = URL.createObjectURL(blob);
-
-        const link = document.createElement("a");
-        link.href = downloadUrl;
-        link.download = filename;
-
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-
-        setExportStatus(
-          "PNG 다운로드를 요청했습니다. 브라우저의 다운로드 목록을 확인해 주세요."
-        );
-      } catch (error) {
-        const detail = error instanceof Error ? error.message : String(error);
-
-        setExportStatus(
-          "PNG 저장에 실패했습니다. " +
-          "GitHub 웹주소에서 실행 중인지, logo.png와 html2canvas.min.js가 배포되었는지 확인해 주세요.\n" +
-          detail,
-          true
-        );
-      } finally {
-        try {
-          if (captureDocument) {
-            const frame = captureDocument.defaultView?.frameElement;
-
-            if (frame?.isConnected) {
-              frame.remove();
-            }
-          }
-
-          if (canvas) {
-            canvas.width = 0;
-            canvas.height = 0;
-          }
-
-          if (downloadUrl) {
-            const urlToRevoke = downloadUrl;
-            setTimeout(() => URL.revokeObjectURL(urlToRevoke), 60000);
-          }
-        } finally {
-          appState.savingPng = false;
-          workspace.inert = previousInert;
-          button.textContent = originalButtonText;
-          syncButtons();
-        }
-      }
-    }
-
-/* 12. 계산 실행 */
-async function runCalculation(targetTab = "report") {
-  if (appState.savingPng || appState.calculating) {
+    return "<tr>" + values.map(value =>
+      `<td>${escapeHtml(value)}</td>`
+    ).join("") + "</tr>";
+  }).join("");
+
+  document.querySelectorAll("#report .note-input").forEach(input => {
+    input.value = savedNotes.get(input.getAttribute("aria-label")) ?? "";
+  });
+
+  renderAggregation(data);
+
+  $("report").hidden = false;
+  $("validation").hidden = false;
+  $("result-tabs").hidden = false;
+
+  appState.valid = data.errors.length === 0;
+  appState.phase = appState.valid ? "complete" : "error";
+  syncButtons();
+
+  setMessage(
+    appState.valid
+      ? ""
+      : "오류가 있어 인쇄 및 PNG 저장을 제한했습니다. 검증 결과를 확인해 주세요.",
+    !appState.valid
+  );
+}
+
+/* 8. 집계 */
+function renderBaseOptions(selectedDate) {
+  const today = new Date();
+  const currentMonth = makeDate(today.getFullYear(), today.getMonth() + 1, 1);
+  const select = $("aggregate-base");
+  select.replaceChildren();
+
+  for (let offset = 0; offset >= -6; offset--) {
+    const date = iso(monthEnd(currentMonth, offset));
+    const option = document.createElement("option");
+    option.value = date;
+    option.textContent = date;
+    select.appendChild(option);
+  }
+
+  select.value = selectedDate;
+
+  if (select.selectedIndex === -1) {
+    const option = document.createElement("option");
+    option.value = selectedDate;
+    option.textContent = `${selectedDate} (선택 범위 밖)`;
+    option.disabled = true;
+    option.selected = true;
+    select.prepend(option);
+  }
+}
+
+function resetFilterState(rows = [], base = "") {
+  aggregateFilterState.rows = rows;
+  aggregateFilterState.base = base;
+  aggregateFilterState.selected = Object.create(null);
+  aggregateFilterState.currentKey = null;
+  aggregateFilterState.draft = new Set();
+  $("aggregate-filter-search").value = "";
+  $("aggregate-filter-options").replaceChildren();
+  $("aggregate-filter-title").textContent = "필터";
+}
+
+function renderAggregation(data) {
+  const aggregate = data.aggregation;
+  const formatted = value => escapeHtml(displayMoney(value));
+
+  renderBaseOptions(data.base);
+
+  $("aggregate-summary").innerHTML = `
+    <tr class="agg-total">
+      <td>계</td>
+      <td>${formatted(aggregate.prev)}</td>
+      <td>${formatted(aggregate.sales)}</td>
+      <td>${formatted(aggregate.carried)}</td>
+      <td class="agg-request">${formatted(aggregate.request)}</td>
+      <td class="agg-paid">${formatted(aggregate.paid)}</td>
+      <td class="agg-unpaid">${formatted(aggregate.unpaid)}</td>
+    </tr>
+  ` + aggregate.details.map(row => `
+    <tr>
+      <td>${escapeHtml(row.label)}</td>
+      <td class="pattern"></td>
+      <td class="pattern"></td>
+      <td>${formatted(row.carry)}</td>
+      <td class="agg-request">${formatted(row.request)}</td>
+      <td class="agg-paid">${formatted(row.paid)}</td>
+      <td class="agg-unpaid">${formatted(row.unpaid)}</td>
+    </tr>
+  `).join("");
+
+  resetFilterState(aggregate.ledger, data.base);
+  applyAggregateFilters();
+}
+
+/* 9. 집계 필터 */
+function aggregateFilterValue(row, key) {
+  return key === "date"
+    ? String(row.date ?? "").slice(2).replaceAll("-", ".")
+    : String(row[key] ?? "");
+}
+
+function aggregateFilterValues(key) {
+  return [...new Set(
+    aggregateFilterState.rows.map(row => aggregateFilterValue(row, key))
+  )].sort((a, b) => a.localeCompare(b, "ko", { numeric: true }));
+}
+
+function aggregateMatchingOptions() {
+  const query = $("aggregate-filter-search").value.trim().toLocaleLowerCase();
+
+  return aggregateFilterValues(aggregateFilterState.currentKey)
+    .filter(value => (value || "(빈 값)").toLocaleLowerCase().includes(query));
+}
+
+function renderAggregateFilterOptions() {
+  const container = $("aggregate-filter-options");
+  const values = aggregateMatchingOptions();
+  container.replaceChildren();
+
+  if (!values.length) {
+    container.textContent = "검색 결과가 없습니다.";
     return;
   }
+
+  for (const value of values) {
+    const label = document.createElement("label");
+    label.className = "aggregate-filter-option";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = aggregateFilterState.draft.has(value);
+    checkbox.addEventListener("change", () => {
+      if (checkbox.checked) aggregateFilterState.draft.add(value);
+      else aggregateFilterState.draft.delete(value);
+    });
+
+    const text = document.createElement("span");
+    text.textContent = value || "(빈 값)";
+    label.append(checkbox, text);
+    container.appendChild(label);
+  }
+}
+
+function openAggregateFilter(column) {
+  aggregateFilterState.currentKey = column.key;
+  aggregateFilterState.draft = new Set(
+    aggregateFilterState.selected[column.key] ?? aggregateFilterValues(column.key)
+  );
+  $("aggregate-filter-title").textContent = `${column.label} 필터`;
+  $("aggregate-filter-search").value = "";
+  renderAggregateFilterOptions();
+  if (!aggregateFilterDialog.open) aggregateFilterDialog.showModal();
+  $("aggregate-filter-search").focus();
+}
+
+function updateFilterButtons() {
+  for (const column of aggregateFilterColumns) {
+    const button = $(`aggregate-filter-button-${column.key}`);
+    const enabled = aggregateFilterState.selected[column.key] !== undefined;
+    button.classList.toggle("active", enabled);
+    button.title = `${column.label} 필터` + (enabled ? " — 적용 중" : "");
+  }
+}
+
+function updateFilteredTotals(rows) {
+  $("aggregate-filter-sales-total").textContent =
+    displayMoney(sum(rows, row => row.sales));
+  $("aggregate-filter-paid-total").textContent =
+    displayMoney(sum(rows, row => row.paid));
+}
+
+function applyAggregateFilters() {
+  const state = aggregateFilterState;
+  const filtered = state.rows.filter(row =>
+    aggregateFilterColumns.every(column => {
+      const selected = state.selected[column.key];
+      return !selected || selected.has(aggregateFilterValue(row, column.key));
+    })
+  );
+
+  $("aggregate-ledger-body").innerHTML = filtered.length
+    ? filtered.map(row => {
+      const values = [
+        aggregateFilterValue(row, "date"), row.product, row.quantity,
+        displayMoney(row.sales), displayMoney(row.paid),
+        row.customer, row.condition
+      ];
+      return "<tr>" + values.map(value =>
+        `<td>${escapeHtml(value)}</td>`
+      ).join("") + "</tr>";
+    }).join("")
+    : '<tr><td colspan="7">조건에 맞는 거래가 없습니다.</td></tr>';
+
+  updateFilteredTotals(filtered);
+
+  const active = aggregateFilterColumns.some(
+    column => state.selected[column.key] !== undefined
+  );
+
+  $("aggregate-count").textContent =
+    `청구 기준일 ${state.base} · 전체 ${state.rows.length}건 중 ` +
+    `${filtered.length}건 표시 · 수금 거래 포함` +
+    (active ? " · 필터 적용 중 (상단 집계 금액은 전체 기준)" : "");
+
+  updateFilterButtons();
+}
+
+function initializeFilterButtons() {
+  const headers = document.querySelectorAll(
+    ".aggregate-ledger thead tr:first-child th"
+  );
+
+  for (const column of aggregateFilterColumns) {
+    const id = `aggregate-filter-button-${column.key}`;
+    if ($(id)) continue;
+
+    const button = document.createElement("button");
+    button.id = id;
+    button.type = "button";
+    button.className = "aggregate-filter-button";
+    button.textContent = "▼";
+    button.setAttribute("aria-label", `${column.label} 필터 열기`);
+    button.setAttribute("aria-haspopup", "dialog");
+    button.addEventListener("click", () => openAggregateFilter(column));
+    headers[column.index].appendChild(button);
+  }
+
+  updateFilterButtons();
+}
+
+/* 10. 인쇄 및 PNG */
+function preparePrintableInputs() {
+  removePrintableInputs();
+
+  const recipientText = document.createElement("span");
+  recipientText.className = "print-input-text recipient-print-text";
+  recipientText.textContent = $("recipient").value;
+  $("recipient").insertAdjacentElement("afterend", recipientText);
+
+  document.querySelectorAll("#report .note-input").forEach(input => {
+    const noteText = document.createElement("div");
+    noteText.className = "print-input-text note-print-text";
+    noteText.textContent = input.value;
+    input.insertAdjacentElement("afterend", noteText);
+  });
+}
+
+function printReport() {
+  if (!appState.valid || appState.savingPng || appState.calculating) return;
+
+  try {
+    setExportStatus();
+    window.print();
+  } catch (error) {
+    setExportStatus("인쇄 실행 중 오류가 발생했습니다: " + error.message, true);
+  }
+}
+
+function withTimeout(promise, milliseconds, message) {
+  let timer;
+  return Promise.race([
+    promise,
+    new Promise((resolve, reject) => {
+      timer = setTimeout(() => reject(new Error(message)), milliseconds);
+    })
+  ]).finally(() => clearTimeout(timer));
+}
+
+function filenamePart(value) {
+  return String(value).replace(/[\/:*?"<>|\u0000-\u001F]/g, "_")
+    .trim().slice(0, 80);
+}
+
+function canvasToPngBlob(canvas) {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(blob => {
+      if (blob) resolve(blob);
+      else reject(new Error("PNG 이미지 생성에 실패했습니다."));
+    }, "image/png");
+  });
+}
+
+async function saveReportPng() {
+  if (!appState.valid || appState.savingPng || appState.calculating) return;
+
+  if (typeof window.html2canvas !== "function") {
+    setExportStatus(
+      "html2canvas.min.js를 불러오지 못했습니다. 파일명과 배포 상태를 확인해 주세요.",
+      true
+    );
+    return;
+  }
+
+  const sheet = $("report-sheet");
+  if ($("report").hidden || sheet.getBoundingClientRect().width === 0) {
+    setExportStatus("결제청구서 탭을 연 뒤 다시 시도해 주세요.", true);
+    return;
+  }
+
+  const workspace = document.querySelector(".workspace");
+  const previousInert = workspace.inert;
+  const button = $("save-png");
+  const originalButtonText = button.textContent;
+  let canvas = null;
+  let downloadUrl = null;
+  let captureDocument = null;
+
+  appState.savingPng = true;
+  workspace.inert = true;
+  syncButtons();
+  button.textContent = "이미지 생성 중...";
+  setExportStatus("청구서를 이미지로 변환하고 있습니다.");
+
+  try {
+    if (document.fonts) {
+      await withTimeout(document.fonts.ready, 15000, "글꼴 로딩 시간이 초과되었습니다.");
+    }
+
+    await Promise.all([...sheet.querySelectorAll("img")].map(async image => {
+      await withTimeout(image.decode(), 15000, "로고 로딩 시간이 초과되었습니다.");
+      if (!image.naturalWidth) throw new Error("logo.png를 읽지 못했습니다.");
+    }));
+
+    const width = Math.ceil(sheet.getBoundingClientRect().width);
+    const recipientValue = $("recipient").value;
+    const commentValue = sheet.querySelector(".comment").innerText;
+    const noteValues = [...sheet.querySelectorAll(".note-input")]
+      .map(input => input.value);
+
+    const filename =
+      `결제청구서_${filenamePart($("base").value)}_` +
+      `${filenamePart(recipientValue) || "거래처"}.png`;
+
+    canvas = await window.html2canvas(sheet, {
+      backgroundColor: "#ffffff",
+      scale: 2,
+      useCORS: true,
+      allowTaint: false,
+      imageTimeout: 15000,
+      logging: false,
+      removeContainer: true,
+
+      onclone(clonedDocument) {
+        captureDocument = clonedDocument;
+        const clonedReport = clonedDocument.getElementById("report");
+        const clonedSheet = clonedDocument.getElementById("report-sheet");
+        const clonedWrap = clonedReport.querySelector(".sheet-wrap");
+
+        clonedReport.hidden = false;
+        clonedReport.classList.remove("aggregate-selected");
+
+        Object.assign(clonedWrap.style, {
+          overflow: "visible", borderRadius: "0", boxShadow: "none"
+        });
+        clonedWrap.scrollLeft = 0;
+        clonedWrap.scrollTop = 0;
+
+        Object.assign(clonedSheet.style, {
+          width: `${width}px`,
+          minWidth: "0",
+          maxWidth: "none",
+          height: "auto",
+          maxHeight: "none",
+          overflow: "visible"
+        });
+
+        clonedReport.querySelectorAll(".print-input-text")
+          .forEach(element => element.remove());
+
+        const recipient = clonedDocument.getElementById("recipient");
+        const recipientOutput = clonedDocument.createElement("div");
+        recipientOutput.textContent = recipientValue;
+
+        Object.assign(recipientOutput.style, {
+          width: "8cm",
+          maxWidth: "calc(100% - 45px)",
+          minWidth: "0",
+          padding: "6px 8px",
+          fontWeight: "700",
+          lineHeight: "1.6",
+          whiteSpace: "pre-wrap",
+          overflowWrap: "anywhere"
+        });
+
+        recipient.replaceWith(recipientOutput);
+        clonedReport.querySelector(".recipient-row").style.alignItems = "flex-start";
+
+        clonedSheet.querySelectorAll(".note-input").forEach((input, index) => {
+          const output = clonedDocument.createElement("div");
+          output.textContent = noteValues[index] ?? "";
+          Object.assign(output.style, {
+            width: "100%",
+            minHeight: "28px",
+            padding: "4px 6px",
+            fontSize: "12px",
+            lineHeight: "1.6",
+            textAlign: "center",
+            whiteSpace: "pre-wrap",
+            overflowWrap: "anywhere"
+          });
+          input.replaceWith(output);
+        });
+
+        const comment = clonedSheet.querySelector(".comment");
+        comment.textContent = commentValue;
+        comment.removeAttribute("contenteditable");
+        Object.assign(comment.style, {
+          height: "auto", maxHeight: "none", overflow: "visible", outline: "none"
+        });
+
+        const bounds = clonedSheet.getBoundingClientRect();
+        const pixelWidth = Math.ceil(bounds.width * 2);
+        const pixelHeight = Math.ceil(bounds.height * 2);
+
+        if (
+          pixelWidth > 16000 || pixelHeight > 16000 ||
+          pixelWidth * pixelHeight > 20000000
+        ) {
+          throw new Error(
+            "청구서가 단일 PNG로 저장하기에 너무 큽니다. 비고·Comment를 줄이거나 PDF 저장을 이용해 주세요."
+          );
+        }
+      }
+    });
+
+    if (!canvas.width || !canvas.height) {
+      throw new Error("빈 이미지가 생성되었습니다.");
+    }
+
+    const blob = await canvasToPngBlob(canvas);
+    downloadUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    setExportStatus("PNG 다운로드를 요청했습니다. 브라우저 다운로드 목록을 확인해 주세요.");
+  } catch (error) {
+    setExportStatus(
+      "PNG 저장에 실패했습니다. logo.png와 html2canvas.min.js의 배포 상태를 확인해 주세요.\n" +
+      (error instanceof Error ? error.message : String(error)),
+      true
+    );
+  } finally {
+    try {
+      const frame = captureDocument?.defaultView?.frameElement;
+      if (frame?.isConnected) frame.remove();
+
+      if (canvas) {
+        canvas.width = 0;
+        canvas.height = 0;
+      }
+
+      if (downloadUrl) {
+        const urlToRevoke = downloadUrl;
+        setTimeout(() => URL.revokeObjectURL(urlToRevoke), 60000);
+      }
+    } finally {
+      appState.savingPng = false;
+      workspace.inert = previousInert;
+      button.textContent = originalButtonText;
+      syncButtons();
+    }
+  }
+}
+
+/* 11. 계산 실행 및 초기화 */
+async function runCalculation(targetTab = "report") {
+  if (appState.savingPng || appState.calculating) return;
 
   invalidate("edited");
   appState.calculating = true;
 
-  const lockedInputs = [
-    $("ledger"),
-    $("base"),
-    $("aggregate-base")
-  ];
-
-  const previousDisabled = lockedInputs.map(
-    element => element.disabled
-  );
-
-  lockedInputs.forEach(element => {
-    element.disabled = true;
-  });
+  const lockedInputs = [$("ledger"), $("base"), $("aggregate-base")];
+  const previousDisabled = lockedInputs.map(element => element.disabled);
+  lockedInputs.forEach(element => { element.disabled = true; });
 
   syncButtons();
   setMessage("계산 및 공휴일 확인 중입니다...");
 
   try {
-    // 계산 도중 입력값이 바뀌지 않도록 고정합니다.
-    const ledgerText = $("ledger").value;
-    const baseText = selectedMonthEnd();
-
     const data = await calculateWithHolidays(
-      ledgerText,
-      baseText
+      $("ledger").value, selectedMonthEnd()
     );
-
     render(data);
     selectResultTab(targetTab);
   } catch (error) {
     invalidate("error");
-
-    setMessage(
-      error instanceof Error ? error.message : String(error),
-      true
-    );
+    setMessage(error instanceof Error ? error.message : String(error), true);
   } finally {
     lockedInputs.forEach((element, index) => {
       element.disabled = previousDisabled[index];
     });
-
     appState.calculating = false;
     syncButtons();
   }
 }
 
-    /* 13. 전체 초기화 */
-    function resetAll() {
-      if (appState.savingPng || appState.calculating) {
-        return;
-      }
+function resetAll() {
+  if (appState.savingPng || appState.calculating) return;
 
-      const confirmed = window.confirm(
-        "입력한 원장, 수신, 비고, Comment 및 계산 결과를 모두 초기화하시겠습니까?"
-      );
+  if (!window.confirm(
+    "입력한 원장, 수신, 비고, Comment 및 계산 결과를 모두 초기화하시겠습니까?"
+  )) return;
 
-      if (!confirmed) {
-        return;
-      }
+  $("ledger").value = "";
+  clearUserNotes();
+  $("base").value = currentMonthValue();
+  invalidate("initial");
+  updateGuide();
 
-      $("ledger").value = "";
-      clearUserNotes();
-      $("base").value = currentMonthValue();
+  [
+    "summary", "details", "totals", "audit",
+    "aggregate-summary", "aggregate-ledger-body", "aggregate-base"
+  ].forEach(id => $(id).replaceChildren());
 
-      invalidate("initial");
-      updateGuide();
+  [
+    "errors", "warnings", "metrics", "hidden-values",
+    "aggregate-count", "written-date"
+  ].forEach(id => { $(id).textContent = ""; });
 
-      [
-        "summary",
-        "details",
-        "totals",
-        "audit",
-        "aggregate-summary",
-        "aggregate-ledger-body",
-        "aggregate-base"
-      ].forEach(id => $(id).replaceChildren());
+  $("document-title").textContent = "결제청구서";
+  $("validation").open = false;
+  document.querySelectorAll("#validation details")
+    .forEach(element => { element.open = false; });
 
-      [
-        "errors",
-        "warnings",
-        "metrics",
-        "hidden-values",
-        "aggregate-count",
-        "written-date"
-      ].forEach(id => {
-        $(id).textContent = "";
-      });
+  updateFilteredTotals([]);
+  resetFilterState();
+  updateFilterButtons();
+  $("tab-report").setAttribute("aria-pressed", "true");
+  $("tab-aggregate").setAttribute("aria-pressed", "false");
+  $("ledger").focus();
+}
 
-      $("document-title").textContent = "결제청구서";
-      $("validation").open = false;
-
-      document.querySelectorAll("#validation details").forEach(element => {
-        element.open = false;
-      });
-
-      updateFilteredTotals([]);
-      resetFilterState();
-      updateFilterButtons();
-
-      $("tab-report").setAttribute("aria-pressed", "true");
-      $("tab-aggregate").setAttribute("aria-pressed", "false");
-      $("ledger").focus();
-    }
-
-    /* 14. 이벤트 */
+/* 12. 기존 화면 이벤트 */
 $("add-bookmark").addEventListener("click", () => {
-  const platform =
-    navigator.userAgentData?.platform ||
-    navigator.platform ||
-    "";
-
-  const isMobile =
-    /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+  const platform = navigator.userAgentData?.platform || navigator.platform || "";
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
     (platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
   if (isMobile) {
     window.alert(
-      "브라우저의 메뉴(⋮ 또는 …)나 공유 버튼을 누른 뒤\n" +
-      "‘북마크 추가’ 또는 ‘즐겨찾기 추가’를 선택해 주세요.\n\n" +
-      "브라우저에 따라 메뉴 이름이 다를 수 있습니다."
+      "브라우저 메뉴(⋮ 또는 …)나 공유 버튼을 누른 뒤\n" +
+      "‘북마크 추가’ 또는 ‘즐겨찾기 추가’를 선택해 주세요."
     );
     return;
   }
 
   const shortcut = /Mac/i.test(platform) ? "⌘ + D" : "Ctrl + D";
-
   window.alert(
-    "이 안내창을 닫은 뒤 " + shortcut + "를 눌러 주세요.\n\n" +
+    `이 안내창을 닫은 뒤 ${shortcut}를 눌러 주세요.\n\n` +
     "이름: SK플라즈마 결제청구 에이전트\n" +
-    "원하는 저장 폴더를 선택하고 ‘완료’ 또는 ‘저장’을 누르시면 됩니다."
+    "저장 폴더를 선택하고 ‘완료’ 또는 ‘저장’을 누르시면 됩니다."
   );
 });
-    $("ledger").addEventListener("input", () => {
-      if (appState.savingPng || appState.calculating) {
-        return;
+
+$("ledger").addEventListener("input", () => {
+  if (appState.savingPng || appState.calculating) return;
+  clearUserNotes();
+  invalidate("edited");
+});
+
+$("base").addEventListener("input", () => {
+  if (appState.savingPng || appState.calculating) return;
+  invalidate("edited");
+  updateGuide();
+});
+
+$("calculate").addEventListener("click", () => runCalculation("report"));
+$("reset-all").addEventListener("click", resetAll);
+$("save-png").addEventListener("click", saveReportPng);
+$("print").addEventListener("click", printReport);
+$("tab-report").addEventListener("click", () => selectResultTab("report"));
+$("tab-aggregate").addEventListener("click", () => selectResultTab("aggregate"));
+
+$("aggregate-base").addEventListener("change", () => {
+  if (appState.savingPng || appState.calculating) return;
+  $("base").value = $("aggregate-base").value.slice(0, 7);
+  updateGuide();
+  runCalculation("aggregate");
+});
+
+$("aggregate-filter-reset").addEventListener("click", () => {
+  aggregateFilterState.selected = Object.create(null);
+  applyAggregateFilters();
+});
+
+$("aggregate-filter-search").addEventListener("input", renderAggregateFilterOptions);
+
+$("aggregate-filter-select-visible").addEventListener("click", () => {
+  for (const value of aggregateMatchingOptions()) {
+    aggregateFilterState.draft.add(value);
+  }
+  renderAggregateFilterOptions();
+});
+
+$("aggregate-filter-clear-visible").addEventListener("click", () => {
+  for (const value of aggregateMatchingOptions()) {
+    aggregateFilterState.draft.delete(value);
+  }
+  renderAggregateFilterOptions();
+});
+
+$("aggregate-filter-apply").addEventListener("click", () => {
+  const state = aggregateFilterState;
+  const all = aggregateFilterValues(state.currentKey);
+
+  if (all.every(value => state.draft.has(value))) {
+    delete state.selected[state.currentKey];
+  } else {
+    state.selected[state.currentKey] = new Set(state.draft);
+  }
+
+  aggregateFilterDialog.close();
+  applyAggregateFilters();
+});
+
+$("aggregate-filter-clear").addEventListener("click", () => {
+  delete aggregateFilterState.selected[aggregateFilterState.currentKey];
+  aggregateFilterDialog.close();
+  applyAggregateFilters();
+});
+
+$("aggregate-filter-cancel").addEventListener("click", () => {
+  aggregateFilterDialog.close();
+});
+
+$("open-update-note").addEventListener("click", () => {
+  if (!updateNoteDialog.open) updateNoteDialog.showModal();
+  $("update-note-title").focus({ preventScroll: true });
+  updateNoteDialog.scrollTop = 0;
+  requestAnimationFrame(() => { updateNoteDialog.scrollTop = 0; });
+});
+
+$("close-update-note").addEventListener("click", () => updateNoteDialog.close());
+window.addEventListener("beforeprint", preparePrintableInputs);
+window.addEventListener("afterprint", removePrintableInputs);
+
+initializeFilterButtons();
+$("base").value = currentMonthValue();
+invalidate("initial");
+updateGuide();
+</script>
+
+<script>
+/* 13. 의견·댓글: 계산 코드와 분리 */
+(() => {
+  "use strict";
+
+  const API = "https://skplasma-guestbook.eunwook.workers.dev";
+  const SITE_KEY = "0x4AAAAAAGGNH1l-uwbEFdyP";
+  const ALLOWED_ORIGIN = "https://ewlee0915.github.io";
+  const byId = id => document.getElementById(id);
+  const dialog = byId("guestbook-dialog");
+
+  const state = {
+    type: "entry",
+    action: "create",
+    id: null,
+    entryId: null,
+    token: "",
+    widgetId: null,
+    busy: false,
+    loading: false,
+    turnstilePromise: null
+  };
+
+  function setStatus(message = "", error = false) {
+    byId("gb-status").textContent = message;
+    byId("gb-status").classList.toggle("gb-error", error);
+  }
+
+  function updateControls() {
+    byId("gb-editor").disabled = state.busy;
+    byId("gb-submit").disabled = state.busy || !state.token;
+    byId("gb-refresh").disabled = state.busy || state.loading;
+    byId("gb-close").disabled = state.busy;
+
+    byId("gb-list").querySelectorAll("button").forEach(button => {
+      button.disabled = state.busy;
+    });
+  }
+
+  function updateCount() {
+    byId("gb-count").textContent =
+      `${Array.from(byId("gb-comment").value).length} / 100자`;
+  }
+
+  function resetVerification() {
+    state.token = "";
+    if (state.widgetId !== null && window.turnstile) {
+      window.turnstile.reset(state.widgetId);
+    }
+    updateControls();
+  }
+
+  function setEditor(type = "entry", action = "create", row = null) {
+    state.type = type;
+    state.action = action;
+    state.id = action === "create" ? null : row.id;
+    state.entryId = type === "comment"
+      ? (action === "create" ? row.id : row.entry_id)
+      : null;
+
+    const deleting = action === "delete";
+    const creatingEntry = type === "entry" && action === "create";
+    const label = type === "entry" ? "의견" : "댓글";
+
+    byId("gb-editor-title").textContent =
+      action === "create" ? `새 ${label} 작성` :
+      action === "update" ? `${label} 수정` : `${label} 삭제`;
+
+    byId("gb-submit").textContent =
+      action === "create" ? `${label} 등록` :
+      action === "update" ? "수정 저장" : "삭제하기";
+
+    byId("gb-submit").classList.toggle("gb-danger", deleting);
+    byId("gb-cancel").hidden = creatingEntry;
+    byId("gb-name-field").hidden = deleting;
+    byId("gb-content-field").hidden = deleting;
+    byId("gb-nickname").value = action === "update" ? row.nickname : "";
+    byId("gb-comment").value = action === "update" ? row.comment : "";
+    byId("gb-password").value = "";
+    byId("gb-password").autocomplete =
+      action === "create" ? "new-password" : "current-password";
+
+    byId("gb-password-help").textContent = action === "create"
+      ? "수정·삭제 시 필요한 비밀번호입니다. 다른 서비스의 비밀번호를 사용하지 마세요. 비밀번호 분실 시 직접 수정·삭제할 수 없습니다."
+      : "이 글을 등록할 때 사용한 비밀번호를 입력해 주세요.";
+
+    const target = byId("gb-target");
+    target.hidden = creatingEntry;
+
+    if (creatingEntry) {
+      target.textContent = "";
+    } else if (action === "create") {
+      target.textContent = `댓글 대상: ${row.nickname}님의 의견 — ${row.comment}`;
+    } else {
+      target.textContent = `선택한 ${label}: ${row.nickname} — ${row.comment}` +
+        (deleting && type === "entry"
+          ? "\n원글을 삭제하면 연결된 댓글도 모두 삭제됩니다."
+          : "");
+    }
+
+    updateCount();
+    resetVerification();
+  }
+
+  function focusEditor() {
+    dialog.scrollTop = 0;
+    (state.action === "delete"
+      ? byId("gb-password")
+      : byId("gb-nickname")
+    ).focus({ preventScroll: true });
+  }
+
+  async function apiRequest(path, body) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 30000);
+
+    try {
+      const response = await fetch(API + path, {
+        method: body ? "POST" : "GET",
+        mode: "cors",
+        credentials: "omit",
+        cache: "no-store",
+        referrerPolicy: "no-referrer",
+        headers: body ? { "Content-Type": "application/json" } : undefined,
+        body: body ? JSON.stringify(body) : undefined,
+        signal: controller.signal
+      });
+
+      let result;
+      try {
+        result = await response.json();
+      } catch {
+        throw new Error("서버 응답을 읽지 못했습니다. Worker 배포 상태를 확인해 주세요.");
       }
 
-      clearUserNotes();
-      invalidate("edited");
-    });
-
-    $("base").addEventListener("input", () => {
-      if (appState.savingPng || appState.calculating) {
-        return;
+      if (!response.ok || result.success !== true) {
+        throw new Error(
+          typeof result.message === "string"
+            ? result.message
+            : `요청에 실패했습니다. HTTP ${response.status}`
+        );
       }
 
-      invalidate("edited");
-      updateGuide();
-    });
-
-    $("calculate").addEventListener("click", () => {
-      runCalculation("report");
-    });
-
-    $("reset-all").addEventListener("click", resetAll);
-    $("save-png").addEventListener("click", saveReportPng);
-    $("print").addEventListener("click", printReport);
-
-    $("tab-report").addEventListener("click", () => {
-      selectResultTab("report");
-    });
-
-    $("tab-aggregate").addEventListener("click", () => {
-      selectResultTab("aggregate");
-    });
-
-    $("aggregate-base").addEventListener("change", () => {
-      if (appState.savingPng || appState.calculating) {
-        return;
+      return result;
+    } catch (error) {
+      if (error.name === "AbortError") {
+        throw new Error(body
+          ? "응답 시간이 초과되었습니다. 이미 처리되었을 수 있으니 목록을 새로고침한 뒤 재시도해 주세요."
+          : "목록 조회 시간이 초과되었습니다. 다시 시도해 주세요.");
       }
 
-      $("base").value = $("aggregate-base").value.slice(0, 7);
-      updateGuide();
-      runCalculation("aggregate");
-    });
+      if (error instanceof TypeError) {
+        throw new Error(
+          "서버에 연결하지 못했습니다. 인터넷 연결과 CSP·CORS 설정을 확인해 주세요."
+        );
+      }
+      throw error;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
 
-    $("aggregate-filter-reset").addEventListener("click", () => {
-      aggregateFilterState.selected = Object.create(null);
-      applyAggregateFilters();
-    });
+  function formatDate(value) {
+    if (typeof value !== "string") return "";
+    const date = new Date(value.replace(" ", "T") + "Z");
+    if (Number.isNaN(date.getTime())) return value;
 
-    $("aggregate-filter-search").addEventListener(
-      "input",
-      renderAggregateFilterOptions
+    return new Intl.DateTimeFormat("ko-KR", {
+      timeZone: "Asia/Seoul",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false
+    }).format(date);
+  }
+
+  function createElement(tag, className, text) {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    if (text !== undefined) element.textContent = text;
+    return element;
+  }
+
+  function createButton(text, handler) {
+    const button = createElement("button", "", text);
+    button.type = "button";
+    button.addEventListener("click", () => {
+      if (!state.busy) handler();
+    });
+    return button;
+  }
+
+  function hasDraft() {
+    return Boolean(
+      byId("gb-nickname").value.trim() ||
+      byId("gb-comment").value.trim() ||
+      byId("gb-password").value
+    );
+  }
+
+  function chooseAction(type, action, row) {
+    if (state.busy) return;
+
+    if (hasDraft() && !window.confirm(
+      "현재 입력 중인 내용을 지우고 선택한 작업으로 전환하시겠습니까?"
+    )) return;
+
+    setStatus();
+    setEditor(type, action, row);
+    focusEditor();
+  }
+
+  function createCard(row, type) {
+    const card = createElement(
+      "article", type === "entry" ? "gb-card" : "gb-reply"
     );
 
-    $("aggregate-filter-select-visible").addEventListener("click", () => {
-      for (const value of aggregateMatchingOptions()) {
-        aggregateFilterState.draft.add(value);
+    const header = createElement("div", "gb-card-head");
+    header.append(
+      createElement("strong", "gb-name", row.nickname),
+      createElement(
+        "span",
+        "gb-date",
+        formatDate(row.created_at) +
+        (row.updated_at !== row.created_at ? " · 수정됨" : "")
+      )
+    );
+
+    // 사용자 입력은 HTML로 해석하지 않고 일반 텍스트로 표시합니다.
+    const content = createElement("p", "gb-text", row.comment);
+    const actions = createElement("div", "gb-card-actions");
+    actions.append(
+      createButton("수정", () => chooseAction(type, "update", row)),
+      createButton("삭제", () => chooseAction(type, "delete", row))
+    );
+
+    card.append(header, content, actions);
+
+    if (type === "entry") {
+      const replies = createElement("div", "gb-replies");
+      replies.hidden = true;
+      let loadingReplies = false;
+
+      const replyButton = createButton(
+        "댓글 달기", () => chooseAction("comment", "create", row)
+      );
+
+      const toggleButton = createButton(
+        `댓글 보기 (${Number(row.comment_count) || 0})`,
+        async () => {
+          if (loadingReplies) return;
+
+          if (!replies.hidden) {
+            replies.hidden = true;
+            toggleButton.setAttribute("aria-expanded", "false");
+            return;
+          }
+
+          replies.hidden = false;
+          toggleButton.setAttribute("aria-expanded", "true");
+          replies.replaceChildren(
+            createElement("p", "gb-empty", "댓글을 불러오고 있습니다...")
+          );
+          loadingReplies = true;
+
+          try {
+            const result = await apiRequest(`/api/entries/${row.id}/comments`);
+            if (!Array.isArray(result.comments)) {
+              throw new Error("댓글 응답 형식이 올바르지 않습니다.");
+            }
+
+            replies.replaceChildren();
+
+            if (!result.comments.length) {
+              replies.append(createElement("p", "gb-empty", "아직 댓글이 없습니다."));
+            } else {
+              result.comments.forEach(comment => {
+                replies.append(createCard(comment, "comment"));
+              });
+            }
+          } catch (error) {
+            replies.replaceChildren(createElement("p", "gb-empty", error.message));
+          } finally {
+            loadingReplies = false;
+            updateControls();
+          }
+        }
+      );
+
+      toggleButton.setAttribute("aria-expanded", "false");
+      actions.prepend(replyButton, toggleButton);
+      card.append(replies);
+    }
+
+    return card;
+  }
+
+  async function loadEntries() {
+    if (state.loading) return;
+    state.loading = true;
+    updateControls();
+
+    const list = byId("gb-list");
+    list.setAttribute("aria-busy", "true");
+
+    try {
+      const result = await apiRequest("/api/entries");
+      if (!Array.isArray(result.entries)) {
+        throw new Error("의견 목록 응답 형식이 올바르지 않습니다.");
       }
 
-      renderAggregateFilterOptions();
-    });
+      list.replaceChildren();
 
-    $("aggregate-filter-clear-visible").addEventListener("click", () => {
-      for (const value of aggregateMatchingOptions()) {
-        aggregateFilterState.draft.delete(value);
-      }
-
-      renderAggregateFilterOptions();
-    });
-
-    $("aggregate-filter-apply").addEventListener("click", () => {
-      const state = aggregateFilterState;
-      const all = aggregateFilterValues(state.currentKey);
-
-      if (all.every(value => state.draft.has(value))) {
-        delete state.selected[state.currentKey];
+      if (!result.entries.length) {
+        list.append(createElement(
+          "p", "gb-empty", "아직 등록된 의견이 없습니다. 첫 의견을 남겨주세요!"
+        ));
       } else {
-        state.selected[state.currentKey] = new Set(state.draft);
+        result.entries.forEach(row => list.append(createCard(row, "entry")));
+      }
+    } finally {
+      state.loading = false;
+      list.setAttribute("aria-busy", "false");
+      updateControls();
+    }
+  }
+
+  function loadTurnstile() {
+    if (window.turnstile?.render) return Promise.resolve();
+    if (state.turnstilePromise) return state.turnstilePromise;
+
+    state.turnstilePromise = new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      let settled = false;
+
+      function finish(error) {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        delete window.guestbookTurnstileReady;
+
+        if (error) {
+          script.remove();
+          reject(error);
+        } else {
+          resolve();
+        }
       }
 
-      aggregateFilterDialog.close();
-      applyAggregateFilters();
+      const timer = setTimeout(() => finish(new Error(
+        "자동 입력 방지 모듈 로딩 시간이 초과되었습니다. 팝업을 닫고 다시 열어주세요."
+      )), 20000);
+
+      window.guestbookTurnstileReady = () => finish();
+      script.src =
+        "https://challenges.cloudflare.com/turnstile/v0/api.js" +
+        "?onload=guestbookTurnstileReady&render=explicit";
+      script.async = true;
+      script.onerror = () => finish(new Error(
+        "자동 입력 방지 모듈을 불러오지 못했습니다. 네트워크 또는 CSP 설정을 확인해 주세요."
+      ));
+
+      document.head.append(script);
+    }).catch(error => {
+      state.turnstilePromise = null;
+      throw error;
     });
 
-    $("aggregate-filter-clear").addEventListener("click", () => {
-      delete aggregateFilterState.selected[aggregateFilterState.currentKey];
-      aggregateFilterDialog.close();
-      applyAggregateFilters();
-    });
+    return state.turnstilePromise;
+  }
 
-    $("aggregate-filter-cancel").addEventListener("click", () => {
-      aggregateFilterDialog.close();
-    });
+  async function ensureVerification() {
+    await loadTurnstile();
+    if (!dialog.open) return;
 
-    $("open-update-note").addEventListener("click", () => {
-      if (!updateNoteDialog.open) {
-        updateNoteDialog.showModal();
+    if (state.widgetId !== null) {
+      resetVerification();
+      return;
+    }
+
+    state.widgetId = window.turnstile.render("#gb-turnstile", {
+      sitekey: SITE_KEY,
+      theme: "light",
+      size: "flexible",
+      language: "ko",
+
+      callback(token) {
+        state.token = token;
+        updateControls();
+      },
+
+      "expired-callback"() {
+        state.token = "";
+        updateControls();
+      },
+
+      "timeout-callback"() {
+        state.token = "";
+        updateControls();
+        setStatus("인증 시간이 초과되었습니다. 인증을 다시 진행해 주세요.", true);
+      },
+
+      "error-callback"() {
+        state.token = "";
+        updateControls();
+        setStatus(
+          "자동 입력 방지 인증에 실패했습니다. 팝업을 닫고 다시 열어주세요.",
+          true
+        );
       }
     });
+  }
 
-    $("close-update-note").addEventListener("click", () => {
-      updateNoteDialog.close();
-    });
+  async function openGuestbook() {
+    if (dialog.open) return;
 
-    // 버튼 인쇄와 Ctrl+P 모두 이 이벤트에서 입력값을 출력용 텍스트로 준비합니다.
-    window.addEventListener("beforeprint", preparePrintableInputs);
-    window.addEventListener("afterprint", removePrintableInputs);
+    dialog.showModal();
+    byId("guestbook-title").focus({ preventScroll: true });
+    dialog.scrollTop = 0;
+    setStatus();
+    setEditor();
 
-    /* 15. 초기 설정 */
-    initializeFilterButtons();
-    $("base").value = currentMonthValue();
-    invalidate("initial");
-    updateGuide();
-  </script>
+    if (location.origin !== ALLOWED_ORIGIN) {
+      setStatus(
+        "의견 등록은 배포된 GitHub Pages 주소에서 이용해 주세요. 로컬 파일에서는 등록할 수 없습니다.",
+        true
+      );
+      await loadEntries().catch(error => setStatus(error.message, true));
+      return;
+    }
+
+    await Promise.all([
+      loadEntries().catch(error => setStatus(error.message, true)),
+      ensureVerification().catch(error => setStatus(error.message, true))
+    ]);
+  }
+
+  async function submitAction() {
+    if (state.busy) return;
+    setStatus();
+
+    if (location.origin !== ALLOWED_ORIGIN) {
+      setStatus("배포된 GitHub Pages 주소에서 이용해 주세요.", true);
+      return;
+    }
+
+    const password = byId("gb-password").value;
+    const nickname = byId("gb-nickname").value.trim();
+    const comment = byId("gb-comment").value.trim();
+
+    if (password.length < 8 || password.length > 128) {
+      setStatus("비밀번호는 8\~128자로 입력해 주세요.", true);
+      byId("gb-password").focus();
+      return;
+    }
+
+    if (state.action !== "delete") {
+      if (!nickname || Array.from(nickname).length > 20) {
+        setStatus("이름 또는 별명은 1\~20자로 입력해 주세요.", true);
+        byId("gb-nickname").focus();
+        return;
+      }
+
+      if (!comment || Array.from(comment).length > 100) {
+        setStatus("의견 또는 댓글은 1\~100자로 입력해 주세요.", true);
+        byId("gb-comment").focus();
+        return;
+      }
+    }
+
+    if (!state.token) {
+      setStatus("자동 입력 방지 확인을 완료해 주세요.", true);
+      return;
+    }
+
+    if (state.action === "delete") {
+      const message = state.type === "entry"
+        ? "이 의견과 연결된 댓글을 모두 삭제하시겠습니까? 삭제 후 복구할 수 없습니다."
+        : "이 댓글을 삭제하시겠습니까? 삭제 후 복구할 수 없습니다.";
+      if (!window.confirm(message)) return;
+    }
+
+    // 원장·수신·금액 등 계산 화면의 값은 읽거나 전송하지 않습니다.
+    const body = {
+      type: state.type,
+      action: state.action,
+      password,
+      token: state.token
+    };
+
+    if (state.action !== "create") body.id = state.id;
+    if (state.type === "comment" && state.action === "create") {
+      body.entryId = state.entryId;
+    }
+    if (state.action !== "delete") {
+      body.nickname = nickname;
+      body.comment = comment;
+    }
+
+    state.busy = true;
+    updateControls();
+    setStatus("처리하고 있습니다...");
+    let succeeded = false;
+
+    try {
+      const result = await apiRequest("/api/action", body);
+      succeeded = true;
+      setEditor();
+      setStatus(result.message || "처리되었습니다.");
+
+      // 먼저 진행 중이던 목록 조회가 끝난 뒤 최신 상태를 다시 조회합니다.
+      while (state.loading) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+
+      try {
+        await loadEntries();
+      } catch {
+        setStatus(
+          "요청은 처리되었지만 목록 갱신에 실패했습니다. 등록을 반복하지 말고 새로고침을 눌러주세요.",
+          true
+        );
+      }
+    } catch (error) {
+      setStatus(error.message, true);
+    } finally {
+      byId("gb-password").value = "";
+      state.busy = false;
+      if (!succeeded) resetVerification();
+      updateControls();
+    }
+  }
+
+  function closeGuestbook() {
+    if (state.busy) return;
+
+    if (hasDraft() && !window.confirm(
+      "작성 중인 내용을 지우고 의견 창을 닫으시겠습니까?"
+    )) return;
+
+    dialog.close();
+  }
+
+  byId("open-guestbook").addEventListener("click", openGuestbook);
+  byId("gb-submit").addEventListener("click", submitAction);
+  byId("gb-comment").addEventListener("input", updateCount);
+  byId("gb-close").addEventListener("click", closeGuestbook);
+
+  byId("gb-cancel").addEventListener("click", () => {
+    if (state.busy) return;
+    if (hasDraft() && !window.confirm("입력 중인 내용을 지우고 취소하시겠습니까?")) {
+      return;
+    }
+    setStatus();
+    setEditor();
+    focusEditor();
+  });
+
+  byId("gb-refresh").addEventListener("click", async () => {
+    if (state.busy || state.loading) return;
+    setStatus();
+    try {
+      await loadEntries();
+    } catch (error) {
+      setStatus(error.message, true);
+    }
+  });
+
+  dialog.addEventListener("cancel", event => {
+    event.preventDefault();
+    closeGuestbook();
+  });
+
+  dialog.addEventListener("close", () => {
+    byId("gb-password").value = "";
+    byId("gb-nickname").value = "";
+    byId("gb-comment").value = "";
+    state.token = "";
+
+    if (state.widgetId !== null && window.turnstile) {
+      window.turnstile.remove(state.widgetId);
+      state.widgetId = null;
+    }
+
+    updateCount();
+  });
+})();
+</script>
 </body>
 </html>
