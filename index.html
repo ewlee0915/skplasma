@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta
     http-equiv="Content-Security-Policy"
-    content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' file: data: blob:; frame-src 'self' about:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"
+    content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' file: data: blob:; frame-src 'self' about:; connect-src https://skplasma-holidays.eunwook.workers.dev; object-src 'none'; base-uri 'none'; form-action 'none'"
   >
   <title>SK플라즈마 결제청구 에이전트</title>
 
@@ -1217,6 +1217,35 @@
         background: transparent;
       }
     }
+/* 입력 카드 오른쪽 위 즐겨찾기 버튼 */
+.input-panel {
+  position: relative;
+  padding-top: 52px;
+}
+
+#add-bookmark {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  padding: 6px 10px;
+  border: 1px solid #d3dae3;
+  border-radius: 6px;
+  background: #fff;
+  color: #526276;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+#add-bookmark:hover {
+  border-color: #073b72;
+  background: #eef5fc;
+  color: #073b72;
+}
+
+#add-bookmark:focus-visible {
+  outline: 2px solid #073b72;
+  outline-offset: 3px;
+}
   </style>
 </head>
 
@@ -1224,6 +1253,15 @@
   <main class="workspace">
     <!-- 원장 입력 -->
     <section class="panel input-panel no-print">
+
+    <button
+      id="add-bookmark"
+      type="button"
+      title="브라우저 즐겨찾기 등록 방법 안내"
+    >
+      ☆ 즐겨찾기 추가
+    </button>
+
       <div class="app-logo">
         <img src="./logo.png" alt="SK plasma">
       </div>
@@ -1525,7 +1563,7 @@
       </div>
 
       <div class="footer-contact">
-        개발·문의: 마케팅지원팀 이은욱(<a href="mailto:eunwook@sk.com">eunwook@sk.com</a>)
+        개발·문의: 마케팅지원팀 이은욱 (<a href="mailto:eunwook@sk.com">eunwook@sk.com</a>)
       </div>
 
       <p class="small version">
@@ -1790,16 +1828,175 @@
       return makeDate(a >= 100 ? a : 2000 + a, b, c);
     }
 
-    // 기존 계산과 동일하게 토요일·일요일만 제외합니다.
-    function previousWorkday(day) {
-      day = checkedDay(day - 1);
+    // 공휴일 정보는 메모리에만 보관합니다.
+// 거래원장·거래처·금액은 외부로 전송하지 않습니다.
+const HOLIDAY_API =
+  "https://skplasma-holidays.eunwook.workers.dev/";
 
-      while ([0, 6].includes(new Date(day * DAY).getUTCDay())) {
-        day = checkedDay(day - 1);
+const holidayCache = new Map();
+const HOLIDAY_CACHE_TTL = 60 * 60 * 1000;
+
+class HolidayYearRequired extends Error {
+  constructor(year) {
+    super(`${year}년 공휴일 조회가 필요합니다.`);
+    this.name = "HolidayYearRequired";
+    this.year = year;
+  }
+}
+
+async function loadHolidayYear(year) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 25000);
+
+  try {
+    const url = new URL(HOLIDAY_API);
+    url.searchParams.set("year", String(year));
+
+    const response = await fetch(url, {
+      method: "GET",
+      mode: "cors",
+      credentials: "omit",
+      referrerPolicy: "no-referrer",
+      cache: "no-store",
+      signal: controller.signal
+    });
+
+    let payload;
+
+    try {
+      payload = await response.json();
+    } catch {
+      throw new Error(
+        `${year}년 공휴일 응답을 읽지 못했습니다. Worker 배포 상태를 확인해 주세요.`
+      );
+    }
+
+    if (!response.ok || payload?.success !== true) {
+      throw new Error(
+        `${year}년 공휴일 조회 실패: ` +
+        (typeof payload?.message === "string"
+          ? payload.message
+          : `HTTP ${response.status}`)
+      );
+    }
+
+    if (
+      payload.year !== year ||
+      !Array.isArray(payload.holidays) ||
+      payload.holidays.length === 0
+    ) {
+      throw new Error(
+        `${year}년 공휴일 목록이 비어 있거나 응답 연도가 다릅니다.`
+      );
+    }
+
+    const dates = new Set();
+
+    for (const item of payload.holidays) {
+      if (
+        !item ||
+        typeof item.date !== "string" ||
+        !/^\d{4}-\d{2}-\d{2}$/.test(item.date) ||
+        !item.date.startsWith(`${year}-`)
+      ) {
+        throw new Error(
+          `${year}년 공휴일 목록의 날짜 형식이 올바르지 않습니다.`
+        );
       }
 
+      const parsed = parseDate(item.date);
+
+      if (iso(parsed) !== item.date) {
+        throw new Error("유효하지 않은 공휴일 날짜가 있습니다.");
+      }
+
+      dates.add(item.date);
+    }
+
+    holidayCache.set(year, {
+      dates,
+      loadedAt: Date.now()
+    });
+  } catch (error) {
+    if (error?.name === "AbortError") {
+      throw new Error(
+        `${year}년 공휴일 조회 시간이 초과되었습니다. 다시 계산해 주세요.`
+      );
+    }
+
+    if (error instanceof TypeError) {
+      throw new Error(
+        "공휴일 서버에 연결하지 못했습니다. 인터넷 연결, HTML의 CSP와 Worker의 CORS 설정을 확인해 주세요."
+      );
+    }
+
+    throw error;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+// 입력일의 전날부터 역산합니다.
+// 기존 날짜 산정 공식은 유지하고 공휴일 제외만 추가합니다.
+function previousWorkday(day) {
+  day = checkedDay(day - 1);
+
+  for (let count = 0; count < 370; count++) {
+    const year = dateParts(day)[0];
+    const cached = holidayCache.get(year);
+
+    if (
+      !cached ||
+      Date.now() - cached.loadedAt >= HOLIDAY_CACHE_TTL
+    ) {
+      throw new HolidayYearRequired(year);
+    }
+
+    const weekday = new Date(day * DAY).getUTCDay();
+    const weekend = weekday === 0 || weekday === 6;
+    const holiday = cached.dates.has(iso(day));
+
+    if (!weekend && !holiday) {
       return day;
     }
+
+    day = checkedDay(day - 1);
+  }
+
+  throw new Error(
+    "영업일을 찾지 못했습니다. 공휴일 목록을 확인해 주세요."
+  );
+}
+
+// 실제 날짜 계산에 필요한 연도만 조회합니다.
+// 연말·연초를 넘으면 해당 연도의 목록도 자동 조회합니다.
+async function calculateWithHolidays(text, baseText) {
+  const requestedYears = new Set();
+
+  for (let attempt = 0; attempt < 8; attempt++) {
+    try {
+      return calculate(text, baseText);
+    } catch (error) {
+      if (!(error instanceof HolidayYearRequired)) {
+        throw error;
+      }
+
+      if (requestedYears.has(error.year)) {
+        throw new Error(
+          `${error.year}년 공휴일 정보를 사용할 수 없습니다. 다시 계산해 주세요.`
+        );
+      }
+
+      requestedYears.add(error.year);
+      setMessage(`${error.year}년 공휴일을 확인하고 있습니다...`);
+      await loadHolidayYear(error.year);
+    }
+  }
+
+  throw new Error(
+    "조회할 연도 범위가 예상보다 넓습니다. 기준월을 확인해 주세요."
+  );
+}
 
     function dateWithDay(value) {
       if (!value) {
@@ -3315,32 +3512,60 @@
       }
     }
 
-    /* 12. 계산 실행 */
-    function runCalculation(targetTab = "report") {
-      if (appState.savingPng || appState.calculating) {
-        return;
-      }
+/* 12. 계산 실행 */
+async function runCalculation(targetTab = "report") {
+  if (appState.savingPng || appState.calculating) {
+    return;
+  }
 
-      invalidate("edited");
-      appState.calculating = true;
-      syncButtons();
-      setMessage("계산 중입니다...");
+  invalidate("edited");
+  appState.calculating = true;
 
-      try {
-        const data = calculate($("ledger").value, selectedMonthEnd());
-        render(data);
-        selectResultTab(targetTab);
-      } catch (error) {
-        invalidate("error");
-        setMessage(
-          error instanceof Error ? error.message : String(error),
-          true
-        );
-      } finally {
-        appState.calculating = false;
-        syncButtons();
-      }
-    }
+  const lockedInputs = [
+    $("ledger"),
+    $("base"),
+    $("aggregate-base")
+  ];
+
+  const previousDisabled = lockedInputs.map(
+    element => element.disabled
+  );
+
+  lockedInputs.forEach(element => {
+    element.disabled = true;
+  });
+
+  syncButtons();
+  setMessage("계산 및 공휴일 확인 중입니다...");
+
+  try {
+    // 계산 도중 입력값이 바뀌지 않도록 고정합니다.
+    const ledgerText = $("ledger").value;
+    const baseText = selectedMonthEnd();
+
+    const data = await calculateWithHolidays(
+      ledgerText,
+      baseText
+    );
+
+    render(data);
+    selectResultTab(targetTab);
+  } catch (error) {
+    invalidate("error");
+
+    setMessage(
+      error instanceof Error ? error.message : String(error),
+      true
+    );
+  } finally {
+    lockedInputs.forEach((element, index) => {
+      element.disabled = previousDisabled[index];
+    });
+
+    appState.calculating = false;
+    syncButtons();
+  }
+}
 
     /* 13. 전체 초기화 */
     function resetAll() {
@@ -3401,6 +3626,33 @@
     }
 
     /* 14. 이벤트 */
+$("add-bookmark").addEventListener("click", () => {
+  const platform =
+    navigator.userAgentData?.platform ||
+    navigator.platform ||
+    "";
+
+  const isMobile =
+    /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+    (platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
+  if (isMobile) {
+    window.alert(
+      "브라우저의 메뉴(⋮ 또는 …)나 공유 버튼을 누른 뒤\n" +
+      "‘북마크 추가’ 또는 ‘즐겨찾기 추가’를 선택해 주세요.\n\n" +
+      "브라우저에 따라 메뉴 이름이 다를 수 있습니다."
+    );
+    return;
+  }
+
+  const shortcut = /Mac/i.test(platform) ? "⌘ + D" : "Ctrl + D";
+
+  window.alert(
+    "이 안내창을 닫은 뒤 " + shortcut + "를 눌러 주세요.\n\n" +
+    "이름: SK플라즈마 결제청구 에이전트\n" +
+    "원하는 저장 폴더를 선택하고 ‘완료’ 또는 ‘저장’을 누르시면 됩니다."
+  );
+});
     $("ledger").addEventListener("input", () => {
       if (appState.savingPng || appState.calculating) {
         return;
