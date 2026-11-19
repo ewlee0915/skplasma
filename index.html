@@ -208,6 +208,7 @@
       font-weight: 700;
     }
 
+/* 기존 .main-steps ~ .main-steps p 부분을 아래 코드로 교체 */
     .main-steps {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -220,13 +221,14 @@
     .main-steps li {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 11px;
       min-width: 0;
-      padding: 16px 12px;
+      padding: 14px 12px;
       border: 1px solid #e1e6ed;
       border-radius: 12px;
-      background: #fff;
-      box-shadow: 0 3px 10px #16283b04;
+      background: #f8fafd;
+      cursor: default;
+      user-select: none;
     }
 
     .step-number {
@@ -237,33 +239,43 @@
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background: #f0eef2;
-      color: #384152;
+      background: #ebeff5;
+      color: #495668;
     }
 
     .step-number svg {
       display: block;
-      width: 23px;
-      height: 23px;
+      width: 22px;
+      height: 22px;
       stroke: currentColor;
       stroke-width: 1.7;
       stroke-linecap: round;
       stroke-linejoin: round;
     }
 
+    .step-label {
+      display: block;
+      margin-bottom: 1px;
+      color: #b71935;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      line-height: 1.2;
+    }
+
     .main-steps strong {
       display: block;
       color: #26364b;
       font-size: 13px;
-      line-height: 1.5;
+      line-height: 1.4;
       word-break: keep-all;
     }
 
     .main-steps p {
-      margin: 4px 0 0;
+      margin: 3px 0 0;
       color: #687588;
       font-size: 10px;
-      line-height: 1.6;
+      line-height: 1.5;
       word-break: keep-all;
     }
 
@@ -2185,7 +2197,7 @@
         </div>
       </header>
 
-      <!-- 사용 순서 -->
+<!-- 사용 순서 -->
       <ol class="main-steps" aria-label="사용 순서">
         <li>
           <span class="step-number" aria-hidden="true">
@@ -2195,6 +2207,7 @@
           </span>
 
           <div>
+            <span class="step-label">STEP 1</span>
             <strong>원장 다운로드</strong>
             <p>MIS에서 거래원장 엑셀 준비</p>
           </div>
@@ -2209,6 +2222,7 @@
           </span>
 
           <div>
+            <span class="step-label">STEP 2</span>
             <strong>복사·붙여넣기</strong>
             <p>헤더를 포함한 전체 데이터 입력</p>
           </div>
@@ -2223,6 +2237,7 @@
           </span>
 
           <div>
+            <span class="step-label">STEP 3</span>
             <strong>기준월 선택·계산</strong>
             <p>결제청구서와 집계 확인</p>
           </div>
