@@ -30,11 +30,23 @@
       box-sizing: border-box;
     }
 
-    body {
+body {
       margin: 0;
       background: #eef1f5;
       color: #111;
       font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    /* 사용자가 직접 입력·복사해야 하는 영역은 드래그 허용 */
+    input,
+    textarea,
+    [contenteditable],
+    .audit-scroll,
+    .aggregate-scroll {
+      -webkit-user-select: text;
+      user-select: text;
     }
 
     [hidden] {
@@ -6040,6 +6052,32 @@
         "guestbook-dialog",
         "gb-close"
       );
+    })();
+  </script>
+<script>
+    /* ========================================
+15. 우클릭 및 드래그 방지 (입력 영역 예외)
+       ======================================== */
+    (() => {
+      "use strict";
+
+      const isEditable = target =>
+        target instanceof Element &&
+        Boolean(target.closest("input, textarea, [contenteditable]"));
+
+      // 마우스 오른쪽 클릭 방지 (입력칸 제외)
+      document.addEventListener("contextmenu", event => {
+        if (!isEditable(event.target)) {
+          event.preventDefault();
+        }
+      });
+
+      // 드래그 시작 방지 (입력칸 제외)
+      document.addEventListener("dragstart", event => {
+        if (!isEditable(event.target)) {
+          event.preventDefault();
+        }
+      });
     })();
   </script>
 </body>
