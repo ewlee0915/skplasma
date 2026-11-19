@@ -3354,10 +3354,10 @@
         B4: "카드",
         B8: "카드",
         BA: "어음",
-        I2: "현금",
-        I4: "현금",
-        I5: "현금",
-        I7: "현금",
+        I2: "기타",
+        I4: "기타",
+        I5: "기타",
+        I7: "기타",
         L3: "교환",
         L5: "교환",
         L6: "교환",
@@ -3633,23 +3633,21 @@
         }
 
         try {
-          let maturity = null;
+          // 실제 어음 만기일은 BA 전자어음 거래에서만 읽습니다.
+          if (row.code === "BA") {
+            const description = String(row.description ?? "").trim();
+            const left = description.indexOf("(");
+            const right = description.indexOf(")", left + 1);
 
-          if (row.description) {
-            const left = row.description.indexOf("(");
-            const right = row.description.indexOf(")");
-
-            if (left < 0 || right <= left) {
-              throw new Error("적요에서 만기일 괄호를 찾지 못했습니다.");
+            if (left < 0 || right <= left + 1) {
+              throw new Error(
+                "전자어음(BA) 적요에서 만기일 괄호를 찾지 못했습니다."
+              );
             }
 
-            maturity = parseDate(
-              row.description.slice(left + 1, right)
+            row.exchange = parseDate(
+              description.slice(left + 1, right).trim()
             );
-          }
-
-          if (row.code === "BA") {
-            row.exchange = maturity;
           } else if (row.aa === "어음") {
             if (!has(BILL_RULES, row.ab)) {
               throw new Error(
@@ -3668,6 +3666,7 @@
               BILL_RULES[row.ab]
             );
           } else {
+            // 일반 수금·잡손실 등의 적요는 날짜로 해석하지 않습니다.
             row.exchange = row.billing;
           }
         } catch (error) {
