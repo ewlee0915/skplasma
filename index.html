@@ -2161,6 +2161,73 @@ body {
         background: #fbfcfe;
       }
     }
+/* ========================================
+12-1. 세부내역(원장) 인쇄 및 출력용 스타일
+       ======================================== */
+
+    .aggregate-export-header {
+      display: none;
+    }
+
+    @media print {
+      /* 세부내역 인쇄 모드일 때는 결제청구서를 숨기고 집계 내역만 출력 */
+      body.printing-aggregate #report {
+        display: none !important;
+      }
+
+      body.printing-aggregate #aggregate-panel {
+        display: block !important;
+      }
+
+      body.printing-aggregate #aggregate-panel > .panel:first-child {
+        display: none !important;
+      }
+
+      body.printing-aggregate #aggregate-panel > .panel {
+        padding: 0;
+        border: 0;
+        box-shadow: none;
+      }
+
+      body.printing-aggregate .aggregate-export-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #243b57;
+      }
+
+      body.printing-aggregate .aggregate-export-header img {
+        width: 110px;
+        height: auto;
+      }
+
+      body.printing-aggregate .aggregate-scroll {
+        max-height: none !important;
+        overflow: visible !important;
+        border: 1px solid #bac9da;
+        border-radius: 0;
+      }
+
+      body.printing-aggregate .aggregate-ledger thead th {
+        position: static !important;
+      }
+
+      body.printing-aggregate .aggregate-filter-button {
+        display: none !important;
+      }
+
+      body.printing-aggregate .aggregate-ledger,
+      body.printing-aggregate .aggregate-ledger * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      body.printing-aggregate .aggregate-ledger tr {
+        break-inside: avoid;
+      }
+    }
   </style>
 </head>
 
@@ -2443,18 +2510,24 @@ body {
         </p>
       </div>
 
-      <div class="panel">
+<div id="aggregate-ledger-panel" class="panel">
+        <!-- 인쇄 및 PNG 저장 시에만 표시되는 상단 로고 바 -->
+        <div class="aggregate-export-header">
+          <img src="./logo.png" alt="SK plasma">
+          <span class="small">[단위: 원]</span>
+        </div>
+
         <h3 class="aggregate-subtitle">
           결제청구액에 대한 일자별 매출 내역
         </h3>
 
         <p id="aggregate-count" class="small"></p>
 
-        <button id="aggregate-filter-reset" type="button">
+        <button id="aggregate-filter-reset" type="button" class="no-print">
           필터 초기화
         </button>
 
-        <div class="aggregate-scroll">
+        <div id="aggregate-ledger-scroll" class="aggregate-scroll">
           <table class="aggregate-ledger">
             <thead>
               <tr>
@@ -2482,6 +2555,26 @@ body {
               </tr>
             </tfoot>
           </table>
+        </div>
+
+        <!-- 세부내역(원장) 출력 도구 -->
+        <div class="toolbar no-print">
+          <div class="toolbar-row">
+            <div class="toolbar-buttons">
+              <button id="print-aggregate" type="button" disabled>
+                세부내역 ▶ 인쇄 / PDF 저장
+              </button>
+              <button id="save-aggregate-png" type="button" disabled>
+                세부내역 ▶ 이미지(PNG)로 저장
+              </button>
+            </div>
+          </div>
+
+          <p class="small print-guide">
+            A4 세로 · 머리글/바닥글 해제 · 배경 그래픽 사용 권장 (현재 필터 적용 상태 그대로 출력)
+          </p>
+
+          <div id="aggregate-export-status" class="small" role="status"></div>
         </div>
       </div>
     </section>
@@ -2651,7 +2744,7 @@ body {
       </div>
 
       <p class="small version">
-        사내 업무용 · <strong>Version. 2.3</strong> · 2026.11.20. 배포
+        사내 업무용 · <strong>Version. 2.4</strong> · 2026.11.21. 배포
       </p>
 
       <div class="update-note-link">
@@ -2676,6 +2769,19 @@ body {
     </h2>
 
     <div class="update-note-history">
+      <section>
+        <h3>Ver. 2.4 - 2026.11.21.</h3>
+        <p>기능 추가</p>
+        <ul>
+          <li>
+            집계 탭 일자별 매출 세부내역(원장) 인쇄/PDF 및 이미지(PNG) 저장 기능 추가
+          </li>
+          <li>
+            거래처·내역별 필터 적용 상태 그대로 세부내역 출력 지원
+          </li>
+        </ul>
+      </section>
+      
       <section>
         <h3>Ver. 2.3 - 2026.11.19.</h3>
         <p>에이전트 메인 UI/UX 개선</p>
@@ -4013,6 +4119,9 @@ body {
       $("reset-all").disabled = busy;
       $("print").disabled = !appState.valid || busy;
       $("save-png").disabled = !appState.valid || busy;
+      // ▼ 아래 2줄 추가
+      $("print-aggregate").disabled = !appState.valid || busy;
+      $("save-aggregate-png").disabled = !appState.valid || busy;
 
       document.body.classList.toggle(
         "print-ready",
@@ -4093,6 +4202,9 @@ body {
 
       setMessage();
       setExportStatus();
+      // ▼ 아래 2줄 추가
+      $("aggregate-export-status").textContent = "";
+      $("aggregate-export-status").classList.remove("export-error");
       removePrintableInputs();
 
       if (aggregateFilterDialog.open) {
@@ -4729,9 +4841,10 @@ body {
           })
         );
 
-        const width = Math.ceil(
-          sheet.getBoundingClientRect().width
-        );
+        // [수정 후] 가로 1000px 고정 (세로는 비율에 맞춰 자동 조정)
+        const width = 750;
+        const targetWidth = 1000;
+        const exportScale = targetWidth / width;
 
         const recipientValue = $("recipient").value;
         const commentValue = sheet.querySelector(".comment").innerText;
@@ -4747,7 +4860,7 @@ body {
 
         canvas = await window.html2canvas(sheet, {
           backgroundColor: "#ffffff",
-          scale: 2,
+          scale: exportScale,
           useCORS: true,
           allowTaint: false,
           imageTimeout: 15000,
@@ -4849,9 +4962,9 @@ body {
             });
 
             const bounds = clonedSheet.getBoundingClientRect();
-            const pixelWidth = Math.ceil(bounds.width * 2);
-            const pixelHeight = Math.ceil(bounds.height * 2);
-
+            // [수정 후]
+            const pixelWidth = Math.ceil(bounds.width * exportScale);
+            const pixelHeight = Math.ceil(bounds.height * exportScale);
             if (
               pixelWidth > 16000 ||
               pixelHeight > 16000 ||
@@ -4918,6 +5031,213 @@ body {
       }
     }
 
+    /* ========================================
+10-1. 세부내역(원장) 인쇄 및 PNG 저장
+       ======================================== */
+
+    function setAggregateExportStatus(text = "", isError = false) {
+      const el = $("aggregate-export-status");
+      el.textContent = text;
+      el.classList.toggle("export-error", isError);
+    }
+
+    function printAggregateLedger() {
+      if (!appState.valid || appState.savingPng || appState.calculating) {
+        return;
+      }
+
+      try {
+        setAggregateExportStatus();
+        document.body.classList.add("printing-aggregate");
+        window.print();
+      } catch (error) {
+        document.body.classList.remove("printing-aggregate");
+        setAggregateExportStatus(
+          "인쇄 실행 중 오류가 발생했습니다: " + error.message,
+          true
+        );
+      }
+    }
+
+    async function saveAggregatePng() {
+      if (!appState.valid || appState.savingPng || appState.calculating) {
+        return;
+      }
+
+      if (typeof window.html2canvas !== "function") {
+        setAggregateExportStatus(
+          "html2canvas.min.js를 불러오지 못했습니다. 배포 상태를 확인해 주세요.",
+          true
+        );
+        return;
+      }
+
+      const panel = $("aggregate-ledger-panel");
+
+      if ($("aggregate-panel").hidden || panel.getBoundingClientRect().width === 0) {
+        setAggregateExportStatus("집계 탭을 연 뒤 다시 시도해 주세요.", true);
+        return;
+      }
+
+      const workspace = document.querySelector(".workspace");
+      const previousInert = workspace.inert;
+      const button = $("save-aggregate-png");
+      const originalButtonText = button.textContent;
+
+      let canvas = null;
+      let downloadUrl = null;
+      let captureDocument = null;
+
+      appState.savingPng = true;
+      workspace.inert = true;
+      syncButtons();
+
+      button.textContent = "이미지 생성 중...";
+      setAggregateExportStatus("세부내역(원장)을 이미지로 변환하고 있습니다.");
+
+      try {
+        if (document.fonts) {
+          await withTimeout(document.fonts.ready, 15000, "글꼴 로딩 시간이 초과되었습니다.");
+        }
+
+        await Promise.all(
+          [...panel.querySelectorAll("img")].map(async image => {
+            await withTimeout(image.decode(), 15000, "로고 로딩 시간이 초과되었습니다.");
+          })
+        );
+
+        // [수정 후] 가로 1000px 고정 (세로는 세부내역 길이에 맞춰 자동 조정)
+        const width = 750;
+        const targetWidth = 1000;
+        const exportScale = targetWidth / width;
+        const baseDate = aggregateFilterState.base || $("base").value;
+        const recipientValue = $("recipient").value;
+
+        const filename =
+          `결제청구_세부내역_${filenamePart(baseDate)}_` +
+          `${filenamePart(recipientValue) || "거래처"}.png`;
+
+        canvas = await window.html2canvas(panel, {
+          backgroundColor: "#ffffff",
+          scale: exportScale,
+          useCORS: true,
+          allowTaint: false,
+          imageTimeout: 15000,
+          logging: false,
+          removeContainer: true,
+
+          onclone(clonedDocument) {
+            captureDocument = clonedDocument;
+
+            const clonedAggPanel = clonedDocument.getElementById("aggregate-panel");
+            const clonedLedgerPanel = clonedDocument.getElementById("aggregate-ledger-panel");
+            const clonedScroll = clonedDocument.getElementById("aggregate-ledger-scroll");
+            const clonedHeader = clonedLedgerPanel.querySelector(".aggregate-export-header");
+
+            clonedAggPanel.hidden = false;
+
+            Object.assign(clonedLedgerPanel.style, {
+              width: `${width}px`,
+              minWidth: `${width}px`,
+              maxWidth: "none",
+              padding: "24px 20px",
+              border: "0",
+              borderRadius: "0",
+              boxShadow: "none"
+            });
+
+            if (clonedHeader) {
+              Object.assign(clonedHeader.style, {
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginBottom: "14px",
+                paddingBottom: "10px",
+                borderBottom: "2px solid #243b57"
+              });
+
+              const logoImg = clonedHeader.querySelector("img");
+              if (logoImg) logoImg.style.width = "110px";
+            }
+
+            // 스크롤 영역을 완전히 펼쳐서 전체 원장 행이 모두 나오도록 처리
+            Object.assign(clonedScroll.style, {
+              maxHeight: "none",
+              height: "auto",
+              overflow: "visible",
+              borderRadius: "6px"
+            });
+
+            clonedLedgerPanel.querySelectorAll("thead th").forEach(th => {
+              th.style.position = "static";
+            });
+
+            // 화면 전용 버튼 및 필터 아이콘 제거
+            clonedLedgerPanel
+              .querySelectorAll(".no-print, .aggregate-filter-button")
+              .forEach(el => el.remove());
+
+            // [수정 후]
+            const bounds = clonedLedgerPanel.getBoundingClientRect();
+            const pixelWidth = Math.ceil(bounds.width * exportScale);
+            const pixelHeight = Math.ceil(bounds.height * exportScale);
+
+            if (
+              pixelWidth > 16000 ||
+              pixelHeight > 16000 ||
+              pixelWidth * pixelHeight > 20000000
+            ) {
+              throw new Error(
+                "거래 건수가 많아 단일 PNG 이미지 한도를 초과했습니다. 거래처 필터를 적용하거나 [인쇄 / PDF 저장]을 이용해 주세요."
+              );
+            }
+          }
+        });
+
+        if (!canvas.width || !canvas.height) {
+          throw new Error("빈 이미지가 생성되었습니다.");
+        }
+
+        const blob = await canvasToPngBlob(canvas);
+        downloadUrl = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = downloadUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        setAggregateExportStatus(
+          "PNG 다운로드를 요청했습니다. 브라우저 다운로드 목록을 확인해 주세요."
+        );
+      } catch (error) {
+        setAggregateExportStatus(
+          "PNG 저장에 실패했습니다.\n" +
+          (error instanceof Error ? error.message : String(error)),
+          true
+        );
+      } finally {
+        try {
+          const frame = captureDocument?.defaultView?.frameElement;
+          if (frame?.isConnected) frame.remove();
+          if (canvas) {
+            canvas.width = 0;
+            canvas.height = 0;
+          }
+          if (downloadUrl) {
+            const urlToRevoke = downloadUrl;
+            setTimeout(() => URL.revokeObjectURL(urlToRevoke), 60000);
+          }
+        } finally {
+          appState.savingPng = false;
+          workspace.inert = previousInert;
+          button.textContent = originalButtonText;
+          syncButtons();
+        }
+      }
+    }
+    
     /* ========================================
        11. 계산 실행 및 초기화
        ======================================== */
@@ -5167,6 +5487,9 @@ body {
     $("reset-all").addEventListener("click", resetAll);
     $("save-png").addEventListener("click", saveReportPng);
     $("print").addEventListener("click", printReport);
+    // ▼ 아래 2줄 추가
+    $("save-aggregate-png").addEventListener("click", saveAggregatePng);
+    $("print-aggregate").addEventListener("click", printAggregateLedger);
 
     $("tab-report").addEventListener(
       "click",
@@ -5256,7 +5579,10 @@ body {
     });
 
     window.addEventListener("beforeprint", preparePrintableInputs);
-    window.addEventListener("afterprint", removePrintableInputs);
+    window.addEventListener("afterprint", () => {
+      removePrintableInputs();
+      document.body.classList.remove("printing-aggregate");
+    });
 
     /* 초기 설정 */
     initializeFilterButtons();
