@@ -2836,7 +2836,7 @@
       </div>
 
       <p class="small version">
-        사내 업무용 · <strong>Version. 2.4</strong> · 2026.11.21. 배포
+        사내 업무용 · <strong>Version. 2.5</strong> · 2026.11.22. 배포
       </p>
 
       <div class="update-note-link">
@@ -2862,6 +2862,16 @@
 
     <div class="update-note-history">
       <section>
+        <h3>Ver. 2.5 - 2026.11.22.</h3>
+        <p>계산 로직 개선</p>
+        <ul>
+          <li>
+            단가정정 거래(취소 및 재발행) 시 원 매출의 결제조건 및 청구기준일을 자동 승계하도록 개선
+          </li>
+        </ul>
+      </section>
+
+      <section>
         <h3>Ver. 2.4 - 2026.11.21.</h3>
         <p>기능 추가 및 개선</p>
         <ul>
@@ -2870,9 +2880,6 @@
           </li>
           <li>
             결제청구서 출력 시 일자별 매출 내역(세부내역) 함께 출력 옵션 추가
-          </li>
-          <li>
-            화면 보호를 위한 우클릭·드래그 제한 적용 (원장·수신·비고·Comment 등 입력 영역 제외)
           </li>
         </ul>
       </section>
@@ -3770,7 +3777,22 @@
       const { rows, warnings } = readLedger(text);
       const errors = [];
 
+      const isPriceCorrectionRemark = remark =>
+        String(remark ?? "").replace(/\s+/g, "").includes("단가정정");
+
+      // 1단계: 일반 행의 비고 조건 추출 및 단가정정 대상 식별
       for (const row of rows) {
+        const trimmedRemark = String(row.remark ?? "").trim();
+        const isPriceCorrectionCancel =
+          row.type === "판매" &&
+          isPriceCorrectionRemark(trimmedRemark);
+
+        // 비고에 "단가정정"이 있거나, 판매(+) 행인데 비고가 공란인 경우(단가정정 재발행)
+        const isPriceCorrectionReissue =
+          row.type === "판매" &&
+          row.amt > 0 &&
+          !trimmedRemark;
+
         Object.assign(row, {
           y: "",
           z: "",
@@ -3778,32 +3800,75 @@
           ab: "",
           kind: "",
           billing: null,
-          exchange: null
+          exchange: null,
+          isPriceCorrection: isPriceCorrectionCancel || isPriceCorrectionReissue
         });
 
         try {
-          if (row.remark) row.y = conditionPart(row.remark, 0);
-          if (row.y) row.z = conditionPart(row.remark, 1);
+          if (!row.isPriceCorrection) {
+            if (trimmedRemark) row.y = conditionPart(trimmedRemark, 0);
+            if (row.y) row.z = conditionPart(trimmedRemark, 1);
 
-          if (!(row.type === "판매" && row.amt < 0)) {
-            if (row.z) row.aa = conditionPart(row.remark, 2);
-            if (row.aa) row.ab = conditionPart(row.remark, 3);
+            if (!(row.type === "판매" && row.amt < 0)) {
+              if (row.z) row.aa = conditionPart(trimmedRemark, 2);
+              if (row.aa) row.ab = conditionPart(trimmedRemark, 3);
+            }
           }
         } catch (error) {
           errors.push(`${row.line}행 조건 추출: ${error.message}`);
         }
       }
 
-      // 음수 판매 거래의 결제조건 참조
+      // 2단계: 각 행의 청구기준일(billing) 먼저 산정 (단가정정 행은 3단계에서 원 매출 상속)
+      for (const row of rows) {
+        const date = row.date;
+
+        if (row.type === "수금") {
+          row.kind = has(KINDS, row.code) ? KINDS[row.code] : "";
+
+          if (!has(KINDS, row.code)) {
+            warnings.push(
+              `${row.line}행: 기준표에 없는 수금 코드 ${row.code}`
+            );
+          }
+        }
+
+        if (EXCHANGE.has(row.code)) {
+          row.billing = null;
+        } else if (row.isPriceCorrection) {
+          // 단가정정 행은 3단계에서 원 매출의 결제조건과 청구기준일을 그대로 상속받습니다.
+          row.billing = monthEnd(date);
+        } else if (row.y === "선수금" && row.z === "0일") {
+          row.billing = date;
+        } else if (row.type === "수금" || row.amt < 0) {
+          row.billing = monthEnd(date);
+        } else if (has(MONTH_RULES, row.y) && has(DAY_RULES, row.z)) {
+          row.billing = monthEnd(
+            date,
+            MONTH_RULES[row.y] +
+            (DAY_RULES[row.z] >= dateParts(date)[2] ? 0 : 1)
+          );
+        } else {
+          row.billing = monthEnd(date);
+          warnings.push(
+            `${row.line}행: 조건 조회 실패 → Excel AD IFERROR에 따라 거래월 말일 적용`
+          );
+        }
+      }
+
+      // 3단계: 음수 판매 거래(약가인하 등) 및 단가정정 거래의 원 매출 참조
       for (let index = 0; index < rows.length; index++) {
         const row = rows[index];
+        const isNegativeSale = row.type === "판매" && row.amt < 0;
 
-        if (row.type !== "판매" || row.amt >= 0) {
+        if (!isNegativeSale && !row.isPriceCorrection) {
           continue;
         }
 
         const matches = candidate =>
+          candidate.type === "판매" &&
           candidate.amt > 0 &&
+          !candidate.isPriceCorrection &&
           candidate.customer === row.customer &&
           (row.code === "HZZZZ05" || candidate.code === row.code);
 
@@ -3823,41 +3888,20 @@
         if (target) {
           row.aa = target.aa;
           row.ab = target.ab;
+
+          // 단가정정 케이스는 원 매출의 청구기준일까지 그대로 반영 (약가인하·약가인상은 당월 유지)
+          if (row.isPriceCorrection && target.billing !== null) {
+            row.billing = target.billing;
+          }
+        } else if (row.isPriceCorrection) {
+          warnings.push(
+            `${row.line}행: 단가정정 대상 원 매출을 찾지 못해 거래월 말일·기타로 처리했습니다.`
+          );
         }
       }
 
+      // 4단계: 만기일(exchange) 및 어음 개월수 계산
       for (const row of rows) {
-        const date = row.date;
-
-        if (row.type === "수금") {
-          row.kind = has(KINDS, row.code) ? KINDS[row.code] : "";
-
-          if (!has(KINDS, row.code)) {
-            warnings.push(
-              `${row.line}행: 기준표에 없는 수금 코드 ${row.code}`
-            );
-          }
-        }
-
-        if (EXCHANGE.has(row.code)) {
-          row.billing = null;
-        } else if (row.y === "선수금" && row.z === "0일") {
-          row.billing = date;
-        } else if (row.type === "수금" || row.amt < 0) {
-          row.billing = monthEnd(date);
-        } else if (has(MONTH_RULES, row.y) && has(DAY_RULES, row.z)) {
-          row.billing = monthEnd(
-            date,
-            MONTH_RULES[row.y] +
-            (DAY_RULES[row.z] >= dateParts(date)[2] ? 0 : 1)
-          );
-        } else {
-          row.billing = monthEnd(date);
-          warnings.push(
-            `${row.line}행: 조건 조회 실패 → Excel AD IFERROR에 따라 거래월 말일 적용`
-          );
-        }
-
         try {
           // 실제 어음 만기일은 BA 전자어음 거래에서만 읽습니다.
           if (row.code === "BA") {
@@ -4936,9 +4980,9 @@
           })
         );
 
-        // 가로 850px 고정 (세로는 비율에 맞춰 자동 조정)
+        // 가로 1000px 고정 (세로는 비율에 맞춰 자동 조정)
         const width = 750;
-        const targetWidth = 850;
+        const targetWidth = 1000;
         const exportScale = targetWidth / width;
         const includeLedger = $("include-ledger-export").checked;
 
@@ -5246,9 +5290,9 @@
           })
         );
 
-        // 가로 850px 고정 (세로는 세부내역 길이에 맞춰 자동 조정)
+        // 가로 1000px 고정 (세로는 세부내역 길이에 맞춰 자동 조정)
         const width = 750;
-        const targetWidth = 850;
+        const targetWidth = 1000;
         const exportScale = targetWidth / width;
         const baseDate = aggregateFilterState.base || $("base").value;
         const recipientValue = $("recipient").value;
