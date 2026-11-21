@@ -12,7 +12,7 @@
 
   <style>
     /* ========================================
-       1. 공통
+1. 공통
        ======================================== */
 
     :root {
@@ -30,7 +30,7 @@
       box-sizing: border-box;
     }
 
-body {
+    body {
       margin: 0;
       background: #eef1f5;
       color: #111;
@@ -112,7 +112,7 @@ body {
     }
 
     /* ========================================
-       2. 메인 화면
+2. 메인 화면
        ======================================== */
 
     .input-panel {
@@ -220,7 +220,6 @@ body {
       font-weight: 700;
     }
 
-/* 기존 .main-steps ~ .main-steps p 부분을 아래 코드로 교체 */
     .main-steps {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -579,7 +578,7 @@ body {
     }
 
     /* ========================================
-       3. 결과 탭
+3. 결과 탭
        ======================================== */
 
     .result-tabs {
@@ -614,7 +613,7 @@ body {
     }
 
     /* ========================================
-       4. 결제청구서
+4. 결제청구서
        ======================================== */
 
     .sheet-wrap {
@@ -965,7 +964,7 @@ body {
     }
 
     /* ========================================
-       5. 출력 도구
+5. 출력 도구
        ======================================== */
 
     .toolbar {
@@ -1002,7 +1001,6 @@ body {
       white-space: nowrap;
     }
 
-    /* [수정 후] */
     #save-png:not(:disabled),
     #save-aggregate-png:not(:disabled) {
       background: #1769aa;
@@ -1029,7 +1027,7 @@ body {
     }
 
     /* ========================================
-       6. 집계 화면
+6. 집계 화면
        ======================================== */
 
     #aggregate-panel > .panel {
@@ -1271,7 +1269,7 @@ body {
     }
 
     /* ========================================
-       7. 필터 및 공통 팝업
+7. 필터 및 공통 팝업
        ======================================== */
 
     .aggregate-filter-button {
@@ -1394,7 +1392,7 @@ body {
     }
 
     /* ========================================
-       8. 검증 결과
+8. 검증 결과
        ======================================== */
 
     #validation {
@@ -1486,7 +1484,7 @@ body {
     }
 
     /* ========================================
-       9. 푸터 및 업데이트 노트
+9. 푸터 및 업데이트 노트
        ======================================== */
 
     footer {
@@ -1583,7 +1581,7 @@ body {
     }
 
     /* ========================================
-       10. 의견 게시판
+10. 의견 게시판
        ======================================== */
 
     #guestbook-dialog {
@@ -1822,7 +1820,7 @@ body {
     }
 
     /* ========================================
-       11. 화면 크기별 설정
+11. 화면 크기별 설정
        ======================================== */
 
     @media screen {
@@ -2054,7 +2052,7 @@ body {
     }
 
     /* ========================================
-       12. 인쇄 및 출력용 텍스트
+12. 인쇄 및 출력용 텍스트
        ======================================== */
 
     .print-input-text {
@@ -2163,7 +2161,8 @@ body {
         background: #fbfcfe;
       }
     }
-/* ========================================
+
+    /* ========================================
 12-1. 세부내역(원장) 인쇄 및 출력용 스타일
        ======================================== */
 
@@ -2230,10 +2229,96 @@ body {
         break-inside: avoid;
       }
     }
+
+    /* 함께 출력 체크박스 및 합본 인쇄 스타일 */
+    .include-ledger-option {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border: 1px solid #d5dde7;
+      border-radius: 8px;
+      background: #f8fafd;
+      color: #243b57;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .include-ledger-option:hover {
+      border-color: var(--navy);
+      background: #f0f5fb;
+    }
+
+    .include-ledger-option input {
+      width: 16px;
+      height: 16px;
+      margin: 0;
+      accent-color: var(--navy);
+      cursor: pointer;
+    }
+
+    @media print {
+      body.printing-with-ledger #aggregate-panel {
+        display: block !important;
+        margin-top: 16mm;
+        page-break-before: always;
+        break-before: page;
+      }
+
+      body.printing-with-ledger #aggregate-panel > .panel:first-child {
+        display: none !important;
+      }
+
+      body.printing-with-ledger #aggregate-panel > .panel {
+        padding: 0;
+        border: 0;
+        box-shadow: none;
+      }
+
+      body.printing-with-ledger .aggregate-export-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #243b57;
+      }
+
+      body.printing-with-ledger .aggregate-export-header img {
+        width: 110px;
+        height: auto;
+      }
+
+      body.printing-with-ledger .aggregate-scroll {
+        max-height: none !important;
+        overflow: visible !important;
+        border: 1px solid #bac9da;
+        border-radius: 0;
+      }
+
+      body.printing-with-ledger .aggregate-ledger thead th {
+        position: static !important;
+      }
+
+      body.printing-with-ledger .aggregate-filter-button {
+        display: none !important;
+      }
+
+      body.printing-with-ledger .aggregate-ledger,
+      body.printing-with-ledger .aggregate-ledger * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      body.printing-with-ledger .aggregate-ledger tr {
+        break-inside: avoid;
+      }
+    }
   </style>
 </head>
-
-<!-- ① 끝: 다음 ②의 <body>부터 바로 이어 붙입니다. -->
 
 <body>
   <main class="workspace">
@@ -2278,7 +2363,7 @@ body {
         </div>
       </header>
 
-<!-- 사용 순서 -->
+      <!-- 사용 순서 -->
       <ol class="main-steps" aria-label="사용 순서">
         <li>
           <span class="step-number" aria-hidden="true">
@@ -2512,7 +2597,7 @@ body {
         </p>
       </div>
 
-<div id="aggregate-ledger-panel" class="panel">
+      <div id="aggregate-ledger-panel" class="panel">
         <!-- 인쇄 및 PNG 저장 시에만 표시되는 상단 로고 바 -->
         <div class="aggregate-export-header">
           <img src="./logo.png" alt="SK plasma">
@@ -2680,6 +2765,11 @@ body {
 
       <!-- 청구서 출력 -->
       <div class="toolbar no-print">
+        <label class="include-ledger-option" for="include-ledger-export">
+          <input id="include-ledger-export" type="checkbox">
+          <span>일자별 매출 내역(세부내역) 함께 출력</span>
+        </label>
+
         <div class="toolbar-row">
           <div class="toolbar-buttons">
             <button id="print" type="button" disabled>
@@ -2773,17 +2863,20 @@ body {
     <div class="update-note-history">
       <section>
         <h3>Ver. 2.4 - 2026.11.21.</h3>
-        <p>기능 추가</p>
+        <p>기능 추가 및 개선</p>
         <ul>
           <li>
-            집계 탭 일자별 매출 세부내역(원장) 인쇄/PDF 및 이미지(PNG) 저장 기능 추가
+            집계 탭 일자별 매출 세부내역(원장) 인쇄/PDF 및 PNG 저장 기능 추가 (필터 적용 상태 반영)
           </li>
           <li>
-            거래처·내역별 필터 적용 상태 그대로 세부내역 출력 지원
+            결제청구서 출력 시 일자별 매출 내역(세부내역) 함께 출력 옵션 추가
+          </li>
+          <li>
+            화면 보호를 위한 우클릭·드래그 제한 적용 (원장·수신·비고·Comment 등 입력 영역 제외)
           </li>
         </ul>
       </section>
-      
+
       <section>
         <h3>Ver. 2.3 - 2026.11.19.</h3>
         <p>에이전트 메인 UI/UX 개선</p>
@@ -3014,13 +3107,11 @@ body {
   <!-- PNG 저장 라이브러리 -->
   <script src="./html2canvas.min.js"></script>
 
-  <!-- ② 끝: 다음 ③의 계산·출력 코드를 바로 이어 붙입니다. -->
-
   <script>
     "use strict";
 
     /* ========================================
-       1. 공통
+1. 공통
        ======================================== */
 
     const $ = id => document.getElementById(id);
@@ -3032,16 +3123,16 @@ body {
     const escapeHtml = value => String(value ?? "").replace(
       /[&<>"']/g,
       character => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;"
+        "&": "&",
+        "<": "<",
+        ">": ">",
+        '"': """,
+        "'": "'"
       }[character])
     );
 
     /* ========================================
-       2. 날짜
+2. 날짜
        ======================================== */
 
     function dateParts(day) {
@@ -3087,7 +3178,7 @@ body {
         !Number.isFinite(year) ||
         year < 1 || year > 9999
       ) {
-        throw new Error("지원 날짜 범위(1\~9999년)를 초과했습니다.");
+        throw new Error("지원 날짜 범위(1~9999년)를 초과했습니다.");
       }
 
       return day;
@@ -3186,7 +3277,7 @@ body {
     }
 
     /* ========================================
-       3. 공휴일
+3. 공휴일
        ======================================== */
 
     const HOLIDAY_API =
@@ -3373,7 +3464,7 @@ body {
     }
 
     /* ========================================
-       4. 금액 및 원장 읽기
+4. 금액 및 원장 읽기
        ======================================== */
 
     function safe(value) {
@@ -3666,7 +3757,7 @@ body {
     }
 
     /* ========================================
-       5. 결제청구액 계산
+5. 결제청구액 계산
        ======================================== */
 
     function calculate(text, baseText) {
@@ -4077,7 +4168,7 @@ body {
     }
 
     /* ========================================
-       6. 화면 상태
+6. 화면 상태
        ======================================== */
 
     const appState = {
@@ -4121,7 +4212,7 @@ body {
       $("reset-all").disabled = busy;
       $("print").disabled = !appState.valid || busy;
       $("save-png").disabled = !appState.valid || busy;
-      // ▼ 아래 2줄 추가
+      $("include-ledger-export").disabled = !appState.valid || busy;
       $("print-aggregate").disabled = !appState.valid || busy;
       $("save-aggregate-png").disabled = !appState.valid || busy;
 
@@ -4142,7 +4233,7 @@ body {
 
       if (year < 1900 || year > 9999) {
         throw new Error(
-          "기준월은 1900\~9999년 사이로 선택해 주세요."
+          "기준월은 1900~9999년 사이로 선택해 주세요."
         );
       }
 
@@ -4204,7 +4295,6 @@ body {
 
       setMessage();
       setExportStatus();
-      // ▼ 아래 2줄 추가
       $("aggregate-export-status").textContent = "";
       $("aggregate-export-status").classList.remove("export-error");
       removePrintableInputs();
@@ -4240,7 +4330,7 @@ body {
     }
 
     /* ========================================
-       7. 결제청구서 표시
+7. 결제청구서 표시
        ======================================== */
 
     function render(data) {
@@ -4428,7 +4518,7 @@ body {
     }
 
     /* ========================================
-       8. 집계
+8. 집계
        ======================================== */
 
     function renderBaseOptions(selectedDate) {
@@ -4510,7 +4600,7 @@ body {
     }
 
     /* ========================================
-       9. 집계 필터
+9. 집계 필터
        ======================================== */
 
     function aggregateFilterValue(row, key) {
@@ -4696,7 +4786,7 @@ body {
     }
 
     /* ========================================
-       10. 인쇄 및 PNG
+10. 인쇄 및 PNG
        ======================================== */
 
     function preparePrintableInputs() {
@@ -4732,8 +4822,11 @@ body {
 
       try {
         setExportStatus();
+        const includeLedger = $("include-ledger-export").checked;
+        document.body.classList.toggle("printing-with-ledger", includeLedger);
         window.print();
       } catch (error) {
+        document.body.classList.remove("printing-with-ledger");
         setExportStatus(
           "인쇄 실행 중 오류가 발생했습니다: " + error.message,
           true
@@ -4843,10 +4936,11 @@ body {
           })
         );
 
-        // [수정 후] 가로 1000px 고정 (세로는 비율에 맞춰 자동 조정)
+        // 가로 1000px 고정 (세로는 비율에 맞춰 자동 조정)
         const width = 750;
         const targetWidth = 1000;
         const exportScale = targetWidth / width;
+        const includeLedger = $("include-ledger-export").checked;
 
         const recipientValue = $("recipient").value;
         const commentValue = sheet.querySelector(".comment").innerText;
@@ -4857,6 +4951,7 @@ body {
         const filename =
           `결제청구서_${filenamePart($("base").value)}_` +
           `${filenamePart(recipientValue) || "거래처"}` +
+          (includeLedger ? "_세부내역포함" : "") +
           (appState.weekendOnly ? "_검토용_공휴일미반영" : "") +
           ".png";
 
@@ -4963,8 +5058,51 @@ body {
               outline: "none"
             });
 
+            // 체크박스 선택 시 청구서 아래에 일자별 매출 내역(세부내역) 이어 붙이기
+            if (includeLedger) {
+              const sourceLedgerPanel = document.getElementById("aggregate-ledger-panel");
+              if (sourceLedgerPanel) {
+                const clonedLedgerSection = sourceLedgerPanel.cloneNode(true);
+                clonedLedgerSection.removeAttribute("id");
+
+                Object.assign(clonedLedgerSection.style, {
+                  marginTop: "28px",
+                  padding: "24px 0 0",
+                  border: "0",
+                  borderTop: "2px dashed #bcc8d6",
+                  borderRadius: "0",
+                  boxShadow: "none"
+                });
+
+                const ledgerHeader = clonedLedgerSection.querySelector(".aggregate-export-header");
+                if (ledgerHeader) {
+                  ledgerHeader.remove();
+                }
+
+                const ledgerScroll = clonedLedgerSection.querySelector(".aggregate-scroll");
+                if (ledgerScroll) {
+                  ledgerScroll.removeAttribute("id");
+                  Object.assign(ledgerScroll.style, {
+                    maxHeight: "none",
+                    height: "auto",
+                    overflow: "visible",
+                    borderRadius: "6px"
+                  });
+                }
+
+                clonedLedgerSection.querySelectorAll("thead th").forEach(th => {
+                  th.style.position = "static";
+                });
+
+                clonedLedgerSection
+                  .querySelectorAll(".no-print, .aggregate-filter-button")
+                  .forEach(el => el.remove());
+
+                clonedSheet.appendChild(clonedLedgerSection);
+              }
+            }
+
             const bounds = clonedSheet.getBoundingClientRect();
-            // [수정 후]
             const pixelWidth = Math.ceil(bounds.width * exportScale);
             const pixelHeight = Math.ceil(bounds.height * exportScale);
             if (
@@ -5108,7 +5246,7 @@ body {
           })
         );
 
-        // [수정 후] 가로 1000px 고정 (세로는 세부내역 길이에 맞춰 자동 조정)
+        // 가로 1000px 고정 (세로는 세부내역 길이에 맞춰 자동 조정)
         const width = 750;
         const targetWidth = 1000;
         const exportScale = targetWidth / width;
@@ -5179,7 +5317,6 @@ body {
               .querySelectorAll(".no-print, .aggregate-filter-button")
               .forEach(el => el.remove());
 
-            // [수정 후]
             const bounds = clonedLedgerPanel.getBoundingClientRect();
             const pixelWidth = Math.ceil(bounds.width * exportScale);
             const pixelHeight = Math.ceil(bounds.height * exportScale);
@@ -5239,9 +5376,9 @@ body {
         }
       }
     }
-    
+
     /* ========================================
-       11. 계산 실행 및 초기화
+11. 계산 실행 및 초기화
        ======================================== */
 
     async function runCalculation(targetTab = "report") {
@@ -5435,7 +5572,7 @@ body {
     }
 
     /* ========================================
-       12. 화면 이벤트
+12. 화면 이벤트
        ======================================== */
 
     $("add-bookmark").addEventListener("click", () => {
@@ -5489,7 +5626,6 @@ body {
     $("reset-all").addEventListener("click", resetAll);
     $("save-png").addEventListener("click", saveReportPng);
     $("print").addEventListener("click", printReport);
-    // ▼ 아래 2줄 추가
     $("save-aggregate-png").addEventListener("click", saveAggregatePng);
     $("print-aggregate").addEventListener("click", printAggregateLedger);
 
@@ -5583,7 +5719,7 @@ body {
     window.addEventListener("beforeprint", preparePrintableInputs);
     window.addEventListener("afterprint", () => {
       removePrintableInputs();
-      document.body.classList.remove("printing-aggregate");
+      document.body.classList.remove("printing-aggregate", "printing-with-ledger");
     });
 
     /* 초기 설정 */
@@ -5593,11 +5729,9 @@ body {
     updateGuide();
   </script>
 
-  <!-- ③ 끝: 다음 ④의 의견 게시판 코드를 바로 이어 붙입니다. -->
-
   <script>
     /* ========================================
-       13. 의견 게시판
+13. 의견 게시판
        계산 기능과 독립적으로 실행합니다.
        ======================================== */
 
@@ -5709,7 +5843,7 @@ body {
           : 128;
 
         byId("gb-password").placeholder = action === "create"
-          ? "4\~12자"
+          ? "4~12자"
           : "작성 시 사용한 비밀번호";
 
         byId("gb-password-help").textContent = action === "create"
@@ -6142,7 +6276,7 @@ body {
         if (state.action !== "delete") {
           if (!nickname || Array.from(nickname).length > 20) {
             setStatus(
-              "이름은 1\~20자로 입력해 주세요.",
+              "이름은 1~20자로 입력해 주세요.",
               true
             );
 
@@ -6152,7 +6286,7 @@ body {
 
           if (!comment || Array.from(comment).length > 100) {
             setStatus(
-              "의견 또는 댓글은 1\~100자로 입력해 주세요.",
+              "의견 또는 댓글은 1~100자로 입력해 주세요.",
               true
             );
 
@@ -6313,7 +6447,7 @@ body {
 
   <script>
     /* ========================================
-       14. 팝업 바깥 클릭으로 닫기
+14. 팝업 바깥 클릭으로 닫기
        ======================================== */
 
     (() => {
@@ -6382,7 +6516,8 @@ body {
       );
     })();
   </script>
-<script>
+
+  <script>
     /* ========================================
 15. 우클릭 및 드래그 방지 (입력 영역 예외)
        ======================================== */
