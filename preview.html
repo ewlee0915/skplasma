@@ -3,24 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SK플라즈마 결제청구 에이전트 — 디자인 시안 6종 비교</title>
+  <title>SK플라즈마 결제청구 에이전트 — 디자인 시안 6종 한눈에 보기</title>
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
       margin: 0;
       font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
       color: #182638;
-      background: #eef1f5;
-      transition: background-color 0.25s ease;
+      background: #e2e8f0;
     }
 
-    /* =========================================
-       시안 전환 컨트롤 바 (비교용)
-       ========================================= */
-    .design-switcher {
+    /* 상단 빠른 이동 목차 바 */
+    .quick-nav {
       position: sticky;
       top: 0;
       z-index: 100;
@@ -28,43 +29,71 @@
       align-items: center;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 6px;
-      padding: 10px 14px;
+      gap: 8px;
+      padding: 12px 16px;
       background: #111927;
       color: #fff;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
     }
 
-    .design-switcher-label {
+    .quick-nav-title {
       margin-right: 6px;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 700;
       color: #9fb0c7;
     }
 
-    .design-switcher button {
-      padding: 6px 12px;
+    .quick-nav a {
+      padding: 6px 13px;
       border: 1px solid #33445c;
       border-radius: 999px;
       background: #1e2a3b;
-      color: #d6e0ed;
-      font-family: inherit;
+      color: #e2e8f0;
       font-size: 12px;
       font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
+      text-decoration: none;
+      transition: all 0.2s;
     }
 
-    .design-switcher button:hover {
-      border-color: #6b85a8;
-      color: #fff;
-    }
-
-    .design-switcher button.active {
+    .quick-nav a:hover {
       border-color: #b71935;
       background: #b71935;
       color: #fff;
-      box-shadow: 0 2px 10px rgba(183, 25, 53, 0.45);
+    }
+
+    /* 각 시안 구분 배너 */
+    .showcase-block {
+      padding: 36px 0 48px;
+      border-bottom: 4px solid #cbd5e1;
+      background: #eef1f5;
+    }
+
+    .showcase-block:nth-child(even) {
+      background: #e6ebf2;
+    }
+
+    .showcase-header {
+      max-width: 1140px;
+      margin: 0 auto 20px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .showcase-badge {
+      padding: 6px 14px;
+      border-radius: 8px;
+      background: #182638;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .showcase-desc {
+      font-size: 14px;
+      font-weight: 700;
+      color: #334155;
     }
 
     /* 공통 요소 스타일 */
@@ -103,14 +132,6 @@
       font-family: inherit;
       font-size: 13px;
       resize: vertical;
-      transition: border-color 0.2s, background-color 0.2s;
-    }
-
-    textarea.demo-textarea:focus {
-      outline: none;
-      border-style: solid;
-      border-color: #073b72;
-      background: #fff;
     }
 
     .btn-primary {
@@ -124,11 +145,6 @@
       font-size: 16px;
       font-weight: 700;
       cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    .btn-primary:hover {
-      background: #96132a;
     }
 
     .util-btn {
@@ -142,26 +158,12 @@
       cursor: pointer;
     }
 
-    .util-btn:hover {
-      border-color: #b71935;
-      color: #b71935;
-    }
-
-    /* 시안 섹션 전환 */
-    .mockup-section {
-      display: none;
-    }
-
-    .mockup-section.active {
-      display: block;
-    }
-
     /* =========================================
-       시안 1: 좌우 분할 워크스페이스형 (Split-Screen)
+       시안 1: 좌우 분할 워크스페이스형
        ========================================= */
     .s1-container {
       max-width: 1140px;
-      margin: 28px auto;
+      margin: 0 auto;
       padding: 0 20px;
     }
 
@@ -311,7 +313,7 @@
     }
 
     /* =========================================
-       시안 2: 딥 네이비 엔터프라이즈형 (Corporate Trust)
+       시안 2: 딥 네이비 엔터프라이즈형
        ========================================= */
     .s2-header {
       background: #073b72;
@@ -337,11 +339,6 @@
       background: rgba(255, 255, 255, 0.1);
       border-color: rgba(255, 255, 255, 0.25);
       color: #f1f5f9;
-    }
-
-    .s2-nav .util-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
-      color: #fff;
     }
 
     .s2-hero-row {
@@ -381,7 +378,7 @@
 
     .s2-main {
       max-width: 840px;
-      margin: -20px auto 32px;
+      margin: -20px auto 0;
       padding: 0 20px;
     }
 
@@ -427,11 +424,11 @@
     }
 
     /* =========================================
-       시안 3: 미니멀 원카드 집중형 (Clean Minimal SaaS)
+       시안 3: 미니멀 원카드 집중형
        ========================================= */
     .s3-wrap {
       max-width: 720px;
-      margin: 34px auto;
+      margin: 0 auto;
       padding: 0 16px;
     }
 
@@ -446,12 +443,6 @@
     .s3-top-links a {
       color: #526276;
       text-decoration: none;
-      cursor: pointer;
-    }
-
-    .s3-top-links a:hover {
-      color: #b71935;
-      text-decoration: underline;
     }
 
     .s3-single-card {
@@ -503,4 +494,735 @@
       align-items: center;
       margin-bottom: 8px;
       font-size: 14px;
-      font
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .s3-inline-month {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 18px 0 20px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+
+    .s3-footer-note {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 11.5px;
+      color: #64748b;
+    }
+
+    /* =========================================
+       시안 4: 슬림 앱 바 + 2단 기능 분리형
+       ========================================= */
+    .s4-appbar {
+      background: #fff;
+      border-top: 1px solid #dce3ec;
+      border-bottom: 1px solid #dce3ec;
+      padding: 0 24px;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .s4-appbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .s4-divider {
+      width: 1px;
+      height: 18px;
+      background: #cbd5e1;
+    }
+
+    .s4-app-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #1e293b;
+      letter-spacing: -0.4px;
+    }
+
+    .s4-workspace {
+      max-width: 1080px;
+      margin: 24px auto 0;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 1.55fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .s4-main-box {
+      background: #fff;
+      border: 1px solid #dce3ec;
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    }
+
+    .s4-side-box {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .s4-panel {
+      background: #fff;
+      border: 1px solid #dce3ec;
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    }
+
+    .s4-panel h3 {
+      margin: 0 0 12px;
+      font-size: 14px;
+      color: #073b72;
+    }
+
+    .s4-checklist {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12px;
+      color: #475569;
+      line-height: 1.8;
+    }
+
+    /* =========================================
+       시안 5: 소프트 파스텔 & 다크 CTA 모던형
+       ========================================= */
+    .s5-bg {
+      background: #f4f6fb;
+      padding: 32px 16px;
+      border-radius: 20px;
+      max-width: 820px;
+      margin: 0 auto;
+      border: 1px solid #dce3ec;
+    }
+
+    .s5-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .s5-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .s5-title-group h1 {
+      margin: 6px 0 0;
+      font-size: 28px;
+      font-weight: 800;
+      color: #111827;
+      letter-spacing: -0.9px;
+    }
+
+    .s5-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 10px 30px rgba(17, 24, 39, 0.05);
+      margin-bottom: 16px;
+    }
+
+    .s5-pill-steps {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+
+    .s5-pill-item {
+      flex: 1;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f8fafc;
+      font-size: 12px;
+      color: #64748b;
+      text-align: center;
+    }
+
+    .s5-pill-item.active {
+      background: #fff1f2;
+      color: #b71935;
+      font-weight: 700;
+    }
+
+    .s5-textarea {
+      width: 100%;
+      padding: 18px;
+      border: 0;
+      border-radius: 16px;
+      background: #f4f6fb;
+      font-family: inherit;
+      font-size: 13px;
+      color: #111827;
+      resize: vertical;
+    }
+
+    .s5-action-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .s5-btn-dark {
+      flex: 1;
+      min-width: 220px;
+      padding: 16px 24px;
+      border: 0;
+      border-radius: 14px;
+      background: #182638;
+      color: #fff;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* =========================================
+       시안 6: 클래식 문서·장부형
+       ========================================= */
+    .s6-wrap {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    .s6-sheet {
+      background: #fff;
+      border: 1px solid #bcc7d4;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+      padding: 32px 36px;
+    }
+
+    .s6-doc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-bottom: 14px;
+      border-bottom: 3px double #243b57;
+      margin-bottom: 20px;
+    }
+
+    .s6-doc-title {
+      margin: 6px 0 0;
+      font-size: 25px;
+      font-weight: 800;
+      color: #20364f;
+      letter-spacing: -0.5px;
+    }
+
+    .s6-meta-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      font-size: 12px;
+    }
+
+    .s6-meta-table th,
+    .s6-meta-table td {
+      border: 1px solid #cbd5e1;
+      padding: 9px 12px;
+      text-align: left;
+    }
+
+    .s6-meta-table th {
+      background: #f0f4f8;
+      color: #243b57;
+      width: 16%;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .s6-section-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: #243b57;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .s6-ledger-box {
+      border: 1px solid #243b57;
+      border-top: 0;
+      padding: 16px;
+      background: #fcfdff;
+    }
+
+    .s6-btn-calc {
+      margin-top: 18px;
+      width: 100%;
+      padding: 14px;
+      border: 0;
+      background: #243b57;
+      color: #fff;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    @media (max-width: 860px) {
+      .s1-grid,
+      .s4-workspace {
+        grid-template-columns: 1fr;
+      }
+      .s1-bottom-bar,
+      .s2-steps,
+      .s5-pill-steps {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 상단 빠른 이동 바 -->
+  <nav class="quick-nav">
+    <span class="quick-nav-title">빠른 이동:</span>
+    <a href="#sec-1">1. 좌우 분할형</a>
+    <a href="#sec-2">2. 딥 네이비형</a>
+    <a href="#sec-3">3. 미니멀 원카드형</a>
+    <a href="#sec-4">4. 슬림 앱바+ERP형</a>
+    <a href="#sec-5">5. 소프트 파스텔+다크버튼</a>
+    <a href="#sec-6">6. 클래식 장부양식형</a>
+  </nav>
+
+  <!-- =========================================================
+       시안 1
+       ========================================================= -->
+  <section id="sec-1" class="showcase-block">
+    <div class="showcase-header">
+      <span class="showcase-badge">시안 1</span>
+      <span class="showcase-desc">좌우 분할 워크스페이스형 — 스크롤 없이 한 화면에서 가이드와 입력창을 동시에 확인</span>
+    </div>
+
+    <div class="s1-container">
+      <div class="s1-topbar">
+        <button type="button" class="util-btn">⭐ 즐겨찾기 안내</button>
+        <div style="display:flex; gap:8px;">
+          <button type="button" class="util-btn">📖 사용 매뉴얼</button>
+          <button type="button" class="util-btn">💬 의견 남기기</button>
+        </div>
+      </div>
+
+      <div class="s1-grid">
+        <aside class="s1-left">
+          <div>
+            <div class="logo-fallback">SK <span>plasma</span></div>
+            <h1 class="s1-title">결제청구 에이전트</h1>
+            <p class="s1-sub">
+              MIS 거래원장을 붙여넣으면 기준월별 결제청구서와 집계 내역을 즉시 산출합니다.
+            </p>
+
+            <ul class="s1-step-list">
+              <li>
+                <span class="s1-badge">1</span>
+                <div>
+                  <strong style="font-size:13px; display:block;">원장 다운로드</strong>
+                  <span style="font-size:11.5px; color:#64748b;">MIS에서 거래원장 엑셀 준비</span>
+                </div>
+              </li>
+              <li class="active">
+                <span class="s1-badge">2</span>
+                <div>
+                  <strong style="font-size:13px; display:block; color:#b71935;">복사 · 붙여넣기</strong>
+                  <span style="font-size:11.5px; color:#64748b;">헤더를 포함한 전체 데이터 입력</span>
+                </div>
+              </li>
+              <li>
+                <span class="s1-badge">3</span>
+                <div>
+                  <strong style="font-size:13px; display:block;">기준월 선택 · 계산</strong>
+                  <span style="font-size:11.5px; color:#64748b;">청구서 및 일자별 집계 출력</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="s1-security">
+            <strong style="color:#205b3e;">✓ 로컬 브라우저 보안 계산</strong><br>
+            입력한 거래원장은 외부 서버로 전송되거나 자동 저장되지 않습니다.
+          </div>
+        </aside>
+
+        <div class="s1-right">
+          <div>
+            <div class="s1-right-header">
+              <h2>거래원장 데이터 입력</h2>
+              <span style="font-size:11px; padding:3px 10px; border-radius:999px; background:#f1f5f9; color:#475569; font-weight:600;">
+                ● 데이터 대기 중
+              </span>
+            </div>
+
+            <p style="margin:6px 0 12px; font-size:12.5px; color:#475569;">
+              엑셀에서 헤더 포함 전체 영역을 <kbd>Ctrl</kbd> + <kbd>C</kbd> 후 아래에 <kbd>Ctrl</kbd> + <kbd>V</kbd> 하세요.
+            </p>
+
+            <div class="s1-notice">
+              ※ 조회 기간은 누락 방지를 위해 <strong>최근 10개월~1년</strong>으로 설정해 주세요.<br>
+              ※ 원본 데이터의 <strong>행·열 순서를 변경하지 마세요.</strong>
+            </div>
+
+            <textarea class="demo-textarea" rows="8" placeholder="여기에 거래원장 전체 데이터를 붙여넣어 주세요..."></textarea>
+          </div>
+
+          <div class="s1-bottom-bar">
+            <div class="s1-month-box">
+              <div>
+                <div style="font-size:11px; color:#64748b; font-weight:700;">청구 기준월</div>
+                <div style="font-size:11px; color:#073b72;">기준일: 2026-11-30</div>
+              </div>
+              <input type="month" value="2026-11" style="padding:6px 8px; border:1px solid #cbd5e1; border-radius:6px;">
+            </div>
+
+            <button type="button" class="btn-primary">결제청구액 계산하기</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       시안 2
+       ========================================================= -->
+  <section id="sec-2" class="showcase-block">
+    <div class="showcase-header">
+      <span class="showcase-badge">시안 2</span>
+      <span class="showcase-desc">딥 네이비 엔터프라이즈형 — 금융·회계 시스템 느낌의 묵직하고 신뢰감 있는 상단 바</span>
+    </div>
+
+    <header class="s2-header">
+      <div class="s2-header-inner">
+        <div class="s2-nav">
+          <div class="logo-fallback" style="color:#fff;">SK <span style="color:#ff8a3d;">plasma</span></div>
+          <div style="display:flex; gap:8px;">
+            <button type="button" class="util-btn">⭐ 즐겨찾기</button>
+            <button type="button" class="util-btn">📖 매뉴얼</button>
+            <button type="button" class="util-btn">💬 의견 남기기</button>
+          </div>
+        </div>
+
+        <div class="s2-hero-row">
+          <div>
+            <h1>결제청구 에이전트</h1>
+            <p>사내 외상매출 정산 및 결제청구서 자동 산출 시스템</p>
+          </div>
+          <div class="s2-pills">
+            <span class="s2-pill">✓ 무설치 웹 실행</span>
+            <span class="s2-pill">✓ 공휴일 자동 반영</span>
+            <span class="s2-pill">✓ 서버 미전송 보안</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="s2-main">
+      <div class="s2-card">
+        <div class="s2-steps">
+          <div class="s2-step">
+            <small>STEP 01</small>
+            <strong>MIS 거래원장 다운로드</strong>
+          </div>
+          <div class="s2-step active">
+            <small>STEP 02 · 현재 단계</small>
+            <strong>헤더 포함 전체 붙여넣기</strong>
+          </div>
+          <div class="s2-step">
+            <small>STEP 03</small>
+            <strong>기준월 선택 후 계산 실행</strong>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <strong style="font-size:16px; color:#073b72;">거래원장 데이터 입력</strong>
+          <span style="font-size:12px; color:#64748b;">조회 권장: 최근 10개월~1년 · 행/열 순서 유지</span>
+        </div>
+
+        <textarea class="demo-textarea" rows="7" placeholder="엑셀에서 복사(Ctrl+C)한 거래원장 데이터를 이곳에 붙여넣어(Ctrl+V) 주세요."></textarea>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-top:18px; padding:14px 18px; background:#f4f7fb; border-radius:10px; border:1px solid #d8e1ec;">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <strong style="font-size:14px; color:#073b72;">청구 기준월</strong>
+            <input type="month" value="2026-11" style="padding:7px 10px; border:1px solid #b8c7da; border-radius:6px;">
+            <span style="font-size:12px; color:#475569;">청구 기준일: <strong>2026-11-30</strong></span>
+          </div>
+
+          <button type="button" class="btn-primary" style="width:auto; padding:12px 28px;">결제청구액 계산하기</button>
+        </div>
+
+        <p style="margin:14px 0 0; text-align:center; font-size:11.5px; color:#526276;">
+          ✓ 입력한 데이터는 PC 브라우저 메모리에서만 연산되며 외부로 전송되지 않습니다.
+        </p>
+      </div>
+    </main>
+  </section>
+
+  <!-- =========================================================
+       시안 3
+       ========================================================= -->
+  <section id="sec-3" class="showcase-block">
+    <div class="showcase-header">
+      <span class="showcase-badge">시안 3</span>
+      <span class="showcase-desc">미니멀 원카드 집중형 — 군더더기 없는 단일 카드에 핵심 입력 동선만 압축</span>
+    </div>
+
+    <div class="s3-wrap">
+      <div class="s3-top-links">
+        <a href="#sec-3">⭐ 즐겨찾기 안내</a>
+        <span>·</span>
+        <a href="#sec-3">📖 사용 매뉴얼</a>
+        <span>·</span>
+        <a href="#sec-3">💬 의견 남기기</a>
+      </div>
+
+      <div class="s3-single-card">
+        <div class="s3-head">
+          <div class="logo-fallback" style="justify-content:center;">SK <span>plasma</span></div>
+          <h1>결제청구 에이전트</h1>
+        </div>
+
+        <div class="s3-stepper">
+          <span>1. MIS 원장 준비</span>
+          <span class="arrow">→</span>
+          <span class="step-now">2. 전체 복사·붙여넣기</span>
+          <span class="arrow">→</span>
+          <span>3. 기준월 계산</span>
+        </div>
+
+        <div class="s3-field-label">
+          <span>거래원장 붙여넣기</span>
+          <span style="font-size:11.5px; font-weight:400; color:#64748b;">
+            <kbd>Ctrl</kbd>+<kbd>C</kbd> 후 <kbd>Ctrl</kbd>+<kbd>V</kbd> (최근 10개월~1년 권장)
+          </span>
+        </div>
+
+        <textarea class="demo-textarea" rows="7" placeholder="헤더를 포함한 거래원장 전체 데이터를 붙여넣어 주세요. (행·열 순서 변경 금지)"></textarea>
+
+        <div class="s3-inline-month">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span style="font-size:14px; font-weight:700;">청구 기준월</span>
+            <input type="month" value="2026-11" style="padding:7px 10px; border:1px solid #cbd5e1; border-radius:8px;">
+          </div>
+          <span style="font-size:12px; color:#64748b;">청구 기준일: 2026-11-30</span>
+        </div>
+
+        <button type="button" class="btn-primary">결제청구액 계산하기</button>
+
+        <div class="s3-footer-note">
+          ✓ 모든 계산은 브라우저 내에서만 처리되며 외부 서버로 전송되지 않습니다.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       시안 4
+       ========================================================= -->
+  <section id="sec-4" class="showcase-block">
+    <div class="showcase-header">
+      <span class="showcase-badge">시안 4</span>
+      <span class="showcase-desc">슬림 앱 바 + 2단 기능 분리형 — 상단 툴바와 좌측 입력·우측 설정 패널 구조 (ERP 스타일)</span>
+    </div>
+
+    <header class="s4-appbar">
+      <div class="s4-appbar-left">
+        <div class="logo-fallback">SK <span>plasma</span></div>
+        <span class="s4-divider"></span>
+        <span class="s4-app-title">결제청구 에이전트</span>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button type="button" class="util-btn">⭐ 즐겨찾기</button>
+        <button type="button" class="util-btn">📖 사용 매뉴얼</button>
+        <button type="button" class="util-btn">💬 의견 남기기</button>
+      </div>
+    </header>
+
+    <div class="s4-workspace">
+      <div class="s4-main-box">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <h2 style="margin:0; font-size:17px; color:#1e293b;">1. 거래원장 데이터 붙여넣기</h2>
+          <span style="font-size:11px; color:#205b3e; background:#edf7f0; padding:3px 9px; border-radius:6px; font-weight:700;">
+            브라우저 로컬 연산
+          </span>
+        </div>
+        <p style="margin:0 0 14px; font-size:12px; color:#526276;">
+          MIS에서 다운로드한 엑셀 원장의 헤더부터 마지막 행까지 복사(<kbd>Ctrl</kbd>+<kbd>C</kbd>) 후 붙여넣어(<kbd>Ctrl</kbd>+<kbd>V</kbd>) 주세요.
+        </p>
+
+        <textarea class="demo-textarea" rows="11" placeholder="거래원장 전체 데이터를 복사하여 이곳에 붙여넣어 주세요..."></textarea>
+      </div>
+
+      <div class="s4-side-box">
+        <div class="s4-panel">
+          <h3>📅 2. 청구 기준월 설정</h3>
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px;">
+            <input type="month" value="2026-11" style="flex:1; padding:9px 10px; border:1px solid #cbd5e1; border-radius:8px; font-size:14px;">
+          </div>
+          <div style="font-size:12px; color:#475569; background:#f8fafc; padding:8px 12px; border-radius:6px;">
+            적용 청구 기준일: <strong>2026-11-30</strong>
+          </div>
+
+          <button type="button" class="btn-primary" style="margin-top:16px;">결제청구액 계산하기</button>
+        </div>
+
+        <div class="s4-panel" style="background:#f8fafc;">
+          <h3>📌 입력 전 체크사항</h3>
+          <ul class="s4-checklist">
+            <li>조회 기간은 <strong>최근 10개월~1년</strong>으로 넉넉히 설정</li>
+            <li>원본 엑셀의 <strong>행·열 순서 변경 금지</strong></li>
+            <li>공휴일 자동 반영 및 어음 만기일 역산 지원</li>
+            <li>입력 데이터는 <strong>외부 서버로 전송되지 않음</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       시안 5
+       ========================================================= -->
+  <section id="sec-5" class="showcase-block">
+    <div class="showcase-header">
+      <span class="showcase-badge">시안 5</span>
+      <span class="showcase-desc">소프트 파스텔 & 다크 CTA 모던형 — 둥근 카드와 세련된 차콜 버튼 조합 (최신 핀테크 스타일)</span>
+    </div>
+
+    <div class="s5-bg">
+      <div class="s5-wrap">
+        <div class="s5-header">
+          <div class="s5-title-group">
+            <div class="logo-fallback" style="font-size:16px;">SK <span>plasma</span></div>
+            <h1>결제청구 에이전트</h1>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button type="button" class="util-btn" style="border-radius:999px;">⭐ 즐겨찾기</button>
+            <button type="button" class="util-btn" style="border-radius:999px;">📖 매뉴얼</button>
+            <button type="button" class="util-btn" style="border-radius:999px;">💬 의견</button>
+          </div>
+        </div>
+
+        <div class="s5-card">
+          <div class="s5-pill-steps">
+            <div class="s5-pill-item">1. MIS 원장 준비</div>
+            <div class="s5-pill-item active">2. 데이터 붙여넣기</div>
+            <div class="s5-pill-item">3. 청구서 자동 완성</div>
+          </div>
+
+          <div style="margin-bottom:10px; font-size:13px; color:#4b5563; line-height:1.6;">
+            엑셀에서 헤더 포함 전체 데이터를 <kbd>Ctrl</kbd>+<kbd>C</kbd> 후 아래 영역에 <kbd>Ctrl</kbd>+<kbd>V</kbd> 하세요.<br>
+            <span style="font-size:11.5px; color:#6b7280;">※ 최근 10개월~1년 조회 권장 · 원본 행·열 순서 유지 필수</span>
+          </div>
+
+          <textarea class="s5-textarea" rows="7" placeholder="거래원장 전체 데이터를 붙여넣어 주세요."></textarea>
+
+          <div class="s5-action-bar">
+            <div style="display:flex; align-items:center; gap:10px; background:#f4f6fb; padding:10px 16px; border-radius:14px;">
+              <span style="font-size:13px; font-weight:700; color:#374151;">기준월</span>
+              <input type="month" value="2026-11" style="border:0; background:transparent; font-size:14px; font-weight:700; color:#111827;">
+              <span style="font-size:11px; color:#6b7280;">(2026-11-30)</span>
+            </div>
+
+            <button type="button" class="s5-btn-dark">결제청구액 계산하기 →</button>
+          </div>
+        </div>
+
+        <p style="text-align:center; font-size:12px; color:#6b7280; margin:0;">
+          🔒 입력한 거래원장은 브라우저에서만 계산되며 외부 서버로 전송되거나 저장되지 않습니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       시안 6
+       ========================================================= -->
+  <section id="sec-6" class="showcase-block">
+    <div class="showcase-header">
+      <span class="showcase-badge">시안 6</span>
+      <span class="showcase-desc">클래식 문서·장부형 — 이중선 헤더와 표 양식으로 구성된 정통 회계·정산 서식 스타일</span>
+    </div>
+
+    <div class="s6-wrap">
+      <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+        <button type="button" class="util-btn">⭐ 즐겨찾기 안내</button>
+        <div style="display:flex; gap:6px;">
+          <button type="button" class="util-btn">📖 사용 매뉴얼</button>
+          <button type="button" class="util-btn">💬 의견 남기기</button>
+        </div>
+      </div>
+
+      <div class="s6-sheet">
+        <div class="s6-doc-header">
+          <div>
+            <div class="logo-fallback">SK <span>plasma</span></div>
+            <h1 class="s6-doc-title">결제청구 에이전트</h1>
+          </div>
+          <div style="text-align:right; font-size:11px; color:#526276; line-height:1.6;">
+            문서구분: 사내 정산·청구 자동화<br>
+            보안등급: 로컬 전용 (서버 미전송)
+          </div>
+        </div>
+
+        <table class="s6-meta-table">
+          <tr>
+            <th>작업 순서</th>
+            <td colspan="3">
+              <strong>①</strong> MIS 거래원장 엑셀 준비  ▶ 
+              <strong style="color:#b71935;">② 헤더 포함 복사·붙여넣기</strong>  ▶ 
+              <strong>③</strong> 청구 기준월 선택 후 산출
+            </td>
+          </tr>
+          <tr>
+            <th>청구 기준월</th>
+            <td>
+              <input type="month" value="2026-11" style="padding:4px 8px; border:1px solid #94a3b8;">
+            </td>
+            <th>청구 기준일</th>
+            <td><strong>2026-11-30</strong> (말일 자동 적용)</td>
+          </tr>
+          <tr>
+            <th>입력 유의사항</th>
+            <td colspan="3" style="color:#475569;">
+              조회 기간은 <strong>최근 10개월~1년</strong>으로 설정하고, 원본 데이터의 <strong>행·열 순서를 변경하지 마세요.</strong>
+            </td>
+          </tr>
+        </table>
+
+        <div class="s6-section-label">
+          <span>■ 거래원장 원본 데이터 입력란 (Ctrl+C → Ctrl+V)</span>
+          <span style="font-size:11px; font-weight:400; color:#cbd5e1;">상태: 입력 대기 중</span>
+        </div>
+
+        <div class="s6-ledger-box">
+          <textarea class="demo-textarea" rows="7" style="border-radius:4px; background:#fff;" placeholder="엑셀에서 복사한 거래원장 전체 데이터를 이곳에 붙여넣어 주세요."></textarea>
+
+          <button type="button" class="s6-btn-calc">결제청구서 및 집계 내역 산출하기</button>
+        </div>
+
+        <div style="margin-top:14px; font-size:11px; color:#64748b; text-align:center;">
+          ※ 본 시스템에 입력된 거래원장은 사용자 PC 브라우저 내에서만 연산되며 외부로 전송·저장되지 않습니다.
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
