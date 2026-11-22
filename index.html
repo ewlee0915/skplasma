@@ -2336,9 +2336,10 @@
     }
 
     @media print {
+      /* 청구서 뒤에서 반드시 새 페이지로 내역 시작 */
       body.printing-with-ledger #aggregate-panel {
         display: block !important;
-        margin-top: 16mm;
+        margin-top: 0;
         page-break-before: always;
         break-before: page;
       }
@@ -3865,11 +3866,9 @@
           row.type === "판매" &&
           isPriceCorrectionRemark(trimmedRemark);
 
-        // 비고에 "단가정정"이 있거나, 판매(+) 행인데 비고가 공란인 경우(단가정정 재발행)
-        const isPriceCorrectionReissue =
-          row.type === "판매" &&
-          row.amt > 0 &&
-          !trimmedRemark;
+        // 재발행 여부는 3단계에서 취소행과 연결하여 확정합니다.
+        // 비고 공란만으로 단가정정으로 판단하지 않습니다.
+        const isPriceCorrectionReissue = false;
 
         Object.assign(row, {
           y: "",
@@ -3895,6 +3894,55 @@
         } catch (error) {
           errors.push(`${row.line}행 조건 추출: ${error.message}`);
         }
+      }
+
+      // 취소행 바로 아래 재발행행을 명시적으로 연결합니다.
+      const correctionPairs = [];
+
+      for (let index = 0; index < rows.length; index++) {
+        const cancel = rows[index];
+
+        if (
+          cancel.type !== "판매" ||
+          !isPriceCorrectionRemark(cancel.remark)
+        ) {
+          continue;
+        }
+
+        if (cancel.amt >= 0) {
+          errors.push(
+            `${cancel.line}행: 단가정정 취소행의 금액은 음수여야 합니다.`
+          );
+          continue;
+        }
+
+        const reissue = rows[index + 1];
+
+        if (
+          !reissue ||
+          reissue.line !== cancel.line + 1 ||
+          reissue.type !== "판매" ||
+          reissue.amt <= 0 ||
+          String(reissue.remark ?? "").trim() !== ""
+        ) {
+          errors.push(
+            `${cancel.line}행: 바로 아래에 비고가 공란인 양수 판매 재발행행이 있어야 합니다.`
+          );
+          continue;
+        }
+
+        if (
+          reissue.code !== cancel.code ||
+          reissue.customer !== cancel.customer
+        ) {
+          errors.push(
+            `${cancel.line}~${reissue.line}행: 단가정정 취소·재발행의 품목 또는 연결처가 다릅니다.`
+          );
+          continue;
+        }
+
+        reissue.isPriceCorrection = true;
+        correctionPairs.push({ cancel, reissue, cancelIndex: index });
       }
 
       // 2단계: 각 행의 청구기준일(billing) 먼저 산정 (단가정정 행은 3단계에서 원 매출 상속)
@@ -3934,12 +3982,104 @@
         }
       }
 
-      // 3단계: 음수 판매 거래(약가인하 등) 및 단가정정 거래의 원 매출 참조
+      // 3단계: 단가정정 쌍에 동일한 원매출 정보를 승계합니다.
+
+      // 수량은 쉼표를 제거하고, 취소 수량의 부호를 무시하여 비교합니다.
+      // 공란 또는 잘못된 수량을 0으로 취급하지 않습니다.
+      function quantityMagnitude(value) {
+        const text = String(value ?? "").trim().replaceAll(",", "");
+
+        if (!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(text)) {
+          return null;
+        }
+
+        const number = Number(text);
+        return Number.isFinite(number) ? Math.abs(number) : null;
+      }
+
+      const correctionFields = ["y", "z", "aa", "ab", "billing"];
+
+      // 이후 정정이 이미 취소된 원매출에 다시 연결되지 않도록 관리합니다.
+      const cancelledSales = new Set();
+      const resolvedReissues = new Set();
+
+      for (const { cancel, reissue, cancelIndex } of correctionPairs) {
+        const cancelQuantity = quantityMagnitude(cancel.quantity);
+        const reissueQuantity = quantityMagnitude(reissue.quantity);
+
+        if (!String(cancel.customer ?? "").trim()) {
+          errors.push(
+            `${cancel.line}행: 연결거래처코드가 없어 단가정정 원매출을 확인할 수 없습니다.`
+          );
+          continue;
+        }
+
+        if (
+          cancelQuantity === null ||
+          reissueQuantity === null ||
+          cancelQuantity !== reissueQuantity
+        ) {
+          errors.push(
+            `${cancel.line}~${reissue.line}행: 취소·재발행 수량을 확인해 주세요.`
+          );
+          continue;
+        }
+
+        // 현재 취소행보다 앞에 있는 과거 매출만 검색합니다.
+        const candidates = rows.slice(0, cancelIndex).filter(candidate =>
+          candidate.type === "판매" &&
+          candidate.amt > 0 &&
+          candidate.date <= cancel.date &&
+          candidate.code === cancel.code &&
+          candidate.customer === cancel.customer &&
+          quantityMagnitude(candidate.quantity) === cancelQuantity &&
+          candidate.amt === -cancel.amt &&
+          !cancelledSales.has(candidate) &&
+          (
+            !candidate.isPriceCorrection ||
+            resolvedReissues.has(candidate)
+          )
+        );
+
+        if (candidates.length !== 1) {
+          errors.push(
+            `${cancel.line}행: 단가정정 원매출 후보가 ${candidates.length}건입니다. ` +
+            "품목·연결처·수량·취소금액을 확인해 주세요."
+          );
+          continue;
+        }
+
+        const original = candidates[0];
+
+        if (original.billing === null || !original.aa) {
+          errors.push(
+            `${cancel.line}행: 원매출 ${original.line}행의 결제조건 또는 청구기준일을 확인해 주세요.`
+          );
+          continue;
+        }
+
+        // 두 행에 반드시 동일한 원매출 정보를 적용합니다.
+        // date, amt, rec, quantity 등 원장 값은 변경하지 않습니다.
+        for (const target of [cancel, reissue]) {
+          for (const field of correctionFields) {
+            target[field] = original[field];
+          }
+        }
+
+        cancelledSales.add(original);
+        resolvedReissues.add(reissue);
+      }
+
+      // 일반 음수 판매(반품·약가인하 등)는 기존 처리 유지:
+      // 결제조건만 참조하고 청구기준일은 거래월 말일로 유지합니다.
       for (let index = 0; index < rows.length; index++) {
         const row = rows[index];
-        const isNegativeSale = row.type === "판매" && row.amt < 0;
 
-        if (!isNegativeSale && !row.isPriceCorrection) {
+        if (
+          row.type !== "판매" ||
+          row.amt >= 0 ||
+          row.isPriceCorrection
+        ) {
           continue;
         }
 
@@ -3966,15 +4106,6 @@
         if (target) {
           row.aa = target.aa;
           row.ab = target.ab;
-
-          // 단가정정 케이스는 원 매출의 청구기준일까지 그대로 반영 (약가인하·약가인상은 당월 유지)
-          if (row.isPriceCorrection && target.billing !== null) {
-            row.billing = target.billing;
-          }
-        } else if (row.isPriceCorrection) {
-          warnings.push(
-            `${row.line}행: 단가정정 대상 원 매출을 찾지 못해 거래월 말일·기타로 처리했습니다.`
-          );
         }
       }
 
@@ -4230,7 +4361,7 @@
         unpaid: safe(contractTotal - received),
         details: aggregateDetails,
         ledger: rows
-          .filter(row => row.billing === base)
+          .filter(row => row.date <= base && row.billing === base)
           .map(row => ({
             date: iso(row.date),
             product: row.product_name,
@@ -4247,8 +4378,11 @@
       );
 
       if (finalTotal !== requestTotal) {
-        warnings.push(
-          "상단 결제청구액과 상세 최종 합계가 다릅니다. 결제조건별 기수금액, 기타 잔액 및 우선순위 차감 결과를 확인해 주세요."
+        errors.push(
+          "상단 결제청구액과 상세 최종 합계가 달라 출력을 제한했습니다.\n" +
+          `상단 결제청구액: ${money(requestTotal)}원\n` +
+          `상세 최종 합계: ${money(finalTotal)}원\n` +
+          "결제조건별 기수금액, 기타 잔액 및 우선순위 차감 결과를 확인해 주세요."
         );
       }
 
@@ -4992,10 +5126,25 @@
       try {
         setExportStatus();
         const includeLedger = $("include-ledger-export").checked;
+
+        if (
+          includeLedger &&
+          aggregateFilterState.base !== selectedMonthEnd()
+        ) {
+          setExportStatus(
+            "청구서와 세부내역의 기준월이 다릅니다. " +
+            "집계 탭에서 기준일을 청구서 기준월과 동일하게 변경한 뒤 다시 출력해 주세요.",
+            true
+          );
+          return;
+        }
+
         document.body.classList.toggle("printing-with-ledger", includeLedger);
         window.print();
       } catch (error) {
+        restoreAggregatePrintPosition();
         document.body.classList.remove("printing-with-ledger");
+
         setExportStatus(
           "인쇄 실행 중 오류가 발생했습니다: " + error.message,
           true
@@ -5110,6 +5259,18 @@
         const targetWidth = 1000;
         const exportScale = targetWidth / width;
         const includeLedger = $("include-ledger-export").checked;
+
+        if (
+          includeLedger &&
+          aggregateFilterState.base !== selectedMonthEnd()
+        ) {
+          setExportStatus(
+            "청구서와 세부내역의 기준월이 다릅니다. " +
+            "집계 탭에서 기준일을 청구서 기준월과 동일하게 변경한 뒤 다시 저장해 주세요.",
+            true
+          );
+          return;
+        }
 
         const recipientValue = $("recipient").value;
         const commentValue = sheet.querySelector(".comment").innerText;
@@ -5885,10 +6046,43 @@
       updateNoteDialog.close();
     });
 
-    window.addEventListener("beforeprint", preparePrintableInputs);
+    // 인쇄 후 집계 영역을 원래 위치로 복구하기 위한 자리표시자
+    let aggregatePrintPlaceholder = null;
+
+    function restoreAggregatePrintPosition() {
+      if (!aggregatePrintPlaceholder) return;
+
+      aggregatePrintPlaceholder.replaceWith($("aggregate-panel"));
+      aggregatePrintPlaceholder = null;
+    }
+
+    window.addEventListener("beforeprint", () => {
+      preparePrintableInputs();
+
+      // 청구서와 내역을 함께 인쇄하는 경우에만 순서를 변경합니다.
+      if (
+        document.body.classList.contains("printing-with-ledger") &&
+        !document.body.classList.contains("printing-aggregate") &&
+        !aggregatePrintPlaceholder
+      ) {
+        const aggregatePanel = $("aggregate-panel");
+
+        aggregatePrintPlaceholder =
+          document.createComment("집계 영역 원래 위치");
+
+        aggregatePanel.before(aggregatePrintPlaceholder);
+        $("report").after(aggregatePanel);
+      }
+    });
+
     window.addEventListener("afterprint", () => {
+      restoreAggregatePrintPosition();
       removePrintableInputs();
-      document.body.classList.remove("printing-aggregate", "printing-with-ledger");
+
+      document.body.classList.remove(
+        "printing-aggregate",
+        "printing-with-ledger"
+      );
     });
 
     /* 초기 설정 */
