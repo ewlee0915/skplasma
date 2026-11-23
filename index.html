@@ -2393,6 +2393,19 @@
         break-inside: avoid;
       }
     }
+    /* PDF·인쇄 시 세부내역 합계의 페이지별 반복 방지 */
+    @media print {
+      body.printing-aggregate .aggregate-ledger tfoot,
+      body.printing-with-ledger .aggregate-ledger tfoot {
+        display: table-row-group !important;
+      }
+
+      body.printing-aggregate .aggregate-ledger tfoot tr,
+      body.printing-with-ledger .aggregate-ledger tfoot tr {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+    }
   </style>
 </head>
 
