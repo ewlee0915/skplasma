@@ -4262,34 +4262,126 @@
         sum(details, row => row.received) + otherReceived
       );
 
-      const adjustment = Math.max(safe(-other), 0);
-      const otherFinal = Math.max(other, 0);
+      // 전체 수금액과 조건별 수금 합계의 일치 여부 확인
+      if (detailedReceived !== received) {
+        reportErrors.push(
+          "전체 수금액과 청구서 조건별 수금 합계가 다릅니다.\n" +
+          `전체 수금액: ${money(received)}원\n` +
+          `조건별 수금 합계: ${money(detailedReceived)}원\n` +
+          "어음(0개월), 지원 범위 밖의 어음 개월수 또는 " +
+          "미분류 수금 코드를 확인해 주세요."
+        );
+      }
 
-      // 기타 음수 잔액을 기존 우선순위에 따라 차감
+      // 청구서 전용 상계:
+      // 집계표의 실제 결제조건별 청구·수금 분류는 변경하지 않습니다.
+
+      // 1) 각 결제조건의 수금 차감 후 잔액을 계산합니다.
+      const settlementItems = [
+        {
+          label: "기타",
+          net: other,
+          final: 0,
+          detail: null
+        },
+        ...details.map(row => ({
+          label: row.label,
+          net: safe(row.contract - row.received),
+          final: 0,
+          detail: row
+        }))
+      ];
+
+      // 2) 모든 음수 잔액의 절댓값을 합산합니다.
+      // 수금 총액을 다시 빼는 것이 아니라,
+      // 조건별 차감 후 음수로 남은 금액만 다른 양수 잔액과 상계합니다.
+      const adjustment = sum(
+        settlementItems,
+        item => item.net < 0 ? safe(-item.net) : 0
+      );
+
+      let remainingAdjustment = adjustment;
+
+      // 3) 양수 잔액을 상계할 순서입니다.
+      const settlementOrder = [
+        "기타",
+        "어음(3개월)",
+        "어음(2개월)",
+        "어음(1개월)",
+        "카드",
+        "현금"
+      ];
+
+      const settlementByLabel = new Map(
+        settlementItems.map(item => [item.label, item])
+      );
+
+      // 4) 각 항목의 양수 잔액까지만 차감합니다.
+      for (const label of settlementOrder) {
+        const item = settlementByLabel.get(label);
+
+        if (!item) {
+          throw new Error(`청구서 상계 항목을 찾지 못했습니다: ${label}`);
+        }
+
+        const positiveBalance = Math.max(item.net, 0);
+        const deducted = Math.min(
+          positiveBalance,
+          remainingAdjustment
+        );
+
+        item.final = safe(positiveBalance - deducted);
+        remainingAdjustment = safe(
+          remainingAdjustment - deducted
+        );
+
+        if (item.detail) {
+          item.detail.final = item.final;
+        }
+      }
+
+      const otherFinal = settlementByLabel.get("기타").final;
+
+      // 모든 양수 잔액을 상계한 뒤에도 남으면 조건별 계산상 초과수금입니다.
+      if (remainingAdjustment > 0) {
+        warnings.push(
+          "조건별 잔액 상계 후 남은 초과수금은 " +
+          `${money(remainingAdjustment)}원입니다. ` +
+          "청구서 최종 금액은 0원으로 표시하며, " +
+          "초과수금의 이월·환급 여부는 별도로 확인해 주세요."
+        );
+      }
+
+      // 5) 상계 결과 자체를 검증합니다.
+      // 상단 청구액과의 대사는 기존 finalTotal 검증에서 별도로 수행합니다.
+      const settlementNetTotal = sum(
+        settlementItems,
+        item => item.net
+      );
+
+      const settlementFinalTotal = sum(
+        settlementItems,
+        item => item.final
+      );
+
+      if (
+        settlementFinalTotal !== Math.max(settlementNetTotal, 0)
+      ) {
+        throw new Error(
+          "청구서 조건별 상계 합계가 일치하지 않습니다."
+        );
+      }
+
+      // 6) 최종 청구금액이 남은 어음 항목의 요청일을 계산합니다.
+      // 기존 날짜 산정 방식은 유지합니다.
       for (const row of details) {
-        const net = safe(row.contract - row.received);
-
-        const earlier = sum(
-          details.filter(candidate =>
-            candidate.priority < row.priority
-          ),
-          candidate => safe(candidate.contract - candidate.received)
-        );
-
-        const remaining = Math.max(
-          safe(adjustment - earlier),
-          0
-        );
-
-        row.final = Math.max(
-          0,
-          safe(net - Math.min(net, remaining))
-        );
-
         row.issue_date = "";
         row.maturity_date = "";
 
-        if (!row.label.startsWith("어음") || row.contract === 0) {
+        if (
+          !row.label.startsWith("어음") ||
+          row.final === 0
+        ) {
           continue;
         }
 
@@ -4758,7 +4850,7 @@
 
       $("metrics").textContent =
         `처리 거래 ${data.rows}건 · ` +
-        `H19 조정금액 ${money(data.adjustment)}원`;
+        `조건별 음수 잔액 상계 대상 ${money(data.adjustment)}원`;
 
       $("hidden-values").textContent =
         `금월 매출액 ${money(summary.sales)}원 / ` +
@@ -6967,12 +7059,9 @@
       notice.hidden = reportErrors.length === 0;
 
       notice.textContent = reportErrors.length
-        ? "※ 이력 검토용: 선택한 기준월의 청구서 발행 검증에서 " +
-          "청구금액과 조건별 상세 최종 합계가 일치하지 않습니다.\n" +
-          `청구서 상단 결제청구액: ${money(data.summary.request)}원 / ` +
-          `청구서 상세 최종 합계: ${money(data.final_total)}원\n` +
-          "집계 조회 및 세부내역 출력은 가능합니다. " +
-          "아래 내역은 선택 기준일·현재 필터 기준의 거래 내역이며, " +
+        ? "※ 이력 검토용: 청구서 발행 검증에서 확인이 필요한 사항이 있습니다.\n" +
+          reportErrors.join("\n\n") +
+          "\n아래 내역은 선택 기준일·현재 필터 기준의 거래 내역이며, " +
           "확정 청구서를 대신하지 않습니다."
         : "";
     }
@@ -7050,9 +7139,10 @@
         );
       } else if (!appState.valid) {
         messages.push(
-          "청구금액과 상세 합계가 달라 청구서 발행만 제한했습니다. " +
-          "집계 탭에서 이력 조회 및 세부내역 출력은 가능합니다."
-        );
+          "청구서 발행 검증에서 확인이 필요한 사항이 있어 청구서 발행만 제한했습니다. " +
+            "집계 탭에서 이력 조회 및 세부내역 출력은 가능합니다. " +
+            "자세한 원인은 검증 결과를 확인해 주세요."
+          );
       }
 
       setMessage(
