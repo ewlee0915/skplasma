@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta
     http-equiv="Content-Security-Policy"
-    content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' file: data: blob:; frame-src 'self' about:; connect-src https://skplasma-holidays.eunwook.workers.dev https://skplasma-guestbook.eunwook.workers.dev; object-src 'none'; base-uri 'none'; form-action 'none'"
+    content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' file: data: blob:; frame-src 'self' about:; connect-src https://skplasma-holidays.eunwook.workers.dev https://skplasma-guestbook.eunwook.workers.dev https://skplasma-visitors.eunwook.workers.dev; object-src 'none'; base-uri 'none'; form-action 'none'"
   >
   <title>SK플라즈마 결제청구 에이전트</title>
   <link rel="icon" type="image/png" href="./sk_icon.png?v=1">
@@ -2406,6 +2406,68 @@
         break-inside: avoid;
       }
     }
+        /* 상단 왼쪽 방문 카운터 */
+    .visitor-counter {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      gap: 9px;
+      min-height: 34px;
+      padding: 6px 10px;
+      border: 1px solid #d3dae3;
+      border-radius: 8px;
+      background: #fff;
+      color: #526276;
+      font-size: 12px;
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+
+    .visitor-counter-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .visitor-counter-label {
+      color: #738096;
+    }
+
+    .visitor-counter strong {
+      color: #244568;
+      font-size: inherit;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .visitor-counter-divider {
+      flex-shrink: 0;
+      width: 1px;
+      height: 12px;
+      background: #dce3ec;
+    }
+
+    /* 좁은 화면에서는 메뉴를 다음 줄로 배치 */
+    @media screen and (max-width: 600px) {
+      .main-quick-actions {
+        flex-wrap: wrap;
+      }
+
+      .main-quick-right {
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        margin-left: auto;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      .visitor-counter {
+        gap: 7px;
+        padding: 6px 8px;
+        font-size: 10px;
+      }
+    }
   </style>
 </head>
 
@@ -2413,14 +2475,38 @@
   <main class="workspace">
     <!-- 메인 입력 화면 -->
     <section class="panel input-panel no-print">
-      <div class="main-quick-actions">
-        <button
-          id="add-bookmark"
-          type="button"
-          title="브라우저 즐겨찾기 등록 방법 안내"
-        >⭐ 즐겨찾기 안내</button>
+            <div class="main-quick-actions">
+        <div
+          id="visitor-counter"
+          class="visitor-counter"
+          role="status"
+          aria-label="방문 통계"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          <span class="visitor-counter-item">
+            <span class="visitor-counter-label">Today</span>
+            <strong id="visitor-today">-</strong>
+          </span>
+
+          <span
+            class="visitor-counter-divider"
+            aria-hidden="true"
+          ></span>
+
+          <span class="visitor-counter-item">
+            <span class="visitor-counter-label">Total</span>
+            <strong id="visitor-total">-</strong>
+          </span>
+        </div>
 
         <div class="main-quick-right">
+          <button
+            id="add-bookmark"
+            type="button"
+            title="브라우저 즐겨찾기 등록 방법 안내"
+          >⭐ 즐겨찾기 안내</button>
+
           <a
             id="open-manual"
             href="./manual.pdf"
@@ -2919,27 +3005,27 @@
       </details>
     </details>
 
-    <!-- 하단 정보 -->
-    <footer class="no-print">
-      <div class="footer-copyright">
-        Copyright © 2026 SK Plasma Co., Ltd. All rights reserved. ｜
-        개발·문의: 마케팅지원팀 이은욱
-        (<a href="mailto:eunwook@sk.com">eunwook@sk.com</a>)
-      </div>
+        <!-- 하단 정보 -->
+            <footer class="no-print">
+              <div class="footer-copyright">
+                Copyright © 2026 SK Plasma Co., Ltd. All rights reserved. ｜
+                개발·문의: 마케팅지원팀 이은욱
+                (<a href="mailto:eunwook@sk.com">eunwook@sk.com</a>)
+              </div>
 
-      <p class="small version">
-        사내 업무용 · <strong>Version. 2.5</strong> · 2026.11.22. 배포
-      </p>
+              <p class="small version">
+                사내 업무용 · <strong>Version. 2.5</strong> · 2026.11.22. 배포
+              </p>
 
-      <div class="update-note-link">
-        <button
-          id="open-update-note"
-          type="button"
-          aria-haspopup="dialog"
-          aria-controls="update-note-dialog"
-        >Update Note</button>
-      </div>
-    </footer>
+              <div class="update-note-link">
+                <button
+                  id="open-update-note"
+                  type="button"
+                  aria-haspopup="dialog"
+                  aria-controls="update-note-dialog"
+                >Update Note</button>
+              </div>
+            </footer>
   </main>
 
   <!-- 업데이트 노트 -->
@@ -7489,6 +7575,135 @@
     );
 
     syncButtons();
+  })();
+</script>
+<script>
+  /*
+   * 방문 카운터
+   * 청구 계산·출력 기능과 독립적으로 실행합니다.
+   */
+  (() => {
+    "use strict";
+
+    const API =
+      "https://skplasma-visitors.eunwook.workers.dev";
+
+    const ALLOWED_ORIGIN =
+      "https://ewlee0915.github.io";
+
+    const STORAGE_KEY =
+      "skplasma.visitor-id.v1";
+
+    const UUID_PATTERN =
+      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+    const counter = document.getElementById("visitor-counter");
+    const todayElement = document.getElementById("visitor-today");
+    const totalElement = document.getElementById("visitor-total");
+
+    if (!counter || !todayElement || !totalElement) return;
+
+    // 로컬 HTML 및 다른 배포 주소에서는 집계하지 않습니다.
+    if (location.origin !== ALLOWED_ORIGIN) {
+      counter.title =
+        "방문 카운터는 정식 배포 주소에서만 동작합니다.";
+      return;
+    }
+
+    function readOrCreateVisitorId() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+
+        if (saved && UUID_PATTERN.test(saved)) {
+          return saved;
+        }
+
+        const generated = crypto.randomUUID();
+        localStorage.setItem(STORAGE_KEY, generated);
+
+        // 저장할 수 없는 환경에서는 신규 방문으로 집계하지 않습니다.
+        return localStorage.getItem(STORAGE_KEY) === generated
+          ? generated
+          : null;
+      } catch {
+        return null;
+      }
+    }
+
+    async function getVisitorId() {
+      // 최초 접속 때 여러 탭이 동시에 식별자를 만드는 것을 방지합니다.
+      if (navigator.locks?.request) {
+        return navigator.locks.request(
+          "skplasma-visitor-id-lock",
+          readOrCreateVisitorId
+        );
+      }
+
+      return readOrCreateVisitorId();
+    }
+
+    async function updateVisitorCounter() {
+      let timer;
+
+      try {
+        const visitorId = await getVisitorId();
+        const controller = new AbortController();
+
+        timer = setTimeout(() => controller.abort(), 10000);
+
+        // 매 접속 시 요청하되, 실제 중복 집계는 서버가 차단합니다.
+        // 저장소 사용이 불가능하면 조회만 합니다.
+        const response = await fetch(
+          API + (visitorId ? "/api/visit" : "/api/stats"),
+          {
+            method: visitorId ? "POST" : "GET",
+            mode: "cors",
+            credentials: "omit",
+            cache: "no-store",
+            referrerPolicy: "no-referrer",
+            headers: visitorId
+              ? { "Content-Type": "application/json" }
+              : undefined,
+            body: visitorId
+              ? JSON.stringify({ visitorId })
+              : undefined,
+            signal: controller.signal
+          }
+        );
+
+        const data = await response.json();
+
+        if (
+          !response.ok ||
+          data.success !== true ||
+          !Number.isSafeInteger(data.today) ||
+          !Number.isSafeInteger(data.total) ||
+          data.today < 0 ||
+          data.total < data.today
+        ) {
+          throw new Error("방문 카운터 응답 오류");
+        }
+
+        todayElement.textContent =
+          data.today.toLocaleString("ko-KR");
+
+        totalElement.textContent =
+          data.total.toLocaleString("ko-KR");
+
+        counter.title = visitorId
+          ? `한국시간 ${data.date} 기준 · 동일 브라우저 하루 1회`
+          : "브라우저 저장소를 사용할 수 없어 조회만 수행했습니다.";
+      } catch {
+        todayElement.textContent = "-";
+        totalElement.textContent = "-";
+        counter.title =
+          "방문 통계를 불러오지 못했습니다. 청구 계산·출력은 이용 가능합니다.";
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+
+    void updateVisitorCounter();
   })();
 </script>
 </body>
