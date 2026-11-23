@@ -12,7 +12,7 @@
 
   <style>
     /* ========================================
-1. 공통
+       1. 공통
        ======================================== */
 
     :root {
@@ -114,7 +114,7 @@
     }
 
     /* ========================================
-2. 메인 화면
+       2. 메인 화면
        ======================================== */
 
     .input-panel {
@@ -133,6 +133,47 @@
       width: 100%;
       gap: 10px;
       margin-bottom: 10px;
+    }
+
+    .visitor-counter {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      gap: 9px;
+      min-height: 34px;
+      padding: 6px 10px;
+      border: 1px solid #d3dae3;
+      border-radius: 8px;
+      background: #fff;
+      color: #526276;
+      font-size: 12px;
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+
+    .visitor-counter-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .visitor-counter-label {
+      color: #738096;
+    }
+
+    .visitor-counter strong {
+      color: #244568;
+      font-size: inherit;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .visitor-counter-divider {
+      flex-shrink: 0;
+      width: 1px;
+      height: 12px;
+      background: #dce3ec;
     }
 
     .main-quick-right {
@@ -246,7 +287,6 @@
       transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    /* 현재 진행 중인 단계 강조 */
     .main-steps li.is-active {
       border-color: #d98292;
       background: #fff;
@@ -258,7 +298,6 @@
       color: #b71935;
     }
 
-    /* 완료된 단계 스타일 */
     .main-steps li.is-done {
       border-color: #c8e3d0;
       background: #f5fbf7;
@@ -345,7 +384,6 @@
       letter-spacing: -0.5px;
     }
 
-    /* 실시간 데이터 입력 상태 배지 */
     .ledger-status-badge {
       display: inline-flex;
       align-items: center;
@@ -648,12 +686,13 @@
 
     #message:empty,
     #export-status:empty,
+    #aggregate-export-status:empty,
     #gb-status:empty {
       display: none;
     }
 
     /* ========================================
-3. 결과 탭
+       3. 결과 탭
        ======================================== */
 
     .result-tabs {
@@ -688,7 +727,7 @@
     }
 
     /* ========================================
-4. 결제청구서
+       4. 결제청구서
        ======================================== */
 
     .sheet-wrap {
@@ -1007,7 +1046,6 @@
       line-height: 1.8;
     }
 
-    /* 기존 동작 유지: 출력 안내는 holiday-date-guide에서 표시 */
     #holiday-report-warning {
       display: none !important;
     }
@@ -1039,7 +1077,7 @@
     }
 
     /* ========================================
-5. 출력 도구
+       5. 출력 도구
        ======================================== */
 
     .toolbar {
@@ -1089,7 +1127,8 @@
       white-space: nowrap;
     }
 
-    #export-status {
+    #export-status,
+    #aggregate-export-status {
       width: 100%;
       margin: 0;
       white-space: pre-wrap;
@@ -1097,12 +1136,42 @@
       text-align: center;
     }
 
-    #export-status.export-error {
+    #export-status.export-error,
+    #aggregate-export-status.export-error {
       color: #c00000;
     }
 
+    .include-ledger-option {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border: 1px solid #d5dde7;
+      border-radius: 8px;
+      background: #f8fafd;
+      color: #243b57;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .include-ledger-option:hover {
+      border-color: var(--navy);
+      background: #f0f5fb;
+    }
+
+    .include-ledger-option input {
+      width: 16px;
+      height: 16px;
+      margin: 0;
+      accent-color: var(--navy);
+      cursor: pointer;
+    }
+
     /* ========================================
-6. 집계 화면
+       6. 집계 화면
        ======================================== */
 
     #aggregate-panel > .panel {
@@ -1259,6 +1328,11 @@
       line-height: 1.8;
     }
 
+    #aggregate-review-warning {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
     .aggregate-scroll {
       max-height: 500px;
       overflow: auto;
@@ -1343,8 +1417,12 @@
       white-space: nowrap;
     }
 
+    .aggregate-export-header {
+      display: none;
+    }
+
     /* ========================================
-7. 필터 및 공통 팝업
+       7. 필터 및 공통 팝업
        ======================================== */
 
     .aggregate-filter-button {
@@ -1467,7 +1545,7 @@
     }
 
     /* ========================================
-8. 검증 결과
+       8. 검증 결과
        ======================================== */
 
     #validation {
@@ -1559,7 +1637,7 @@
     }
 
     /* ========================================
-9. 푸터 및 업데이트 노트
+       9. 푸터 및 업데이트 노트
        ======================================== */
 
     footer {
@@ -1656,7 +1734,7 @@
     }
 
     /* ========================================
-10. 의견 게시판
+       10. 의견 게시판
        ======================================== */
 
     #guestbook-dialog {
@@ -1895,7 +1973,7 @@
     }
 
     /* ========================================
-11. 화면 크기별 설정
+       11. 화면 크기별 설정
        ======================================== */
 
     @media screen {
@@ -2049,6 +2127,16 @@
     }
 
     @media screen and (max-width: 600px) {
+      .main-quick-actions {
+        flex-wrap: wrap;
+      }
+
+      .main-quick-right {
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        margin-left: auto;
+      }
+
       .main-hero {
         padding: 12px 16px 22px;
         border-radius: 16px;
@@ -2111,6 +2199,12 @@
         gap: 4px;
       }
 
+      .visitor-counter {
+        gap: 7px;
+        padding: 6px 8px;
+        font-size: 10px;
+      }
+
       .main-quick-actions button,
       .main-quick-actions a {
         padding: 6px;
@@ -2127,7 +2221,7 @@
     }
 
     /* ========================================
-12. 인쇄 및 출력용 텍스트
+       12. 인쇄 및 출력용 스타일
        ======================================== */
 
     .print-input-text {
@@ -2235,18 +2329,8 @@
         outline: none;
         background: #fbfcfe;
       }
-    }
 
-    /* ========================================
-12-1. 세부내역(원장) 인쇄 및 출력용 스타일
-       ======================================== */
-
-    .aggregate-export-header {
-      display: none;
-    }
-
-    @media print {
-      /* 세부내역 인쇄 모드일 때는 결제청구서를 숨기고 집계 내역만 출력 */
+      /* 세부내역 단독 인쇄 모드 */
       body.printing-aggregate #report {
         display: none !important;
       }
@@ -2255,88 +2339,7 @@
         display: block !important;
       }
 
-      body.printing-aggregate #aggregate-panel > .panel:first-child {
-        display: none !important;
-      }
-
-      body.printing-aggregate #aggregate-panel > .panel {
-        padding: 0;
-        border: 0;
-        box-shadow: none;
-      }
-
-      body.printing-aggregate .aggregate-export-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 12px;
-        padding-bottom: 8px;
-        border-bottom: 2px solid #243b57;
-      }
-
-      body.printing-aggregate .aggregate-export-header img {
-        width: 110px;
-        height: auto;
-      }
-
-      body.printing-aggregate .aggregate-scroll {
-        max-height: none !important;
-        overflow: visible !important;
-        border: 1px solid #bac9da;
-        border-radius: 0;
-      }
-
-      body.printing-aggregate .aggregate-ledger thead th {
-        position: static !important;
-      }
-
-      body.printing-aggregate .aggregate-filter-button {
-        display: none !important;
-      }
-
-      body.printing-aggregate .aggregate-ledger,
-      body.printing-aggregate .aggregate-ledger * {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-
-      body.printing-aggregate .aggregate-ledger tr {
-        break-inside: avoid;
-      }
-    }
-
-    /* 함께 출력 체크박스 및 합본 인쇄 스타일 */
-    .include-ledger-option {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      padding: 8px 14px;
-      border: 1px solid #d5dde7;
-      border-radius: 8px;
-      background: #f8fafd;
-      color: #243b57;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .include-ledger-option:hover {
-      border-color: var(--navy);
-      background: #f0f5fb;
-    }
-
-    .include-ledger-option input {
-      width: 16px;
-      height: 16px;
-      margin: 0;
-      accent-color: var(--navy);
-      cursor: pointer;
-    }
-
-    @media print {
-      /* 청구서 뒤에서 반드시 새 페이지로 내역 시작 */
+      /* 청구서 + 세부내역 합본 인쇄 모드 */
       body.printing-with-ledger #aggregate-panel {
         display: block !important;
         margin-top: 0;
@@ -2344,16 +2347,20 @@
         break-before: page;
       }
 
+      /* 세부내역 공통 인쇄 스타일 */
+      body.printing-aggregate #aggregate-panel > .panel:first-child,
       body.printing-with-ledger #aggregate-panel > .panel:first-child {
         display: none !important;
       }
 
+      body.printing-aggregate #aggregate-panel > .panel,
       body.printing-with-ledger #aggregate-panel > .panel {
         padding: 0;
         border: 0;
         box-shadow: none;
       }
 
+      body.printing-aggregate .aggregate-export-header,
       body.printing-with-ledger .aggregate-export-header {
         display: flex;
         align-items: center;
@@ -2363,11 +2370,13 @@
         border-bottom: 2px solid #243b57;
       }
 
+      body.printing-aggregate .aggregate-export-header img,
       body.printing-with-ledger .aggregate-export-header img {
         width: 110px;
         height: auto;
       }
 
+      body.printing-aggregate .aggregate-scroll,
       body.printing-with-ledger .aggregate-scroll {
         max-height: none !important;
         overflow: visible !important;
@@ -2375,26 +2384,29 @@
         border-radius: 0;
       }
 
+      body.printing-aggregate .aggregate-ledger thead th,
       body.printing-with-ledger .aggregate-ledger thead th {
         position: static !important;
       }
 
+      body.printing-aggregate .aggregate-filter-button,
       body.printing-with-ledger .aggregate-filter-button {
         display: none !important;
       }
 
+      body.printing-aggregate .aggregate-ledger,
+      body.printing-aggregate .aggregate-ledger *,
       body.printing-with-ledger .aggregate-ledger,
       body.printing-with-ledger .aggregate-ledger * {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
 
+      body.printing-aggregate .aggregate-ledger tr,
       body.printing-with-ledger .aggregate-ledger tr {
         break-inside: avoid;
       }
-    }
-    /* PDF·인쇄 시 세부내역 합계의 페이지별 반복 방지 */
-    @media print {
+
       body.printing-aggregate .aggregate-ledger tfoot,
       body.printing-with-ledger .aggregate-ledger tfoot {
         display: table-row-group !important;
@@ -2406,68 +2418,6 @@
         break-inside: avoid;
       }
     }
-        /* 상단 왼쪽 방문 카운터 */
-    .visitor-counter {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      gap: 9px;
-      min-height: 34px;
-      padding: 6px 10px;
-      border: 1px solid #d3dae3;
-      border-radius: 8px;
-      background: #fff;
-      color: #526276;
-      font-size: 12px;
-      line-height: 1.4;
-      white-space: nowrap;
-    }
-
-    .visitor-counter-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .visitor-counter-label {
-      color: #738096;
-    }
-
-    .visitor-counter strong {
-      color: #244568;
-      font-size: inherit;
-      font-weight: 700;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .visitor-counter-divider {
-      flex-shrink: 0;
-      width: 1px;
-      height: 12px;
-      background: #dce3ec;
-    }
-
-    /* 좁은 화면에서는 메뉴를 다음 줄로 배치 */
-    @media screen and (max-width: 600px) {
-      .main-quick-actions {
-        flex-wrap: wrap;
-      }
-
-      .main-quick-right {
-        justify-content: flex-end;
-        flex-wrap: wrap;
-        margin-left: auto;
-      }
-    }
-
-    @media screen and (max-width: 480px) {
-      .visitor-counter {
-        gap: 7px;
-        padding: 6px 8px;
-        font-size: 10px;
-      }
-    }
   </style>
 </head>
 
@@ -2475,7 +2425,7 @@
   <main class="workspace">
     <!-- 메인 입력 화면 -->
     <section class="panel input-panel no-print">
-            <div class="main-quick-actions">
+      <div class="main-quick-actions">
         <div
           id="visitor-counter"
           class="visitor-counter"
@@ -2787,6 +2737,7 @@
         </h3>
 
         <p id="aggregate-count" class="small"></p>
+        <p id="aggregate-review-warning" class="small warning" hidden></p>
 
         <button id="aggregate-filter-reset" type="button" class="no-print">
           필터 초기화
@@ -2867,7 +2818,7 @@
           </div>
 
           <p class="greeting">
-1. 항상 보내주시는 협조에 감사드리며, 아래와 같이 결제청구 드리오니
+            1. 항상 보내주시는 협조에 감사드리며, 아래와 같이 결제청구 드리오니
             기한 내 처리 부탁드립니다.
           </p>
 
@@ -3005,27 +2956,27 @@
       </details>
     </details>
 
-        <!-- 하단 정보 -->
-            <footer class="no-print">
-              <div class="footer-copyright">
-                Copyright © 2026 SK Plasma Co., Ltd. All rights reserved. ｜
-                개발·문의: 마케팅지원팀 이은욱
-                (<a href="mailto:eunwook@sk.com">eunwook@sk.com</a>)
-              </div>
+    <!-- 하단 정보 -->
+    <footer class="no-print">
+      <div class="footer-copyright">
+        Copyright © 2026 SK Plasma Co., Ltd. All rights reserved. ｜
+        개발·문의: 마케팅지원팀 이은욱
+        (<a href="mailto:eunwook@sk.com">eunwook@sk.com</a>)
+      </div>
 
-              <p class="small version">
-                사내 업무용 · <strong>Version. 2.5</strong> · 2026.11.22. 배포
-              </p>
+      <p class="small version">
+        사내 업무용 · <strong>Version. 2.5</strong> · 2026.11.22. 배포
+      </p>
 
-              <div class="update-note-link">
-                <button
-                  id="open-update-note"
-                  type="button"
-                  aria-haspopup="dialog"
-                  aria-controls="update-note-dialog"
-                >Update Note</button>
-              </div>
-            </footer>
+      <div class="update-note-link">
+        <button
+          id="open-update-note"
+          type="button"
+          aria-haspopup="dialog"
+          aria-controls="update-note-dialog"
+        >Update Note</button>
+      </div>
+    </footer>
   </main>
 
   <!-- 업데이트 노트 -->
@@ -3297,7 +3248,7 @@
     "use strict";
 
     /* ========================================
-1. 공통
+       1. 공통
        ======================================== */
 
     const $ = id => document.getElementById(id);
@@ -3318,7 +3269,7 @@
     );
 
     /* ========================================
-2. 날짜
+       2. 날짜
        ======================================== */
 
     function dateParts(day) {
@@ -3463,7 +3414,7 @@
     }
 
     /* ========================================
-3. 공휴일
+       3. 공휴일
        ======================================== */
 
     const HOLIDAY_API =
@@ -3650,7 +3601,7 @@
     }
 
     /* ========================================
-4. 금액 및 원장 읽기
+       4. 금액 및 원장 읽기
        ======================================== */
 
     function safe(value) {
@@ -3943,7 +3894,7 @@
     }
 
     /* ========================================
-5. 결제청구액 계산
+       5. 결제청구액 계산
        ======================================== */
 
     function calculate(text, baseText) {
@@ -3958,7 +3909,7 @@
       // 데이터 자체의 오류: 청구서·집계 모두 차단
       const errors = [];
 
-      // 청구서 발행 검증 오류: 청구서만 차단
+      // 청구서 발행 검증 오류: 청구서만 차단 (집계·세부내역 출력은 허용)
       const reportErrors = [];
 
       const isPriceCorrectionRemark = remark =>
@@ -3971,10 +3922,6 @@
           row.type === "판매" &&
           isPriceCorrectionRemark(trimmedRemark);
 
-        // 재발행 여부는 3단계에서 취소행과 연결하여 확정합니다.
-        // 비고 공란만으로 단가정정으로 판단하지 않습니다.
-        const isPriceCorrectionReissue = false;
-
         Object.assign(row, {
           y: "",
           z: "",
@@ -3983,7 +3930,7 @@
           kind: "",
           billing: null,
           exchange: null,
-          isPriceCorrection: isPriceCorrectionCancel || isPriceCorrectionReissue
+          isPriceCorrection: isPriceCorrectionCancel
         });
 
         try {
@@ -4025,7 +3972,6 @@
 
         if (
           !reissue ||
-          reissue.line !== cancel.line + 1 ||
           reissue.type !== "판매" ||
           reissue.amt <= 0 ||
           String(reissue.remark ?? "").trim() !== ""
@@ -4067,7 +4013,6 @@
         if (EXCHANGE.has(row.code)) {
           row.billing = null;
         } else if (row.isPriceCorrection) {
-          // 단가정정 행은 3단계에서 원 매출의 결제조건과 청구기준일을 그대로 상속받습니다.
           row.billing = monthEnd(date);
         } else if (row.y === "선수금" && row.z === "0일") {
           row.billing = date;
@@ -4088,9 +4033,6 @@
       }
 
       // 3단계: 단가정정 쌍에 동일한 원매출 정보를 승계합니다.
-
-      // 수량은 쉼표를 제거하고, 취소 수량의 부호를 무시하여 비교합니다.
-      // 공란 또는 잘못된 수량을 0으로 취급하지 않습니다.
       function quantityMagnitude(value) {
         const text = String(value ?? "").trim().replaceAll(",", "");
 
@@ -4103,8 +4045,6 @@
       }
 
       const correctionFields = ["y", "z", "aa", "ab", "billing"];
-
-      // 이후 정정이 이미 취소된 원매출에 다시 연결되지 않도록 관리합니다.
       const cancelledSales = new Set();
       const resolvedReissues = new Set();
 
@@ -4130,7 +4070,6 @@
           continue;
         }
 
-        // 현재 취소행보다 앞에 있는 과거 매출만 검색합니다.
         const candidates = rows.slice(0, cancelIndex).filter(candidate =>
           candidate.type === "판매" &&
           candidate.amt > 0 &&
@@ -4163,8 +4102,6 @@
           continue;
         }
 
-        // 두 행에 반드시 동일한 원매출 정보를 적용합니다.
-        // date, amt, rec, quantity 등 원장 값은 변경하지 않습니다.
         for (const target of [cancel, reissue]) {
           for (const field of correctionFields) {
             target[field] = original[field];
@@ -4175,8 +4112,7 @@
         resolvedReissues.add(reissue);
       }
 
-      // 일반 음수 판매(반품·약가인하 등)는 기존 처리 유지:
-      // 결제조건만 참조하고 청구기준일은 거래월 말일로 유지합니다.
+      // 일반 음수 판매(반품·약가인하 등): 결제조건만 참조하고 청구기준일은 거래월 말일 유지
       for (let index = 0; index < rows.length; index++) {
         const row = rows[index];
 
@@ -4217,7 +4153,6 @@
       // 4단계: 만기일(exchange) 및 어음 개월수 계산
       for (const row of rows) {
         try {
-          // 실제 어음 만기일은 BA 전자어음 거래에서만 읽습니다.
           if (row.code === "BA") {
             const description = String(row.description ?? "").trim();
             const left = description.indexOf("(");
@@ -4250,7 +4185,6 @@
               BILL_RULES[row.ab]
             );
           } else {
-            // 일반 수금·잡손실 등의 적요는 날짜로 해석하지 않습니다.
             row.exchange = row.billing;
           }
         } catch (error) {
@@ -4346,7 +4280,6 @@
         )
       }));
 
-      // 담보경비 O2·O3를 포함해 원장 수금액 부호 그대로 합산
       const otherReceived = sum(
         current.filter(row => row.kind === "기타"),
         row => row.rec
@@ -4362,7 +4295,6 @@
         sum(details, row => row.received) + otherReceived
       );
 
-      // 전체 수금액과 조건별 수금 합계의 일치 여부 확인
       if (detailedReceived !== received) {
         reportErrors.push(
           "전체 수금액과 청구서 조건별 수금 합계가 다릅니다.\n" +
@@ -4373,10 +4305,7 @@
         );
       }
 
-      // 청구서 전용 상계:
-      // 집계표의 실제 결제조건별 청구·수금 분류는 변경하지 않습니다.
-
-      // 1) 각 결제조건의 수금 차감 후 잔액을 계산합니다.
+      // 청구서 전용 상계
       const settlementItems = [
         {
           label: "기타",
@@ -4392,9 +4321,6 @@
         }))
       ];
 
-      // 2) 모든 음수 잔액의 절댓값을 합산합니다.
-      // 수금 총액을 다시 빼는 것이 아니라,
-      // 조건별 차감 후 음수로 남은 금액만 다른 양수 잔액과 상계합니다.
       const adjustment = sum(
         settlementItems,
         item => item.net < 0 ? safe(-item.net) : 0
@@ -4402,7 +4328,6 @@
 
       let remainingAdjustment = adjustment;
 
-      // 3) 양수 잔액을 상계할 순서입니다.
       const settlementOrder = [
         "기타",
         "어음(3개월)",
@@ -4416,7 +4341,6 @@
         settlementItems.map(item => [item.label, item])
       );
 
-      // 4) 각 항목의 양수 잔액까지만 차감합니다.
       for (const label of settlementOrder) {
         const item = settlementByLabel.get(label);
 
@@ -4442,7 +4366,6 @@
 
       const otherFinal = settlementByLabel.get("기타").final;
 
-      // 모든 양수 잔액을 상계한 뒤에도 남으면 조건별 계산상 초과수금입니다.
       if (remainingAdjustment > 0) {
         warnings.push(
           "조건별 잔액 상계 후 남은 초과수금은 " +
@@ -4452,8 +4375,6 @@
         );
       }
 
-      // 5) 상계 결과 자체를 검증합니다.
-      // 상단 청구액과의 대사는 기존 finalTotal 검증에서 별도로 수행합니다.
       const settlementNetTotal = sum(
         settlementItems,
         item => item.net
@@ -4472,8 +4393,6 @@
         );
       }
 
-      // 6) 최종 청구금액이 남은 어음 항목의 요청일을 계산합니다.
-      // 기존 날짜 산정 방식은 유지합니다.
       for (const row of details) {
         row.issue_date = "";
         row.maturity_date = "";
@@ -4623,7 +4542,7 @@
     }
 
     /* ========================================
-6. 화면 상태
+       6. 화면 상태
        ======================================== */
 
     const appState = {
@@ -4665,7 +4584,6 @@
       step1.classList.remove("is-active", "is-done");
       step2.classList.remove("is-active", "is-done");
       step3.classList.remove("is-active", "is-done");
-
       badge.classList.remove("has-data", "is-warn");
 
       if (appState.phase === "complete") {
@@ -4714,13 +4632,10 @@
       $("print").disabled = !appState.valid || busy;
       $("save-png").disabled = !appState.valid || busy;
       $("include-ledger-export").disabled = !appState.valid || busy;
-      $("print-aggregate").disabled = !appState.valid || busy;
-      $("save-aggregate-png").disabled = !appState.valid || busy;
+      $("print-aggregate").disabled = !appState.aggregateValid || busy;
+      $("save-aggregate-png").disabled = !appState.aggregateValid || busy;
 
-      document.body.classList.toggle(
-        "print-ready",
-        appState.valid
-      );
+      document.body.classList.toggle("print-ready", appState.valid);
 
       updateLedgerAndStepFeedback();
     }
@@ -4784,8 +4699,6 @@
       appState.phase = phase;
       appState.weekendOnly = false;
 
-      // 아래 기존 코드는 그대로 유지
-
       for (const id of [
         "report",
         "validation",
@@ -4798,6 +4711,12 @@
       $("report").classList.remove("aggregate-selected");
       $("holiday-report-warning").hidden = true;
       $("holiday-report-warning").textContent = "";
+
+      const reviewNotice = $("aggregate-review-warning");
+      if (reviewNotice) {
+        reviewNotice.hidden = true;
+        reviewNotice.textContent = "";
+      }
 
       setMessage();
       setExportStatus();
@@ -4817,26 +4736,14 @@
 
       const selected = name === "aggregate";
 
-      $("report").classList.toggle(
-        "aggregate-selected",
-        selected
-      );
-
+      $("report").classList.toggle("aggregate-selected", selected);
       $("aggregate-panel").hidden = !selected;
-
-      $("tab-report").setAttribute(
-        "aria-pressed",
-        String(!selected)
-      );
-
-      $("tab-aggregate").setAttribute(
-        "aria-pressed",
-        String(selected)
-      );
+      $("tab-report").setAttribute("aria-pressed", String(!selected));
+      $("tab-aggregate").setAttribute("aria-pressed", String(selected));
     }
 
     /* ========================================
-7. 결제청구서 표시
+       7. 결제청구서 표시
        ======================================== */
 
     function render(data) {
@@ -4912,7 +4819,6 @@
         </tr>
       `;
 
-      // 0원 행은 삭제하지 않고 숨겨 비고와 원래 순서를 유지합니다.
       const detailRows = [...$("details").querySelectorAll("tr")];
 
       const finalAmounts = [
@@ -4934,9 +4840,24 @@
         </tr>
       `;
 
-      $("errors").textContent = data.errors.length
-        ? "출력 전 확인이 필요한 오류:\n" + data.errors.join("\n")
-        : "";
+      const reportErrors = data.reportErrors ?? [];
+      const errorSections = [];
+
+      if (data.errors.length) {
+        errorSections.push(
+          "데이터 오류 — 청구서·세부내역 출력 제한:\n" +
+          data.errors.join("\n")
+        );
+      }
+
+      if (reportErrors.length) {
+        errorSections.push(
+          "청구서 발행 검증 오류:\n" +
+          reportErrors.join("\n")
+        );
+      }
+
+      $("errors").textContent = errorSections.join("\n\n");
 
       const warnings = [...data.warnings];
 
@@ -4990,7 +4911,6 @@
         ? WEEKEND_ONLY_WARNING
         : "";
 
-      // 출력물에도 공휴일 반영 여부를 안내합니다.
       $("holiday-date-guide").textContent = data.weekendOnly
         ? "어음 발행·만기 요청일은 결제조건에 따라 산정하며, 주말만 제외했습니다. 공휴일은 반영되지 않았습니다."
         : "어음 발행·만기 요청일은 결제조건에 따라 산정하며, 주말·공휴일이면 직전 영업일로 안내드립니다.";
@@ -4999,10 +4919,11 @@
 
       $("report").hidden = false;
       $("validation").hidden = false;
-      $("validation").open = false;
+      $("validation").open = errorSections.length > 0;
       $("result-tabs").hidden = false;
 
-      appState.valid = data.errors.length === 0;
+      appState.aggregateValid = data.errors.length === 0;
+      appState.valid = appState.aggregateValid && reportErrors.length === 0;
       appState.weekendOnly = Boolean(data.weekendOnly);
       appState.phase = appState.valid ? "complete" : "error";
 
@@ -5014,9 +4935,16 @@
         messages.push(WEEKEND_ONLY_WARNING);
       }
 
-      if (!appState.valid) {
+      if (!appState.aggregateValid) {
         messages.push(
-          "계산 오류가 있어 인쇄 및 PNG 저장을 제한했습니다. 검증 결과를 확인해 주세요."
+          "데이터 오류가 있어 청구서 및 세부내역 출력을 제한했습니다. " +
+          "검증 결과를 확인해 주세요."
+        );
+      } else if (!appState.valid) {
+        messages.push(
+          "청구서 발행 검증에서 확인이 필요한 사항이 있어 청구서 발행만 제한했습니다. " +
+          "집계 탭에서 이력 조회 및 세부내역 출력은 가능합니다. " +
+          "자세한 원인은 검증 결과를 확인해 주세요."
         );
       }
 
@@ -5024,7 +4952,7 @@
     }
 
     /* ========================================
-8. 집계
+       8. 집계
        ======================================== */
 
     function renderBaseOptions(selectedDate) {
@@ -5073,6 +5001,30 @@
       $("aggregate-filter-title").textContent = "필터";
     }
 
+    function showAggregateReviewNotice(data) {
+      const notice = $("aggregate-review-warning");
+      if (!notice) return;
+
+      const reportErrors = data.reportErrors ?? [];
+
+      if (data.errors.length > 0) {
+        notice.hidden = false;
+        notice.textContent =
+          "※ 데이터 오류가 있는 검토용 결과입니다. " +
+          "세부내역 출력은 제한됩니다.\n" +
+          data.errors.join("\n");
+        return;
+      }
+
+      notice.hidden = reportErrors.length === 0;
+      notice.textContent = reportErrors.length
+        ? "※ 이력 검토용: 청구서 발행 검증에서 확인이 필요한 사항이 있습니다.\n" +
+          reportErrors.join("\n\n") +
+          "\n아래 내역은 선택 기준일·현재 필터 기준의 거래 내역이며, " +
+          "확정 청구서를 대신하지 않습니다."
+        : "";
+    }
+
     function renderAggregation(data) {
       const aggregate = data.aggregation;
       const formatted = value => escapeHtml(displayMoney(value));
@@ -5103,10 +5055,15 @@
 
       resetFilterState(aggregate.ledger, data.base);
       applyAggregateFilters();
+
+      appState.aggregateValid = data.errors.length === 0;
+      showAggregateReviewNotice(data);
+      setAggregateExportStatus();
+      syncButtons();
     }
 
     /* ========================================
-9. 집계 필터
+       9. 집계 필터
        ======================================== */
 
     function aggregateFilterValue(row, key) {
@@ -5292,7 +5249,7 @@
     }
 
     /* ========================================
-10. 인쇄 및 PNG
+       10. 인쇄 및 PNG
        ======================================== */
 
     function preparePrintableInputs() {
@@ -5342,11 +5299,16 @@
           return;
         }
 
+        document.body.classList.remove("printing-aggregate");
         document.body.classList.toggle("printing-with-ledger", includeLedger);
         window.print();
       } catch (error) {
         restoreAggregatePrintPosition();
-        document.body.classList.remove("printing-with-ledger");
+        removePrintableInputs();
+        document.body.classList.remove(
+          "printing-aggregate",
+          "printing-with-ledger"
+        );
 
         setExportStatus(
           "인쇄 실행 중 오류가 발생했습니다: " + error.message,
@@ -5457,7 +5419,6 @@
           })
         );
 
-        // 가로 1000px 고정 (세로는 비율에 맞춰 자동 조정)
         const width = 750;
         const targetWidth = 1000;
         const exportScale = targetWidth / width;
@@ -5512,7 +5473,6 @@
             clonedReport.hidden = false;
             clonedReport.classList.remove("aggregate-selected");
 
-            // PNG에서는 청구서 전체를 감싸는 외곽 테두리 제거
             Object.assign(clonedWrap.style, {
               overflow: "visible",
               border: "0",
@@ -5705,7 +5665,7 @@
     }
 
     /* ========================================
-10-1. 세부내역(원장) 인쇄 및 PNG 저장
+       10-1. 세부내역(원장) 인쇄 및 PNG 저장
        ======================================== */
 
     function setAggregateExportStatus(text = "", isError = false) {
@@ -5715,25 +5675,51 @@
     }
 
     function printAggregateLedger() {
-      if (!appState.valid || appState.savingPng || appState.calculating) {
+      if (
+        !appState.aggregateValid ||
+        appState.savingPng ||
+        appState.calculating
+      ) {
+        return;
+      }
+
+      if ($("aggregate-panel").hidden) {
+        setAggregateExportStatus(
+          "집계 탭을 연 뒤 다시 시도해 주세요.",
+          true
+        );
         return;
       }
 
       try {
         setAggregateExportStatus();
+        restoreAggregatePrintPosition();
+        document.body.classList.remove("printing-with-ledger");
         document.body.classList.add("printing-aggregate");
+
         window.print();
       } catch (error) {
-        document.body.classList.remove("printing-aggregate");
+        restoreAggregatePrintPosition();
+        removePrintableInputs();
+        document.body.classList.remove(
+          "printing-aggregate",
+          "printing-with-ledger"
+        );
+
         setAggregateExportStatus(
-          "인쇄 실행 중 오류가 발생했습니다: " + error.message,
+          "인쇄 실행 중 오류가 발생했습니다: " +
+          (error instanceof Error ? error.message : String(error)),
           true
         );
       }
     }
 
     async function saveAggregatePng() {
-      if (!appState.valid || appState.savingPng || appState.calculating) {
+      if (
+        !appState.aggregateValid ||
+        appState.savingPng ||
+        appState.calculating
+      ) {
         return;
       }
 
@@ -5747,7 +5733,10 @@
 
       const panel = $("aggregate-ledger-panel");
 
-      if ($("aggregate-panel").hidden || panel.getBoundingClientRect().width === 0) {
+      if (
+        $("aggregate-panel").hidden ||
+        panel.getBoundingClientRect().width === 0
+      ) {
         setAggregateExportStatus("집계 탭을 연 뒤 다시 시도해 주세요.", true);
         return;
       }
@@ -5766,7 +5755,7 @@
       syncButtons();
 
       button.textContent = "이미지 생성 중...";
-      setAggregateExportStatus("세부내역(원장)을 이미지로 변환하고 있습니다.");
+      setAggregateExportStatus("세부내역을 이미지로 변환하고 있습니다.");
 
       try {
         if (document.fonts) {
@@ -5776,19 +5765,27 @@
         await Promise.all(
           [...panel.querySelectorAll("img")].map(async image => {
             await withTimeout(image.decode(), 15000, "로고 로딩 시간이 초과되었습니다.");
+
+            if (!image.naturalWidth) {
+              throw new Error("logo.png를 읽지 못했습니다.");
+            }
           })
         );
 
-        // 가로 1000px 고정 (세로는 세부내역 길이에 맞춰 자동 조정)
         const width = 750;
         const targetWidth = 1000;
         const exportScale = targetWidth / width;
         const baseDate = aggregateFilterState.base || $("base").value;
         const recipientValue = $("recipient").value;
 
+        const notice = $("aggregate-review-warning");
+        const reviewOnly = Boolean(notice && !notice.hidden);
+
         const filename =
           `결제청구_세부내역_${filenamePart(baseDate)}_` +
-          `${filenamePart(recipientValue) || "거래처"}.png`;
+          `${filenamePart(recipientValue) || "거래처"}` +
+          (reviewOnly ? "_검토용" : "") +
+          ".png";
 
         canvas = await window.html2canvas(panel, {
           backgroundColor: "#ffffff",
@@ -5833,7 +5830,6 @@
               if (logoImg) logoImg.style.width = "110px";
             }
 
-            // 스크롤 영역을 완전히 펼쳐서 전체 원장 행이 모두 나오도록 처리
             Object.assign(clonedScroll.style, {
               maxHeight: "none",
               height: "auto",
@@ -5845,7 +5841,6 @@
               th.style.position = "static";
             });
 
-            // 화면 전용 버튼 및 필터 아이콘 제거
             clonedLedgerPanel
               .querySelectorAll(".no-print, .aggregate-filter-button")
               .forEach(el => el.remove());
@@ -5860,7 +5855,8 @@
               pixelWidth * pixelHeight > 20000000
             ) {
               throw new Error(
-                "거래 건수가 많아 단일 PNG 이미지 한도를 초과했습니다. 거래처 필터를 적용하거나 [인쇄 / PDF 저장]을 이용해 주세요."
+                "거래 건수가 많아 단일 PNG 이미지 한도를 초과했습니다. " +
+                "필터를 적용하거나 인쇄 / PDF 저장을 이용해 주세요."
               );
             }
           }
@@ -5877,8 +5873,11 @@
         link.href = downloadUrl;
         link.download = filename;
         document.body.appendChild(link);
-        link.click();
-        link.remove();
+        try {
+          link.click();
+        } finally {
+          link.remove();
+        }
 
         setAggregateExportStatus(
           "PNG 다운로드를 요청했습니다. 브라우저 다운로드 목록을 확인해 주세요."
@@ -5911,7 +5910,7 @@
     }
 
     /* ========================================
-11. 계산 실행 및 초기화
+       11. 계산 실행 및 초기화
        ======================================== */
 
     async function runCalculation(targetTab = "report") {
@@ -6025,7 +6024,6 @@
         return;
       }
 
-      // 집계 기준일만 변경하며 청구서의 기준월은 유지합니다.
       const selectedDate = $("aggregate-base").value;
       const previousDate = aggregateFilterState.base;
 
@@ -6070,7 +6068,6 @@
           );
         }
 
-        // 청구서는 건드리지 않고 집계만 갱신합니다.
         renderAggregation(data);
 
         await new Promise(resolve =>
@@ -6105,7 +6102,7 @@
     }
 
     /* ========================================
-12. 화면 이벤트
+       12. 화면 이벤트
        ======================================== */
 
     $("add-bookmark").addEventListener("click", () => {
@@ -6262,7 +6259,6 @@
     window.addEventListener("beforeprint", () => {
       preparePrintableInputs();
 
-      // 청구서와 내역을 함께 인쇄하는 경우에만 순서를 변경합니다.
       if (
         document.body.classList.contains("printing-with-ledger") &&
         !document.body.classList.contains("printing-aggregate") &&
@@ -6297,8 +6293,7 @@
 
   <script>
     /* ========================================
-13. 의견 게시판
-       계산 기능과 독립적으로 실행합니다.
+       13. 의견 게시판 (계산 기능과 독립 실행)
        ======================================== */
 
     (() => {
@@ -6329,15 +6324,9 @@
 
       function updateControls() {
         byId("gb-editor").disabled = state.busy;
-
-        byId("gb-submit").disabled =
-          state.busy || !isAllowedOrigin();
-
+        byId("gb-submit").disabled = state.busy || !isAllowedOrigin();
         byId("gb-refresh").disabled =
-          state.busy ||
-          Boolean(state.listPromise) ||
-          !isAllowedOrigin();
-
+          state.busy || Boolean(state.listPromise) || !isAllowedOrigin();
         byId("gb-close").disabled = state.busy;
 
         byId("gb-list").querySelectorAll("button")
@@ -6365,9 +6354,7 @@
           : null;
 
         const deleting = action === "delete";
-        const creatingEntry =
-          type === "entry" && action === "create";
-
+        const creatingEntry = type === "entry" && action === "create";
         const label = type === "entry" ? "의견" : "댓글";
 
         byId("gb-editor-title").textContent =
@@ -6380,33 +6367,20 @@
           action === "update" ? "수정 저장" :
           "삭제하기";
 
-        byId("gb-submit").classList.toggle(
-          "gb-danger",
-          deleting
-        );
-
+        byId("gb-submit").classList.toggle("gb-danger", deleting);
         byId("gb-cancel").hidden = creatingEntry;
         byId("gb-name-field").hidden = deleting;
         byId("gb-content-field").hidden = deleting;
 
-        byId("gb-nickname").value = action === "update"
-          ? row.nickname
-          : "";
-
-        byId("gb-comment").value = action === "update"
-          ? row.comment
-          : "";
-
+        byId("gb-nickname").value = action === "update" ? row.nickname : "";
+        byId("gb-comment").value = action === "update" ? row.comment : "";
         byId("gb-password").value = "";
 
         byId("gb-password").autocomplete = action === "create"
           ? "new-password"
           : "current-password";
 
-        // 과거 긴 비밀번호로 작성한 글의 수정·삭제도 허용합니다.
-        byId("gb-password").maxLength = action === "create"
-          ? 12
-          : 128;
+        byId("gb-password").maxLength = action === "create" ? 12 : 128;
 
         byId("gb-password").placeholder = action === "create"
           ? "4~12자"
@@ -6448,10 +6422,7 @@
 
       async function apiRequest(path, body) {
         const controller = new AbortController();
-        const timer = setTimeout(
-          () => controller.abort(),
-          30000
-        );
+        const timer = setTimeout(() => controller.abort(), 30000);
 
         try {
           const response = await fetch(API + path, {
@@ -6460,9 +6431,7 @@
             credentials: "omit",
             cache: "no-store",
             referrerPolicy: "no-referrer",
-            headers: body
-              ? { "Content-Type": "application/json" }
-              : undefined,
+            headers: body ? { "Content-Type": "application/json" } : undefined,
             body: body ? JSON.stringify(body) : undefined,
             signal: controller.signal
           });
@@ -6536,13 +6505,8 @@
       function createElement(tag, className, text) {
         const element = document.createElement(tag);
 
-        if (className) {
-          element.className = className;
-        }
-
-        if (text !== undefined) {
-          element.textContent = text;
-        }
+        if (className) element.className = className;
+        if (text !== undefined) element.textContent = text;
 
         return element;
       }
@@ -6552,9 +6516,7 @@
         button.type = "button";
 
         button.addEventListener("click", () => {
-          if (!state.busy) {
-            handler();
-          }
+          if (!state.busy) handler();
         });
 
         return button;
@@ -6605,27 +6567,12 @@
           )
         );
 
-        // 사용자 입력은 HTML이 아닌 텍스트로 표시합니다.
-        const content = createElement(
-          "p",
-          "gb-text",
-          row.comment
-        );
-
-        const actions = createElement(
-          "div",
-          "gb-card-actions"
-        );
+        const content = createElement("p", "gb-text", row.comment);
+        const actions = createElement("div", "gb-card-actions");
 
         actions.append(
-          createButton(
-            "수정",
-            () => chooseAction(type, "update", row)
-          ),
-          createButton(
-            "삭제",
-            () => chooseAction(type, "delete", row)
-          )
+          createButton("수정", () => chooseAction(type, "update", row)),
+          createButton("삭제", () => chooseAction(type, "delete", row))
         );
 
         card.append(header, content, actions);
@@ -6648,25 +6595,15 @@
 
               if (!replies.hidden) {
                 replies.hidden = true;
-                toggleButton.setAttribute(
-                  "aria-expanded",
-                  "false"
-                );
+                toggleButton.setAttribute("aria-expanded", "false");
                 return;
               }
 
               replies.hidden = false;
-              toggleButton.setAttribute(
-                "aria-expanded",
-                "true"
-              );
+              toggleButton.setAttribute("aria-expanded", "true");
 
               replies.replaceChildren(
-                createElement(
-                  "p",
-                  "gb-empty",
-                  "댓글을 불러오고 있습니다..."
-                )
+                createElement("p", "gb-empty", "댓글을 불러오고 있습니다...")
               );
 
               loadingReplies = true;
@@ -6677,35 +6614,23 @@
                 );
 
                 if (!Array.isArray(result.comments)) {
-                  throw new Error(
-                    "댓글 응답 형식이 올바르지 않습니다."
-                  );
+                  throw new Error("댓글 응답 형식이 올바르지 않습니다.");
                 }
 
                 replies.replaceChildren();
 
                 if (!result.comments.length) {
                   replies.append(
-                    createElement(
-                      "p",
-                      "gb-empty",
-                      "아직 댓글이 없습니다."
-                    )
+                    createElement("p", "gb-empty", "아직 댓글이 없습니다.")
                   );
                 } else {
                   result.comments.forEach(comment => {
-                    replies.append(
-                      createCard(comment, "comment")
-                    );
+                    replies.append(createCard(comment, "comment"));
                   });
                 }
               } catch (error) {
                 replies.replaceChildren(
-                  createElement(
-                    "p",
-                    "gb-empty",
-                    error.message
-                  )
+                  createElement("p", "gb-empty", error.message)
                 );
               } finally {
                 loadingReplies = false;
@@ -6714,10 +6639,7 @@
             }
           );
 
-          toggleButton.setAttribute(
-            "aria-expanded",
-            "false"
-          );
+          toggleButton.setAttribute("aria-expanded", "false");
 
           actions.prepend(replyButton, toggleButton);
           card.append(replies);
@@ -6738,9 +6660,7 @@
           const result = await apiRequest("/api/entries");
 
           if (!Array.isArray(result.entries)) {
-            throw new Error(
-              "의견 목록 응답 형식이 올바르지 않습니다."
-            );
+            throw new Error("의견 목록 응답 형식이 올바르지 않습니다.");
           }
 
           list.replaceChildren();
@@ -6772,10 +6692,7 @@
         if (dialog.open) return;
 
         dialog.showModal();
-
-        byId("guestbook-title").focus({
-          preventScroll: true
-        });
+        byId("guestbook-title").focus({ preventScroll: true });
 
         dialog.scrollTop = 0;
         setStatus();
@@ -6789,11 +6706,7 @@
           );
 
           byId("gb-list").replaceChildren(
-            createElement(
-              "p",
-              "gb-empty",
-              "로컬 미리보기 모드입니다."
-            )
+            createElement("p", "gb-empty", "로컬 미리보기 모드입니다.")
           );
           return;
         }
@@ -6822,9 +6735,7 @@
         const nickname = byId("gb-nickname").value.trim();
         const comment = byId("gb-comment").value.trim();
 
-        const maxPasswordLength = state.action === "create"
-          ? 12
-          : 128;
+        const maxPasswordLength = state.action === "create" ? 12 : 128;
 
         if (
           password.length < 4 ||
@@ -6834,28 +6745,19 @@
             `비밀번호는 4~${maxPasswordLength}자로 입력해 주세요.`,
             true
           );
-
           byId("gb-password").focus();
           return;
         }
 
         if (state.action !== "delete") {
           if (!nickname || Array.from(nickname).length > 20) {
-            setStatus(
-              "이름은 1~20자로 입력해 주세요.",
-              true
-            );
-
+            setStatus("이름은 1~20자로 입력해 주세요.", true);
             byId("gb-nickname").focus();
             return;
           }
 
           if (!comment || Array.from(comment).length > 100) {
-            setStatus(
-              "의견 또는 댓글은 1~100자로 입력해 주세요.",
-              true
-            );
-
+            setStatus("의견 또는 댓글은 1~100자로 입력해 주세요.", true);
             byId("gb-comment").focus();
             return;
           }
@@ -6871,7 +6773,6 @@
           }
         }
 
-        // 원장·거래처·금액은 읽거나 전송하지 않습니다.
         const body = {
           type: state.type,
           action: state.action,
@@ -6882,10 +6783,7 @@
           body.id = state.id;
         }
 
-        if (
-          state.type === "comment" &&
-          state.action === "create"
-        ) {
+        if (state.type === "comment" && state.action === "create") {
           body.entryId = state.entryId;
         }
 
@@ -6899,15 +6797,11 @@
         setStatus("처리하고 있습니다...");
 
         try {
-          const result = await apiRequest(
-            "/api/action",
-            body
-          );
+          const result = await apiRequest("/api/action", body);
 
           setEditor();
           setStatus(result.message || "처리되었습니다.");
 
-          // 진행 중이던 조회가 끝난 뒤 변경된 목록을 조회합니다.
           if (state.listPromise) {
             await state.listPromise.catch(() => {});
           }
@@ -6942,26 +6836,10 @@
         dialog.close();
       }
 
-      /* 게시판 이벤트 */
-      byId("open-guestbook").addEventListener(
-        "click",
-        openGuestbook
-      );
-
-      byId("gb-submit").addEventListener(
-        "click",
-        submitAction
-      );
-
-      byId("gb-comment").addEventListener(
-        "input",
-        updateCount
-      );
-
-      byId("gb-close").addEventListener(
-        "click",
-        closeGuestbook
-      );
+      byId("open-guestbook").addEventListener("click", openGuestbook);
+      byId("gb-submit").addEventListener("click", submitAction);
+      byId("gb-comment").addEventListener("input", updateCount);
+      byId("gb-close").addEventListener("click", closeGuestbook);
 
       byId("gb-cancel").addEventListener("click", () => {
         if (state.busy) return;
@@ -7013,7 +6891,7 @@
 
   <script>
     /* ========================================
-14. 팝업 바깥 클릭으로 닫기
+       14. 팝업 바깥 클릭으로 닫기
        ======================================== */
 
     (() => {
@@ -7057,7 +6935,6 @@
           startedOutside = false;
 
           if (dialog.open && shouldClose) {
-            // 작성 중 확인 및 처리 중 잠금은 기존 닫기 로직을 따릅니다.
             closeButton.click();
           }
         });
@@ -7071,22 +6948,16 @@
         });
       }
 
-      enableOutsideClose(
-        "update-note-dialog",
-        "close-update-note"
-      );
-
-      enableOutsideClose(
-        "guestbook-dialog",
-        "gb-close"
-      );
+      enableOutsideClose("update-note-dialog", "close-update-note");
+      enableOutsideClose("guestbook-dialog", "gb-close");
     })();
   </script>
 
   <script>
     /* ========================================
-15. 우클릭 및 드래그 방지 (입력 영역 예외)
+       15. 우클릭 및 드래그 방지 (입력 영역 예외)
        ======================================== */
+
     (() => {
       "use strict";
 
@@ -7094,14 +6965,12 @@
         target instanceof Element &&
         Boolean(target.closest("input, textarea, [contenteditable]"));
 
-      // 마우스 오른쪽 클릭 방지 (입력칸 제외)
       document.addEventListener("contextmenu", event => {
         if (!isEditable(event.target)) {
           event.preventDefault();
         }
       });
 
-      // 드래그 시작 방지 (입력칸 제외)
       document.addEventListener("dragstart", event => {
         if (!isEditable(event.target)) {
           event.preventDefault();
@@ -7109,603 +6978,121 @@
       });
     })();
   </script>
-<script>
-  /*
-   * 청구서 발행 검증과 집계 이력 조회 검증 분리
-   * 이 블록은 기존 모든 script 뒤, </body> 바로 위에 한 번만 추가합니다.
-   */
-  (() => {
-    "use strict";
 
-    // 중복 설치 방지
-    if (window.__plasmaHistoryValidationInstalled) return;
-    window.__plasmaHistoryValidationInstalled = true;
+  <script>
+    /* ========================================
+       16. 방문 카운터 (계산·출력 기능과 독립 실행)
+       ======================================== */
 
-    const originalSyncButtons = syncButtons;
-    const originalRender = render;
-    const originalRenderAggregation = renderAggregation;
-    const originalInvalidate = invalidate;
+    (() => {
+      "use strict";
 
-    const originalPrintAggregate = printAggregateLedger;
-    const originalSaveAggregate = saveAggregatePng;
+      const API = "https://skplasma-visitors.eunwook.workers.dev";
+      const ALLOWED_ORIGIN = "https://ewlee0915.github.io";
+      const STORAGE_KEY = "skplasma.visitor-id.v1";
 
-    function showAggregateReviewNotice(data) {
-      let notice = $("aggregate-review-warning");
+      const UUID_PATTERN =
+        /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-      if (!notice) {
-        notice = document.createElement("p");
-        notice.id = "aggregate-review-warning";
-        notice.className = "small warning";
-        notice.style.whiteSpace = "pre-wrap";
-        notice.style.overflowWrap = "anywhere";
+      const counter = document.getElementById("visitor-counter");
+      const todayElement = document.getElementById("visitor-today");
+      const totalElement = document.getElementById("visitor-total");
 
-        $("aggregate-count").insertAdjacentElement(
-          "afterend",
-          notice
-        );
-      }
+      if (!counter || !todayElement || !totalElement) return;
 
-      const reportErrors = data.reportErrors ?? [];
-
-      if (data.errors.length > 0) {
-        notice.hidden = false;
-        notice.textContent =
-          "※ 데이터 오류가 있는 검토용 결과입니다. " +
-          "세부내역 출력은 제한됩니다.\n" +
-          data.errors.join("\n");
+      if (location.origin !== ALLOWED_ORIGIN) {
+        counter.title = "방문 카운터는 정식 배포 주소에서만 동작합니다.";
         return;
       }
 
-      notice.hidden = reportErrors.length === 0;
+      function readOrCreateVisitorId() {
+        try {
+          const saved = localStorage.getItem(STORAGE_KEY);
 
-      notice.textContent = reportErrors.length
-        ? "※ 이력 검토용: 청구서 발행 검증에서 확인이 필요한 사항이 있습니다.\n" +
-          reportErrors.join("\n\n") +
-          "\n아래 내역은 선택 기준일·현재 필터 기준의 거래 내역이며, " +
-          "확정 청구서를 대신하지 않습니다."
-        : "";
-    }
+          if (saved && UUID_PATTERN.test(saved)) {
+            return saved;
+          }
 
-    // 청구서와 집계 출력 버튼의 유효 상태를 분리합니다.
-    syncButtons = function () {
-      originalSyncButtons();
+          const generated = crypto.randomUUID();
+          localStorage.setItem(STORAGE_KEY, generated);
 
-      const busy =
-        appState.calculating || appState.savingPng;
-
-      $("print-aggregate").disabled =
-        !appState.aggregateValid || busy;
-
-      $("save-aggregate-png").disabled =
-        !appState.aggregateValid || busy;
-    };
-
-    // 최초 계산과 집계 기준일 변경 모두 이 함수를 거칩니다.
-    // 청구서의 appState.valid는 여기서 변경하지 않습니다.
-    renderAggregation = function (data) {
-      originalRenderAggregation(data);
-
-      appState.aggregateValid = data.errors.length === 0;
-      showAggregateReviewNotice(data);
-
-      setAggregateExportStatus();
-      syncButtons();
-    };
-
-    // 기존 화면 생성은 유지하고 검증 상태와 안내만 보완합니다.
-    render = function (data) {
-      originalRender(data);
-
-      const reportErrors = data.reportErrors ?? [];
-
-      appState.aggregateValid = data.errors.length === 0;
-      appState.valid =
-        appState.aggregateValid &&
-        reportErrors.length === 0;
-
-      appState.phase = appState.valid
-        ? "complete"
-        : "error";
-
-      const errorSections = [];
-
-      if (data.errors.length) {
-        errorSections.push(
-          "데이터 오류 — 청구서·세부내역 출력 제한:\n" +
-          data.errors.join("\n")
-        );
+          return localStorage.getItem(STORAGE_KEY) === generated
+            ? generated
+            : null;
+        } catch {
+          return null;
+        }
       }
 
-      if (reportErrors.length) {
-        errorSections.push(
-          "청구서 발행 검증 오류:\n" +
-          reportErrors.join("\n")
-        );
-      }
-
-      $("errors").textContent = errorSections.join("\n\n");
-      $("validation").open = errorSections.length > 0;
-
-      const messages = [];
-
-      if (data.weekendOnly) {
-        messages.push(WEEKEND_ONLY_WARNING);
-      }
-
-      if (!appState.aggregateValid) {
-        messages.push(
-          "데이터 오류가 있어 청구서 및 세부내역 출력을 제한했습니다. " +
-          "검증 결과를 확인해 주세요."
-        );
-      } else if (!appState.valid) {
-        messages.push(
-          "청구서 발행 검증에서 확인이 필요한 사항이 있어 청구서 발행만 제한했습니다. " +
-            "집계 탭에서 이력 조회 및 세부내역 출력은 가능합니다. " +
-            "자세한 원인은 검증 결과를 확인해 주세요."
-          );
-      }
-
-      setMessage(
-        messages.join("\n"),
-        messages.length > 0
-      );
-
-      syncButtons();
-    };
-
-    // 원장·기준월 변경 또는 초기화 시 집계 상태도 초기화합니다.
-    invalidate = function (phase = "edited") {
-      originalInvalidate(phase);
-
-      appState.aggregateValid = false;
-
-      const notice = $("aggregate-review-warning");
-
-      if (notice) {
-        notice.hidden = true;
-        notice.textContent = "";
-      }
-
-      syncButtons();
-    };
-
-    // 기존 이벤트는 이전 함수 참조를 보유하므로 제거 후 재등록합니다.
-    $("print-aggregate").removeEventListener(
-      "click",
-      originalPrintAggregate
-    );
-
-    $("save-aggregate-png").removeEventListener(
-      "click",
-      originalSaveAggregate
-    );
-
-    // 세부내역 인쇄는 청구서 유효 여부와 독립적으로 허용합니다.
-    printAggregateLedger = function () {
-      if (
-        !appState.aggregateValid ||
-        appState.savingPng ||
-        appState.calculating
-      ) {
-        return;
-      }
-
-      if ($("aggregate-panel").hidden) {
-        setAggregateExportStatus(
-          "집계 탭을 연 뒤 다시 시도해 주세요.",
-          true
-        );
-        return;
-      }
-
-      try {
-        setAggregateExportStatus();
-
-        // 단독 인쇄에 합본 모드가 섞이지 않도록 정리합니다.
-        restoreAggregatePrintPosition();
-        document.body.classList.remove("printing-with-ledger");
-        document.body.classList.add("printing-aggregate");
-
-        window.print();
-      } catch (error) {
-        restoreAggregatePrintPosition();
-        removePrintableInputs();
-
-        document.body.classList.remove(
-          "printing-aggregate",
-          "printing-with-ledger"
-        );
-
-        setAggregateExportStatus(
-          "인쇄 실행 중 오류가 발생했습니다: " +
-          (error instanceof Error
-            ? error.message
-            : String(error)),
-          true
-        );
-      }
-    };
-
-    // 세부내역 PNG도 집계 유효 상태만 검사합니다.
-    saveAggregatePng = async function () {
-      if (
-        !appState.aggregateValid ||
-        appState.savingPng ||
-        appState.calculating
-      ) {
-        return;
-      }
-
-      if (typeof window.html2canvas !== "function") {
-        setAggregateExportStatus(
-          "html2canvas.min.js를 불러오지 못했습니다. " +
-          "배포 상태를 확인해 주세요.",
-          true
-        );
-        return;
-      }
-
-      const panel = $("aggregate-ledger-panel");
-
-      if (
-        $("aggregate-panel").hidden ||
-        panel.getBoundingClientRect().width === 0
-      ) {
-        setAggregateExportStatus(
-          "집계 탭을 연 뒤 다시 시도해 주세요.",
-          true
-        );
-        return;
-      }
-
-      const workspace = document.querySelector(".workspace");
-      const previousInert = workspace.inert;
-
-      const button = $("save-aggregate-png");
-      const originalButtonText = button.textContent;
-
-      let canvas = null;
-      let downloadUrl = null;
-      let captureDocument = null;
-
-      appState.savingPng = true;
-      workspace.inert = true;
-      syncButtons();
-
-      button.textContent = "이미지 생성 중...";
-      setAggregateExportStatus(
-        "세부내역을 이미지로 변환하고 있습니다."
-      );
-
-      try {
-        if (document.fonts) {
-          await withTimeout(
-            document.fonts.ready,
-            15000,
-            "글꼴 로딩 시간이 초과되었습니다."
+      async function getVisitorId() {
+        if (navigator.locks?.request) {
+          return navigator.locks.request(
+            "skplasma-visitor-id-lock",
+            readOrCreateVisitorId
           );
         }
 
-        await Promise.all(
-          [...panel.querySelectorAll("img")].map(async image => {
-            await withTimeout(
-              image.decode(),
-              15000,
-              "로고 로딩 시간이 초과되었습니다."
-            );
+        return readOrCreateVisitorId();
+      }
 
-            if (!image.naturalWidth) {
-              throw new Error("logo.png를 읽지 못했습니다.");
-            }
-          })
-        );
-
-        const width = 750;
-        const exportScale = 1000 / width;
-        const baseDate = aggregateFilterState.base;
-        const recipientValue = $("recipient").value;
-
-        const notice = $("aggregate-review-warning");
-        const reviewOnly = Boolean(notice && !notice.hidden);
-
-        const filename =
-          `결제청구_세부내역_${filenamePart(baseDate)}_` +
-          `${filenamePart(recipientValue) || "거래처"}` +
-          (reviewOnly ? "_검토용" : "") +
-          ".png";
-
-        canvas = await window.html2canvas(panel, {
-          backgroundColor: "#ffffff",
-          scale: exportScale,
-          useCORS: true,
-          allowTaint: false,
-          imageTimeout: 15000,
-          logging: false,
-          removeContainer: true,
-
-          onclone(clonedDocument) {
-            captureDocument = clonedDocument;
-
-            const clonedAggregate =
-              clonedDocument.getElementById("aggregate-panel");
-
-            const clonedPanel =
-              clonedDocument.getElementById("aggregate-ledger-panel");
-
-            const clonedScroll =
-              clonedDocument.getElementById("aggregate-ledger-scroll");
-
-            const clonedHeader =
-              clonedPanel.querySelector(".aggregate-export-header");
-
-            clonedAggregate.hidden = false;
-
-            Object.assign(clonedPanel.style, {
-              width: `${width}px`,
-              minWidth: `${width}px`,
-              maxWidth: "none",
-              padding: "24px 20px",
-              border: "0",
-              borderRadius: "0",
-              boxShadow: "none"
-            });
-
-            if (clonedHeader) {
-              Object.assign(clonedHeader.style, {
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: "14px",
-                paddingBottom: "10px",
-                borderBottom: "2px solid #243b57"
-              });
-
-              const image = clonedHeader.querySelector("img");
-
-              if (image) {
-                image.style.width = "110px";
-              }
-            }
-
-            Object.assign(clonedScroll.style, {
-              maxHeight: "none",
-              height: "auto",
-              overflow: "visible",
-              borderRadius: "6px"
-            });
-
-            clonedPanel.querySelectorAll("thead th")
-              .forEach(th => {
-                th.style.position = "static";
-              });
-
-            clonedPanel
-              .querySelectorAll(".no-print, .aggregate-filter-button")
-              .forEach(element => element.remove());
-
-            // 검토 안내는 제거하지 않고 출력물에도 포함합니다.
-            const bounds = clonedPanel.getBoundingClientRect();
-            const pixelWidth =
-              Math.ceil(bounds.width * exportScale);
-            const pixelHeight =
-              Math.ceil(bounds.height * exportScale);
-
-            if (
-              pixelWidth > 16000 ||
-              pixelHeight > 16000 ||
-              pixelWidth * pixelHeight > 20000000
-            ) {
-              throw new Error(
-                "거래 건수가 많아 단일 PNG 이미지 한도를 초과했습니다. " +
-                "필터를 적용하거나 인쇄 / PDF 저장을 이용해 주세요."
-              );
-            }
-          }
-        });
-
-        if (!canvas.width || !canvas.height) {
-          throw new Error("빈 이미지가 생성되었습니다.");
-        }
-
-        const blob = await canvasToPngBlob(canvas);
-        downloadUrl = URL.createObjectURL(blob);
-
-        const link = document.createElement("a");
-        link.href = downloadUrl;
-        link.download = filename;
-
-        document.body.appendChild(link);
+      async function updateVisitorCounter() {
+        let timer;
 
         try {
-          link.click();
+          const visitorId = await getVisitorId();
+          const controller = new AbortController();
+
+          timer = setTimeout(() => controller.abort(), 10000);
+
+          const response = await fetch(
+            API + (visitorId ? "/api/visit" : "/api/stats"),
+            {
+              method: visitorId ? "POST" : "GET",
+              mode: "cors",
+              credentials: "omit",
+              cache: "no-store",
+              referrerPolicy: "no-referrer",
+              headers: visitorId
+                ? { "Content-Type": "application/json" }
+                : undefined,
+              body: visitorId
+                ? JSON.stringify({ visitorId })
+                : undefined,
+              signal: controller.signal
+            }
+          );
+
+          const data = await response.json();
+
+          if (
+            !response.ok ||
+            data.success !== true ||
+            !Number.isSafeInteger(data.today) ||
+            !Number.isSafeInteger(data.total) ||
+            data.today < 0 ||
+            data.total < data.today
+          ) {
+            throw new Error("방문 카운터 응답 오류");
+          }
+
+          todayElement.textContent = data.today.toLocaleString("ko-KR");
+          totalElement.textContent = data.total.toLocaleString("ko-KR");
+
+          counter.title = visitorId
+            ? `한국시간 ${data.date} 기준 · 동일 브라우저 하루 1회`
+            : "브라우저 저장소를 사용할 수 없어 조회만 수행했습니다.";
+        } catch {
+          todayElement.textContent = "-";
+          totalElement.textContent = "-";
+          counter.title =
+            "방문 통계를 불러오지 못했습니다. 청구 계산·출력은 이용 가능합니다.";
         } finally {
-          link.remove();
-        }
-
-        setAggregateExportStatus(
-          "PNG 다운로드를 요청했습니다. " +
-          "브라우저 다운로드 목록을 확인해 주세요."
-        );
-      } catch (error) {
-        setAggregateExportStatus(
-          "PNG 저장에 실패했습니다.\n" +
-          (error instanceof Error
-            ? error.message
-            : String(error)),
-          true
-        );
-      } finally {
-        try {
-          const frame =
-            captureDocument?.defaultView?.frameElement;
-
-          if (frame?.isConnected) {
-            frame.remove();
-          }
-
-          if (canvas) {
-            canvas.width = 0;
-            canvas.height = 0;
-          }
-
-          if (downloadUrl) {
-            const urlToRevoke = downloadUrl;
-
-            setTimeout(
-              () => URL.revokeObjectURL(urlToRevoke),
-              60000
-            );
-          }
-        } finally {
-          appState.savingPng = false;
-          workspace.inert = previousInert;
-          button.textContent = originalButtonText;
-          syncButtons();
+          clearTimeout(timer);
         }
       }
-    };
 
-    $("print-aggregate").addEventListener(
-      "click",
-      printAggregateLedger
-    );
-
-    $("save-aggregate-png").addEventListener(
-      "click",
-      saveAggregatePng
-    );
-
-    syncButtons();
-  })();
-</script>
-<script>
-  /*
-   * 방문 카운터
-   * 청구 계산·출력 기능과 독립적으로 실행합니다.
-   */
-  (() => {
-    "use strict";
-
-    const API =
-      "https://skplasma-visitors.eunwook.workers.dev";
-
-    const ALLOWED_ORIGIN =
-      "https://ewlee0915.github.io";
-
-    const STORAGE_KEY =
-      "skplasma.visitor-id.v1";
-
-    const UUID_PATTERN =
-      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
-    const counter = document.getElementById("visitor-counter");
-    const todayElement = document.getElementById("visitor-today");
-    const totalElement = document.getElementById("visitor-total");
-
-    if (!counter || !todayElement || !totalElement) return;
-
-    // 로컬 HTML 및 다른 배포 주소에서는 집계하지 않습니다.
-    if (location.origin !== ALLOWED_ORIGIN) {
-      counter.title =
-        "방문 카운터는 정식 배포 주소에서만 동작합니다.";
-      return;
-    }
-
-    function readOrCreateVisitorId() {
-      try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-
-        if (saved && UUID_PATTERN.test(saved)) {
-          return saved;
-        }
-
-        const generated = crypto.randomUUID();
-        localStorage.setItem(STORAGE_KEY, generated);
-
-        // 저장할 수 없는 환경에서는 신규 방문으로 집계하지 않습니다.
-        return localStorage.getItem(STORAGE_KEY) === generated
-          ? generated
-          : null;
-      } catch {
-        return null;
-      }
-    }
-
-    async function getVisitorId() {
-      // 최초 접속 때 여러 탭이 동시에 식별자를 만드는 것을 방지합니다.
-      if (navigator.locks?.request) {
-        return navigator.locks.request(
-          "skplasma-visitor-id-lock",
-          readOrCreateVisitorId
-        );
-      }
-
-      return readOrCreateVisitorId();
-    }
-
-    async function updateVisitorCounter() {
-      let timer;
-
-      try {
-        const visitorId = await getVisitorId();
-        const controller = new AbortController();
-
-        timer = setTimeout(() => controller.abort(), 10000);
-
-        // 매 접속 시 요청하되, 실제 중복 집계는 서버가 차단합니다.
-        // 저장소 사용이 불가능하면 조회만 합니다.
-        const response = await fetch(
-          API + (visitorId ? "/api/visit" : "/api/stats"),
-          {
-            method: visitorId ? "POST" : "GET",
-            mode: "cors",
-            credentials: "omit",
-            cache: "no-store",
-            referrerPolicy: "no-referrer",
-            headers: visitorId
-              ? { "Content-Type": "application/json" }
-              : undefined,
-            body: visitorId
-              ? JSON.stringify({ visitorId })
-              : undefined,
-            signal: controller.signal
-          }
-        );
-
-        const data = await response.json();
-
-        if (
-          !response.ok ||
-          data.success !== true ||
-          !Number.isSafeInteger(data.today) ||
-          !Number.isSafeInteger(data.total) ||
-          data.today < 0 ||
-          data.total < data.today
-        ) {
-          throw new Error("방문 카운터 응답 오류");
-        }
-
-        todayElement.textContent =
-          data.today.toLocaleString("ko-KR");
-
-        totalElement.textContent =
-          data.total.toLocaleString("ko-KR");
-
-        counter.title = visitorId
-          ? `한국시간 ${data.date} 기준 · 동일 브라우저 하루 1회`
-          : "브라우저 저장소를 사용할 수 없어 조회만 수행했습니다.";
-      } catch {
-        todayElement.textContent = "-";
-        totalElement.textContent = "-";
-        counter.title =
-          "방문 통계를 불러오지 못했습니다. 청구 계산·출력은 이용 가능합니다.";
-      } finally {
-        clearTimeout(timer);
-      }
-    }
-
-    void updateVisitorCounter();
-  })();
-</script>
+      void updateVisitorCounter();
+    })();
+  </script>
 </body>
 </html>
