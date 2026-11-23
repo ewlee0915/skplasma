@@ -3854,7 +3854,12 @@
       }
 
       const { rows, warnings } = readLedger(text);
+
+      // 데이터 자체의 오류: 청구서·집계 모두 차단
       const errors = [];
+
+      // 청구서 발행 검증 오류: 청구서만 차단
+      const reportErrors = [];
 
       const isPriceCorrectionRemark = remark =>
         String(remark ?? "").replace(/\s+/g, "").includes("단가정정");
@@ -4378,10 +4383,11 @@
       );
 
       if (finalTotal !== requestTotal) {
-        errors.push(
-          "상단 결제청구액과 상세 최종 합계가 달라 출력을 제한했습니다.\n" +
+        reportErrors.push(
+          "상단 결제청구액과 상세 최종 합계가 다릅니다.\n" +
           `상단 결제청구액: ${money(requestTotal)}원\n` +
           `상세 최종 합계: ${money(finalTotal)}원\n` +
+          "청구서 발행은 제한되지만 집계 조회·세부내역 출력은 가능합니다. " +
           "결제조건별 기수금액, 기타 잔액 및 우선순위 차감 결과를 확인해 주세요."
         );
       }
@@ -4409,6 +4415,7 @@
         final_total: finalTotal,
         warnings: [...new Set(warnings)],
         errors: [...new Set(errors)],
+        reportErrors: [...new Set(reportErrors)],
         audit: rows.map(row => ({
           line: row.line,
           date: iso(row.date),
@@ -4430,6 +4437,7 @@
     const appState = {
       phase: "initial",
       valid: false,
+      aggregateValid: false,
       calculating: false,
       savingPng: false,
       weekendOnly: false
@@ -4580,8 +4588,11 @@
 
     function invalidate(phase = "edited") {
       appState.valid = false;
+      appState.aggregateValid = false;
       appState.phase = phase;
       appState.weekendOnly = false;
+
+      // 아래 기존 코드는 그대로 유지
 
       for (const id of [
         "report",
@@ -6906,5 +6917,476 @@
       });
     })();
   </script>
+<script>
+  /*
+   * 청구서 발행 검증과 집계 이력 조회 검증 분리
+   * 이 블록은 기존 모든 script 뒤, </body> 바로 위에 한 번만 추가합니다.
+   */
+  (() => {
+    "use strict";
+
+    // 중복 설치 방지
+    if (window.__plasmaHistoryValidationInstalled) return;
+    window.__plasmaHistoryValidationInstalled = true;
+
+    const originalSyncButtons = syncButtons;
+    const originalRender = render;
+    const originalRenderAggregation = renderAggregation;
+    const originalInvalidate = invalidate;
+
+    const originalPrintAggregate = printAggregateLedger;
+    const originalSaveAggregate = saveAggregatePng;
+
+    function showAggregateReviewNotice(data) {
+      let notice = $("aggregate-review-warning");
+
+      if (!notice) {
+        notice = document.createElement("p");
+        notice.id = "aggregate-review-warning";
+        notice.className = "small warning";
+        notice.style.whiteSpace = "pre-wrap";
+        notice.style.overflowWrap = "anywhere";
+
+        $("aggregate-count").insertAdjacentElement(
+          "afterend",
+          notice
+        );
+      }
+
+      const reportErrors = data.reportErrors ?? [];
+
+      if (data.errors.length > 0) {
+        notice.hidden = false;
+        notice.textContent =
+          "※ 데이터 오류가 있는 검토용 결과입니다. " +
+          "세부내역 출력은 제한됩니다.\n" +
+          data.errors.join("\n");
+        return;
+      }
+
+      notice.hidden = reportErrors.length === 0;
+
+      notice.textContent = reportErrors.length
+        ? "※ 이력 검토용: 선택한 기준월의 청구서 발행 검증에서 " +
+          "청구금액과 조건별 상세 최종 합계가 일치하지 않습니다.\n" +
+          `청구서 상단 결제청구액: ${money(data.summary.request)}원 / ` +
+          `청구서 상세 최종 합계: ${money(data.final_total)}원\n` +
+          "집계 조회 및 세부내역 출력은 가능합니다. " +
+          "아래 내역은 선택 기준일·현재 필터 기준의 거래 내역이며, " +
+          "확정 청구서를 대신하지 않습니다."
+        : "";
+    }
+
+    // 청구서와 집계 출력 버튼의 유효 상태를 분리합니다.
+    syncButtons = function () {
+      originalSyncButtons();
+
+      const busy =
+        appState.calculating || appState.savingPng;
+
+      $("print-aggregate").disabled =
+        !appState.aggregateValid || busy;
+
+      $("save-aggregate-png").disabled =
+        !appState.aggregateValid || busy;
+    };
+
+    // 최초 계산과 집계 기준일 변경 모두 이 함수를 거칩니다.
+    // 청구서의 appState.valid는 여기서 변경하지 않습니다.
+    renderAggregation = function (data) {
+      originalRenderAggregation(data);
+
+      appState.aggregateValid = data.errors.length === 0;
+      showAggregateReviewNotice(data);
+
+      setAggregateExportStatus();
+      syncButtons();
+    };
+
+    // 기존 화면 생성은 유지하고 검증 상태와 안내만 보완합니다.
+    render = function (data) {
+      originalRender(data);
+
+      const reportErrors = data.reportErrors ?? [];
+
+      appState.aggregateValid = data.errors.length === 0;
+      appState.valid =
+        appState.aggregateValid &&
+        reportErrors.length === 0;
+
+      appState.phase = appState.valid
+        ? "complete"
+        : "error";
+
+      const errorSections = [];
+
+      if (data.errors.length) {
+        errorSections.push(
+          "데이터 오류 — 청구서·세부내역 출력 제한:\n" +
+          data.errors.join("\n")
+        );
+      }
+
+      if (reportErrors.length) {
+        errorSections.push(
+          "청구서 발행 검증 오류:\n" +
+          reportErrors.join("\n")
+        );
+      }
+
+      $("errors").textContent = errorSections.join("\n\n");
+      $("validation").open = errorSections.length > 0;
+
+      const messages = [];
+
+      if (data.weekendOnly) {
+        messages.push(WEEKEND_ONLY_WARNING);
+      }
+
+      if (!appState.aggregateValid) {
+        messages.push(
+          "데이터 오류가 있어 청구서 및 세부내역 출력을 제한했습니다. " +
+          "검증 결과를 확인해 주세요."
+        );
+      } else if (!appState.valid) {
+        messages.push(
+          "청구금액과 상세 합계가 달라 청구서 발행만 제한했습니다. " +
+          "집계 탭에서 이력 조회 및 세부내역 출력은 가능합니다."
+        );
+      }
+
+      setMessage(
+        messages.join("\n"),
+        messages.length > 0
+      );
+
+      syncButtons();
+    };
+
+    // 원장·기준월 변경 또는 초기화 시 집계 상태도 초기화합니다.
+    invalidate = function (phase = "edited") {
+      originalInvalidate(phase);
+
+      appState.aggregateValid = false;
+
+      const notice = $("aggregate-review-warning");
+
+      if (notice) {
+        notice.hidden = true;
+        notice.textContent = "";
+      }
+
+      syncButtons();
+    };
+
+    // 기존 이벤트는 이전 함수 참조를 보유하므로 제거 후 재등록합니다.
+    $("print-aggregate").removeEventListener(
+      "click",
+      originalPrintAggregate
+    );
+
+    $("save-aggregate-png").removeEventListener(
+      "click",
+      originalSaveAggregate
+    );
+
+    // 세부내역 인쇄는 청구서 유효 여부와 독립적으로 허용합니다.
+    printAggregateLedger = function () {
+      if (
+        !appState.aggregateValid ||
+        appState.savingPng ||
+        appState.calculating
+      ) {
+        return;
+      }
+
+      if ($("aggregate-panel").hidden) {
+        setAggregateExportStatus(
+          "집계 탭을 연 뒤 다시 시도해 주세요.",
+          true
+        );
+        return;
+      }
+
+      try {
+        setAggregateExportStatus();
+
+        // 단독 인쇄에 합본 모드가 섞이지 않도록 정리합니다.
+        restoreAggregatePrintPosition();
+        document.body.classList.remove("printing-with-ledger");
+        document.body.classList.add("printing-aggregate");
+
+        window.print();
+      } catch (error) {
+        restoreAggregatePrintPosition();
+        removePrintableInputs();
+
+        document.body.classList.remove(
+          "printing-aggregate",
+          "printing-with-ledger"
+        );
+
+        setAggregateExportStatus(
+          "인쇄 실행 중 오류가 발생했습니다: " +
+          (error instanceof Error
+            ? error.message
+            : String(error)),
+          true
+        );
+      }
+    };
+
+    // 세부내역 PNG도 집계 유효 상태만 검사합니다.
+    saveAggregatePng = async function () {
+      if (
+        !appState.aggregateValid ||
+        appState.savingPng ||
+        appState.calculating
+      ) {
+        return;
+      }
+
+      if (typeof window.html2canvas !== "function") {
+        setAggregateExportStatus(
+          "html2canvas.min.js를 불러오지 못했습니다. " +
+          "배포 상태를 확인해 주세요.",
+          true
+        );
+        return;
+      }
+
+      const panel = $("aggregate-ledger-panel");
+
+      if (
+        $("aggregate-panel").hidden ||
+        panel.getBoundingClientRect().width === 0
+      ) {
+        setAggregateExportStatus(
+          "집계 탭을 연 뒤 다시 시도해 주세요.",
+          true
+        );
+        return;
+      }
+
+      const workspace = document.querySelector(".workspace");
+      const previousInert = workspace.inert;
+
+      const button = $("save-aggregate-png");
+      const originalButtonText = button.textContent;
+
+      let canvas = null;
+      let downloadUrl = null;
+      let captureDocument = null;
+
+      appState.savingPng = true;
+      workspace.inert = true;
+      syncButtons();
+
+      button.textContent = "이미지 생성 중...";
+      setAggregateExportStatus(
+        "세부내역을 이미지로 변환하고 있습니다."
+      );
+
+      try {
+        if (document.fonts) {
+          await withTimeout(
+            document.fonts.ready,
+            15000,
+            "글꼴 로딩 시간이 초과되었습니다."
+          );
+        }
+
+        await Promise.all(
+          [...panel.querySelectorAll("img")].map(async image => {
+            await withTimeout(
+              image.decode(),
+              15000,
+              "로고 로딩 시간이 초과되었습니다."
+            );
+
+            if (!image.naturalWidth) {
+              throw new Error("logo.png를 읽지 못했습니다.");
+            }
+          })
+        );
+
+        const width = 750;
+        const exportScale = 1000 / width;
+        const baseDate = aggregateFilterState.base;
+        const recipientValue = $("recipient").value;
+
+        const notice = $("aggregate-review-warning");
+        const reviewOnly = Boolean(notice && !notice.hidden);
+
+        const filename =
+          `결제청구_세부내역_${filenamePart(baseDate)}_` +
+          `${filenamePart(recipientValue) || "거래처"}` +
+          (reviewOnly ? "_검토용" : "") +
+          ".png";
+
+        canvas = await window.html2canvas(panel, {
+          backgroundColor: "#ffffff",
+          scale: exportScale,
+          useCORS: true,
+          allowTaint: false,
+          imageTimeout: 15000,
+          logging: false,
+          removeContainer: true,
+
+          onclone(clonedDocument) {
+            captureDocument = clonedDocument;
+
+            const clonedAggregate =
+              clonedDocument.getElementById("aggregate-panel");
+
+            const clonedPanel =
+              clonedDocument.getElementById("aggregate-ledger-panel");
+
+            const clonedScroll =
+              clonedDocument.getElementById("aggregate-ledger-scroll");
+
+            const clonedHeader =
+              clonedPanel.querySelector(".aggregate-export-header");
+
+            clonedAggregate.hidden = false;
+
+            Object.assign(clonedPanel.style, {
+              width: `${width}px`,
+              minWidth: `${width}px`,
+              maxWidth: "none",
+              padding: "24px 20px",
+              border: "0",
+              borderRadius: "0",
+              boxShadow: "none"
+            });
+
+            if (clonedHeader) {
+              Object.assign(clonedHeader.style, {
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginBottom: "14px",
+                paddingBottom: "10px",
+                borderBottom: "2px solid #243b57"
+              });
+
+              const image = clonedHeader.querySelector("img");
+
+              if (image) {
+                image.style.width = "110px";
+              }
+            }
+
+            Object.assign(clonedScroll.style, {
+              maxHeight: "none",
+              height: "auto",
+              overflow: "visible",
+              borderRadius: "6px"
+            });
+
+            clonedPanel.querySelectorAll("thead th")
+              .forEach(th => {
+                th.style.position = "static";
+              });
+
+            clonedPanel
+              .querySelectorAll(".no-print, .aggregate-filter-button")
+              .forEach(element => element.remove());
+
+            // 검토 안내는 제거하지 않고 출력물에도 포함합니다.
+            const bounds = clonedPanel.getBoundingClientRect();
+            const pixelWidth =
+              Math.ceil(bounds.width * exportScale);
+            const pixelHeight =
+              Math.ceil(bounds.height * exportScale);
+
+            if (
+              pixelWidth > 16000 ||
+              pixelHeight > 16000 ||
+              pixelWidth * pixelHeight > 20000000
+            ) {
+              throw new Error(
+                "거래 건수가 많아 단일 PNG 이미지 한도를 초과했습니다. " +
+                "필터를 적용하거나 인쇄 / PDF 저장을 이용해 주세요."
+              );
+            }
+          }
+        });
+
+        if (!canvas.width || !canvas.height) {
+          throw new Error("빈 이미지가 생성되었습니다.");
+        }
+
+        const blob = await canvasToPngBlob(canvas);
+        downloadUrl = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = downloadUrl;
+        link.download = filename;
+
+        document.body.appendChild(link);
+
+        try {
+          link.click();
+        } finally {
+          link.remove();
+        }
+
+        setAggregateExportStatus(
+          "PNG 다운로드를 요청했습니다. " +
+          "브라우저 다운로드 목록을 확인해 주세요."
+        );
+      } catch (error) {
+        setAggregateExportStatus(
+          "PNG 저장에 실패했습니다.\n" +
+          (error instanceof Error
+            ? error.message
+            : String(error)),
+          true
+        );
+      } finally {
+        try {
+          const frame =
+            captureDocument?.defaultView?.frameElement;
+
+          if (frame?.isConnected) {
+            frame.remove();
+          }
+
+          if (canvas) {
+            canvas.width = 0;
+            canvas.height = 0;
+          }
+
+          if (downloadUrl) {
+            const urlToRevoke = downloadUrl;
+
+            setTimeout(
+              () => URL.revokeObjectURL(urlToRevoke),
+              60000
+            );
+          }
+        } finally {
+          appState.savingPng = false;
+          workspace.inert = previousInert;
+          button.textContent = originalButtonText;
+          syncButtons();
+        }
+      }
+    };
+
+    $("print-aggregate").addEventListener(
+      "click",
+      printAggregateLedger
+    );
+
+    $("save-aggregate-png").addEventListener(
+      "click",
+      saveAggregatePng
+    );
+
+    syncButtons();
+  })();
+</script>
 </body>
 </html>
