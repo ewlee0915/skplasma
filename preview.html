@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SK플라즈마 결제청구 에이전트 — 5대 컨셉 디자인 시안 비교</title>
+  <title>SK플라즈마 결제청구 에이전트 — 신규 5대 컨셉 비교</title>
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -16,8 +16,8 @@
     body {
       margin: 0;
       font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
-      background: #cbd5e1;
-      color: #1e293b;
+      color: #18181b;
+      background: #d4d4d8;
     }
 
     /* 상단 빠른 이동 바 */
@@ -31,24 +31,24 @@
       flex-wrap: wrap;
       gap: 8px;
       padding: 12px 16px;
-      background: #0f172a;
+      background: #18181b;
       color: #fff;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
     }
 
     .quick-nav-title {
       margin-right: 6px;
       font-size: 13px;
       font-weight: 700;
-      color: #94a3b8;
+      color: #a1a1aa;
     }
 
     .quick-nav a {
       padding: 7px 14px;
-      border: 1px solid #334155;
+      border: 1px solid #3f3f46;
       border-radius: 999px;
-      background: #1e293b;
-      color: #f1f5f9;
+      background: #27272a;
+      color: #f4f4f5;
       font-size: 12px;
       font-weight: 600;
       text-decoration: none;
@@ -61,15 +61,14 @@
       color: #fff;
     }
 
-    /* 시안 구분 컨테이너 */
     .concept-section {
-      padding: 44px 0 60px;
-      border-bottom: 6px solid #94a3b8;
+      padding: 46px 0 64px;
+      border-bottom: 6px solid #a1a1aa;
     }
 
     .concept-label-bar {
-      max-width: 1060px;
-      margin: 0 auto 22px;
+      max-width: 1040px;
+      margin: 0 auto 24px;
       padding: 0 20px;
       display: flex;
       align-items: center;
@@ -80,724 +79,596 @@
     .concept-tag {
       padding: 6px 14px;
       border-radius: 6px;
-      background: #0f172a;
+      background: #18181b;
       color: #fff;
       font-size: 13px;
       font-weight: 800;
-      letter-spacing: 0.3px;
     }
 
     .concept-summary {
       font-size: 14px;
       font-weight: 700;
-      color: #1e293b;
+      color: #18181b;
     }
 
     /* =================================================================
-       1. 미래적 하이테크 AI 터미널형 (Futuristic AI Workspace)
+       시안 A: 에디토리얼 매거진형 (Monocle / Economist Style)
        ================================================================= */
-    .sec-futuristic {
-      background:
-        radial-gradient(circle at 15% 20%, rgba(56, 189, 248, 0.16), transparent 40%),
-        radial-gradient(circle at 85% 80%, rgba(244, 63, 94, 0.14), transparent 40%),
-        linear-gradient(180deg, #060b19 0%, #0b132b 100%);
-      color: #e2e8f0;
+    .sec-editorial {
+      background: #f9f8f4;
     }
 
-    .sec-futuristic .concept-summary {
-      color: #bae6fd;
-    }
-
-    .f1-shell {
-      max-width: 980px;
+    .ed-wrap {
+      max-width: 960px;
       margin: 0 auto;
       padding: 0 20px;
     }
 
-    .f1-hud-top {
+    .ed-masthead {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 14px 20px;
-      border-radius: 14px 14px 0 0;
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid rgba(56, 189, 248, 0.28);
-      border-bottom: 0;
+      padding-bottom: 12px;
+      border-bottom: 4px solid #111;
     }
 
-    .f1-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+    .ed-brand {
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: #b71935;
     }
 
-    .f1-pulse {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #38bdf8;
-      box-shadow: 0 0 12px #38bdf8;
-    }
-
-    .f1-brand-text {
-      font-size: 15px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      color: #f8fafc;
-    }
-
-    .f1-brand-text span {
-      color: #38bdf8;
-      font-weight: 600;
-    }
-
-    .f1-nav-btns button {
-      padding: 6px 12px;
-      margin-left: 6px;
-      border-radius: 6px;
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      background: rgba(30, 41, 59, 0.7);
-      color: #cbd5e1;
-      font-family: inherit;
+    .ed-links a {
+      margin-left: 16px;
       font-size: 12px;
-      cursor: pointer;
+      font-weight: 700;
+      color: #111;
+      text-decoration: none;
     }
 
-    .f1-glass-body {
-      padding: 32px;
-      border-radius: 0 0 18px 18px;
-      background: rgba(15, 23, 42, 0.65);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(56, 189, 248, 0.28);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    .ed-hero {
+      padding: 24px 0;
+      border-bottom: 1px solid #111;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 24px;
+      align-items: end;
     }
 
-    .f1-hero {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .f1-hero h1 {
-      margin: 0 0 6px;
-      font-size: 28px;
-      font-weight: 800;
-      background: linear-gradient(90deg, #ffffff 0%, #7dd3fc 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .f1-hero p {
+    .ed-hero h1 {
       margin: 0;
-      font-size: 13px;
-      color: #94a3b8;
+      font-size: 38px;
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -1.5px;
+      color: #111;
     }
 
-    .f1-step-chips {
-      display: flex;
-      gap: 8px;
+    .ed-hero p {
+      margin: 0;
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: #444;
     }
 
-    .f1-chip {
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: rgba(30, 41, 59, 0.9);
-      border: 1px solid rgba(56, 189, 248, 0.25);
-      font-size: 11.5px;
-      color: #7dd3fc;
+    .ed-grid {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 28px;
+      padding-top: 24px;
     }
 
-    .f1-terminal-box {
+    .ed-sidebar {
+      border-right: 1px solid #d4d0c8;
+      padding-right: 20px;
+    }
+
+    .ed-step-item {
+      padding: 12px 0;
+      border-bottom: 1px solid #e5e2dc;
+      font-size: 12.5px;
+    }
+
+    .ed-step-num {
+      font-size: 11px;
+      font-weight: 900;
+      color: #b71935;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .ed-textarea {
       width: 100%;
-      padding: 18px;
-      border-radius: 12px;
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      background: rgba(2, 6, 23, 0.78);
-      color: #e0f2fe;
-      font-family: "Consolas", "Malgun Gothic", monospace;
+      padding: 16px;
+      border: 1px solid #111;
+      background: #fff;
+      font-family: inherit;
       font-size: 13px;
       resize: vertical;
-      box-shadow: inset 0 0 20px rgba(56, 189, 248, 0.06);
     }
 
-    .f1-terminal-box::placeholder {
-      color: #64748b;
-    }
-
-    .f1-control-row {
+    .ed-action-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 14px;
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 1px solid rgba(148, 163, 184, 0.15);
-    }
-
-    .f1-date-pill {
-      display: flex;
-      align-items: center;
       gap: 12px;
-      padding: 10px 16px;
-      border-radius: 10px;
-      background: rgba(30, 41, 59, 0.8);
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      font-size: 13px;
+      margin-top: 16px;
     }
 
-    .f1-date-pill input {
-      background: #0f172a;
-      color: #38bdf8;
-      border: 1px solid #334155;
-      border-radius: 6px;
-      padding: 5px 8px;
-      font-weight: 700;
-    }
-
-    .f1-btn-neon {
+    .ed-btn {
       padding: 14px 32px;
       border: 0;
-      border-radius: 10px;
-      background: linear-gradient(90deg, #0284c7 0%, #2563eb 100%);
+      background: #b71935;
       color: #fff;
       font-family: inherit;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 800;
+      letter-spacing: 0.5px;
       cursor: pointer;
-      box-shadow: 0 0 24px rgba(2, 132, 199, 0.45);
     }
 
     /* =================================================================
-       2. 클래식컬 유러피언 뱅킹·아카이브형 (Classical Heritage)
+       시안 B: 네오 브루탈리즘·모듈 그리드형 (Swiss Grid / Figma Style)
        ================================================================= */
-    .sec-classical {
-      background: #efeae0;
+    .sec-brutal {
+      background: #fef08a;
     }
 
-    .c2-frame {
-      max-width: 840px;
+    .br-wrap {
+      max-width: 920px;
       margin: 0 auto;
-      padding: 12px;
-      background: #faf7f0;
-      border: 1px solid #c5b9a5;
-      box-shadow: 0 12px 32px rgba(45, 36, 24, 0.1);
+      padding: 0 20px;
     }
 
-    .c2-inner-border {
-      border: 2px solid #7c2d36;
-      padding: 34px 40px;
-      background: #fdfbf7;
+    .br-card {
+      background: #fff;
+      border: 3px solid #111;
+      border-radius: 16px;
+      box-shadow: 8px 8px 0 #111;
+      padding: 28px 32px;
     }
 
-    .c2-top-meta {
+    .br-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 11.5px;
-      color: #6b5e4c;
-      border-bottom: 1px solid #dfd6c7;
-      padding-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 12px;
       margin-bottom: 22px;
     }
 
-    .c2-top-meta a {
-      color: #6b5e4c;
-      text-decoration: none;
-      margin-left: 12px;
+    .br-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      background: #ff5c5c;
+      color: #fff;
+      border: 2px solid #111;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 900;
+      box-shadow: 3px 3px 0 #111;
     }
 
-    .c2-crest-head {
-      text-align: center;
-      margin-bottom: 26px;
+    .br-nav button {
+      padding: 6px 12px;
+      margin-left: 6px;
+      background: #e0f2fe;
+      border: 2px solid #111;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 2px 2px 0 #111;
     }
 
-    .c2-crest-sub {
-      font-size: 11px;
-      letter-spacing: 3px;
-      color: #8c6d3f;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
-    .c2-crest-head h1 {
-      margin: 8px 0 10px;
-      font-family: "Batang", "바탕", Georgia, serif;
+    .br-title {
+      margin: 0 0 18px;
       font-size: 30px;
-      font-weight: 700;
-      color: #2b2118;
-      letter-spacing: -0.5px;
+      font-weight: 900;
+      letter-spacing: -1px;
     }
 
-    .c2-ornament {
-      width: 140px;
-      height: 2px;
-      margin: 0 auto;
-      background: linear-gradient(90deg, transparent, #8c6d3f, transparent);
-    }
-
-    .c2-steps-bar {
+    .br-steps {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
-      margin-bottom: 24px;
-      padding: 14px;
-      background: #f5f0e6;
-      border-top: 1px solid #d5cab8;
-      border-bottom: 1px solid #d5cab8;
-      text-align: center;
-      font-size: 12px;
-      color: #4a3f33;
+      margin-bottom: 20px;
     }
 
-    .c2-steps-bar strong {
-      display: block;
-      font-family: "Batang", "바탕", serif;
-      color: #7c2d36;
-      margin-bottom: 2px;
+    .br-step-box {
+      padding: 12px 14px;
+      border: 2px solid #111;
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 700;
     }
 
-    .c2-textarea {
+    .br-textarea {
       width: 100%;
       padding: 16px;
-      border: 1px solid #bfb39f;
-      background: #fffdf9;
+      border: 2.5px solid #111;
+      border-radius: 12px;
+      background: #fafafa;
       font-family: inherit;
       font-size: 13px;
-      color: #2b2118;
       resize: vertical;
     }
 
-    .c2-footer-row {
+    .br-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .br-month-pill {
+      padding: 10px 16px;
+      background: #dcfce7;
+      border: 2px solid #111;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .br-btn-cta {
+      padding: 14px 30px;
+      background: #3b82f6;
+      color: #fff;
+      border: 2.5px solid #111;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 900;
+      box-shadow: 4px 4px 0 #111;
+      cursor: pointer;
+    }
+
+    /* =================================================================
+       시안 C: 웜 내추럴·세이지 그린 웰니스형 (Nordic / Kinfolk Style)
+       ================================================================= */
+    .sec-nordic {
+      background: #e9e4d9;
+    }
+
+    .nd-wrap {
+      max-width: 840px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .nd-card {
+      background: #faf8f3;
+      border-radius: 28px;
+      padding: 36px 42px;
+      border: 1px solid #d6cfc0;
+      box-shadow: 0 14px 36px rgba(62, 57, 47, 0.08);
+    }
+
+    .nd-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .nd-logo {
+      font-size: 15px;
+      font-weight: 800;
+      color: #2c4c3b;
+      letter-spacing: 0.5px;
+    }
+
+    .nd-pills a {
+      margin-left: 12px;
+      font-size: 12px;
+      color: #5c584f;
+      text-decoration: none;
+    }
+
+    .nd-title-area {
+      margin-bottom: 24px;
+    }
+
+    .nd-title-area h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      font-weight: 800;
+      color: #233329;
+      letter-spacing: -0.7px;
+    }
+
+    .nd-title-area p {
+      margin: 0;
+      font-size: 13.5px;
+      color: #636057;
+    }
+
+    .nd-guide-strip {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 18px;
+      border-radius: 16px;
+      background: #eef2ec;
+      color: #2c4c3b;
+      font-size: 12.5px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .nd-textarea {
+      width: 100%;
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid #cfc8b8;
+      background: #fff;
+      font-family: inherit;
+      font-size: 13px;
+      color: #233329;
+      resize: vertical;
+    }
+
+    .nd-bottom {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 14px;
       margin-top: 20px;
-      padding-top: 18px;
-      border-top: 1px solid #dfd6c7;
     }
 
-    .c2-btn-burgundy {
-      padding: 13px 30px;
-      border: 1px solid #591c23;
-      background: #7c2d36;
-      color: #fdfbf7;
-      font-family: "Batang", "바탕", serif;
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      cursor: pointer;
-    }
-
-    /* =================================================================
-       3. 대한민국 공공·정부 포털 표준형 (Gov-Tech KRDS)
-       ================================================================= */
-    .sec-gov {
-      background: #f1f5f9;
-    }
-
-    .g3-official-strip {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 8px 20px;
-      background: #e2e8f0;
-      border-bottom: 1px solid #cbd5e1;
-      font-size: 11.5px;
-      color: #334155;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .g3-header {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 18px 24px;
-      background: #fff;
-      border-bottom: 2px solid #003764;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .g3-logo-area {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .g3-emblem {
-      padding: 5px 10px;
-      border-radius: 4px;
-      background: #003764;
-      color: #fff;
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .g3-title {
-      font-size: 22px;
-      font-weight: 800;
-      color: #0f172a;
-      letter-spacing: -0.6px;
-    }
-
-    .g3-menu button {
-      padding: 7px 12px;
-      border: 1px solid #cbd5e1;
-      background: #f8fafc;
-      color: #1e293b;
-      font-family: inherit;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .g3-body {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 28px 24px 34px;
-      background: #fff;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-    }
-
-    .g3-guide-box {
-      padding: 16px 20px;
-      margin-bottom: 24px;
-      background: #f0f5fa;
-      border: 1px solid #b8cde0;
-      border-left: 5px solid #003764;
-      font-size: 13px;
-      line-height: 1.7;
-      color: #1e293b;
-    }
-
-    .g3-form-table {
-      width: 100%;
-      border-collapse: collapse;
-      border-top: 2px solid #1e293b;
-      margin-bottom: 22px;
-    }
-
-    .g3-form-table th {
-      width: 190px;
-      padding: 16px;
-      background: #f8fafc;
-      border-bottom: 1px solid #cbd5e1;
-      border-right: 1px solid #cbd5e1;
-      text-align: left;
-      font-size: 13.5px;
-      color: #0f172a;
-      vertical-align: top;
-    }
-
-    .g3-form-table td {
-      padding: 16px;
-      border-bottom: 1px solid #cbd5e1;
-      font-size: 13px;
-    }
-
-    .g3-req {
-      color: #d71920;
-      font-weight: 800;
-    }
-
-    .g3-btn-area {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .g3-btn-submit {
-      padding: 14px 36px;
+    .nd-btn-sage {
+      padding: 15px 34px;
       border: 0;
-      border-radius: 4px;
-      background: #003764;
-      color: #fff;
+      border-radius: 999px;
+      background: #2c4c3b;
+      color: #faf8f3;
       font-family: inherit;
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
     }
 
-    .g3-btn-reset {
-      padding: 14px 24px;
-      border: 1px solid #94a3b8;
-      border-radius: 4px;
-      background: #fff;
-      color: #334155;
-      font-family: inherit;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
     /* =================================================================
-       4. 글로벌 제약·바이오 엔터프라이즈형 (Global Pharma)
+       시안 D: 사이드바 고정형 올인원 워크벤치 (Notion / Slack App Style)
        ================================================================= */
-    .sec-pharma {
-      background: #eef4f7;
+    .sec-workbench {
+      background: #e4e7ec;
     }
 
-    .p4-container {
-      max-width: 1020px;
+    .wb-app {
+      max-width: 1060px;
       margin: 0 auto;
       padding: 0 20px;
     }
 
-    .p4-card {
+    .wb-window {
+      display: grid;
+      grid-template-columns: 250px 1fr;
       background: #fff;
       border-radius: 16px;
       overflow: hidden;
-      border: 1px solid #d5e3ea;
-      box-shadow: 0 12px 32px rgba(0, 94, 128, 0.07);
+      border: 1px solid #cbd5e1;
+      box-shadow: 0 14px 34px rgba(15, 23, 42, 0.1);
     }
 
-    .p4-top-banner {
-      padding: 26px 34px;
-      background: linear-gradient(120deg, #004e64 0%, #007a8c 65%, #00a896 100%);
-      color: #fff;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .p4-top-banner h1 {
-      margin: 6px 0 4px;
-      font-size: 26px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-    }
-
-    .p4-top-banner p {
-      margin: 0;
-      font-size: 13px;
-      color: #d8f3f0;
-    }
-
-    .p4-nav-group button {
-      padding: 7px 13px;
-      margin-left: 6px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      background: rgba(255, 255, 255, 0.12);
-      color: #fff;
-      font-family: inherit;
-      font-size: 12px;
-      cursor: pointer;
-    }
-
-    .p4-content {
-      padding: 30px 34px;
-      display: grid;
-      grid-template-columns: 1.7fr 1fr;
-      gap: 28px;
-    }
-
-    .p4-textarea {
-      width: 100%;
-      padding: 16px;
-      border-radius: 12px;
-      border: 1.5px solid #cbdde4;
-      background: #f7fbfc;
-      font-family: inherit;
-      font-size: 13px;
-      resize: vertical;
-    }
-
-    .p4-side-panel {
-      padding: 22px;
-      border-radius: 12px;
-      background: #f4f9fb;
-      border: 1px solid #d8e8ee;
+    .wb-sidebar {
+      background: #1e2430;
+      color: #cbd5e1;
+      padding: 24px 20px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
 
-    .p4-kpi-item {
-      padding: 10px 12px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-      background: #fff;
-      border-left: 3px solid #007a8c;
-      font-size: 12px;
-      color: #334e58;
-    }
-
-    .p4-btn-teal {
-      width: 100%;
-      padding: 14px;
-      border: 0;
-      border-radius: 10px;
-      background: #006d77;
+    .wb-brand {
+      font-size: 16px;
+      font-weight: 900;
       color: #fff;
-      font-family: inherit;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    /* =================================================================
-       5. 빅테크 포털·검색엔진 메인형 (Google / Naver Hub)
-       ================================================================= */
-    .sec-portal {
-      background: #ffffff;
-    }
-
-    .pt5-wrap {
-      max-width: 780px;
-      margin: 0 auto;
-      padding: 10px 20px 20px;
-    }
-
-    .pt5-top-utility {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 14px;
-      font-size: 12.5px;
-      color: #475569;
-      margin-bottom: 28px;
-    }
-
-    .pt5-top-utility a {
-      color: #334155;
-      text-decoration: none;
-    }
-
-    .pt5-center-brand {
-      text-align: center;
       margin-bottom: 24px;
     }
 
-    .pt5-wordmark {
-      font-size: 36px;
-      font-weight: 900;
-      letter-spacing: -1.5px;
-      color: #1e293b;
+    .wb-brand span {
+      color: #f97316;
     }
 
-    .pt5-wordmark .sk-r {
-      color: #d71920;
+    .wb-menu-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
-    .pt5-wordmark .sk-o {
-      color: #f37021;
+    .wb-menu-list li {
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
     }
 
-    .pt5-search-card {
-      padding: 20px 22px;
-      border-radius: 26px;
+    .wb-menu-list li.active {
+      background: #2f384a;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .wb-side-tip {
+      padding: 14px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      font-size: 11.5px;
+      line-height: 1.6;
+      color: #94a3b8;
+    }
+
+    .wb-canvas {
+      padding: 30px 34px;
       background: #fff;
-      border: 1px solid #dfe1e5;
-      box-shadow: 0 4px 16px rgba(32, 33, 36, 0.12);
     }
 
-    .pt5-search-header {
+    .wb-canvas-head {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding-bottom: 10px;
-      margin-bottom: 10px;
-      border-bottom: 1px solid #f1f5f9;
-      font-size: 12.5px;
-      color: #64748b;
-    }
-
-    .pt5-textarea {
-      width: 100%;
-      border: 0;
-      outline: none;
-      font-family: inherit;
-      font-size: 13.5px;
-      color: #1e293b;
-      resize: vertical;
-      background: transparent;
-    }
-
-    .pt5-action-chips {
-      display: flex;
-      justify-content: center;
       align-items: center;
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .wb-canvas-head h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .wb-textarea {
+      width: 100%;
+      padding: 16px;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      font-family: inherit;
+      font-size: 13px;
+      resize: vertical;
+    }
+
+    .wb-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 18px;
       flex-wrap: wrap;
       gap: 12px;
-      margin-top: 22px;
     }
 
-    .pt5-month-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 18px;
-      border-radius: 999px;
-      background: #f8f9fa;
-      border: 1px solid #dadce0;
-      font-size: 13px;
-      color: #3c4043;
-    }
-
-    .pt5-month-chip input {
+    .wb-btn {
+      padding: 13px 28px;
       border: 0;
-      background: transparent;
-      font-weight: 700;
-      color: #1e293b;
-    }
-
-    .pt5-btn-submit {
-      padding: 11px 28px;
-      border: 0;
-      border-radius: 999px;
+      border-radius: 8px;
       background: #b71935;
       color: #fff;
       font-family: inherit;
       font-size: 14px;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 2px 6px rgba(183, 25, 53, 0.3);
     }
 
-    .pt5-quick-shortcuts {
+    /* =================================================================
+       시안 E: 아쿠아 글래스 & 오로라 그라데이션형 (Apple Vision / Modern Mac)
+       ================================================================= */
+    .sec-aurora {
+      background:
+        radial-gradient(at 10% 15%, #ffd6e0 0px, transparent 50%),
+        radial-gradient(at 90% 20%, #c8e7ff 0px, transparent 50%),
+        radial-gradient(at 50% 90%, #d8f3dc 0px, transparent 55%),
+        #f0f4f8;
+    }
+
+    .au-wrap {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .au-glass {
+      padding: 36px 40px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      box-shadow: 0 20px 45px rgba(31, 38, 135, 0.08);
+    }
+
+    .au-top {
       display: flex;
-      justify-content: center;
-      gap: 16px;
-      margin-top: 28px;
-      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
     }
 
-    .pt5-shortcut {
-      width: 135px;
-      padding: 14px 10px;
-      border-radius: 14px;
-      background: #f8fafc;
-      text-align: center;
+    .au-pill-nav button {
+      padding: 6px 12px;
+      margin-left: 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.6);
+      font-family: inherit;
       font-size: 12px;
       color: #334155;
-      border: 1px solid #e2e8f0;
+      cursor: pointer;
     }
 
-    .pt5-shortcut strong {
-      display: block;
-      margin-top: 6px;
-      font-size: 12.5px;
+    .au-hero {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .au-hero h1 {
+      margin: 6px 0 8px;
+      font-size: 29px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      color: #0f172a;
+    }
+
+    .au-hero p {
+      margin: 0;
+      font-size: 13px;
+      color: #475569;
+    }
+
+    .au-textarea {
+      width: 100%;
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background: rgba(255, 255, 255, 0.82);
+      font-family: inherit;
+      font-size: 13px;
+      resize: vertical;
+    }
+
+    .au-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .au-btn-grad {
+      padding: 14px 32px;
+      border: 0;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      color: #fff;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.18);
     }
 
     @media (max-width: 820px) {
-      .p4-content,
-      .c2-steps-bar {
+      .ed-hero,
+      .ed-grid,
+      .wb-window,
+      .br-steps {
         grid-template-columns: 1fr;
       }
-      .g3-form-table th {
-        width: 110px;
+      .ed-sidebar {
+        border-right: 0;
+        border-bottom: 1px solid #d4d0c8;
+        padding-bottom: 14px;
       }
     }
   </style>
@@ -806,258 +677,220 @@
 
   <!-- 상단 빠른 이동 바 -->
   <nav class="quick-nav">
-    <span class="quick-nav-title">컨셉별 바로가기:</span>
-    <a href="#concept-1">1. 미래적 AI 터미널형</a>
-    <a href="#concept-2">2. 클래식컬 아카이브형</a>
-    <a href="#concept-3">3. 공공·정부 포털형</a>
-    <a href="#concept-4">4. 글로벌 제약사형</a>
-    <a href="#concept-5">5. 빅테크 포털 허브형</a>
+    <span class="quick-nav-title">신규 5대 컨셉:</span>
+    <a href="#sec-a">A. 에디토리얼 매거진형</a>
+    <a href="#sec-b">B. 네오 브루탈리즘·그리드형</a>
+    <a href="#sec-c">C. 웜 내추럴·세이지 그린형</a>
+    <a href="#sec-d">D. 사이드바 올인원 워크벤치</a>
+    <a href="#sec-e">E. 오로라 프로스트 글래스형</a>
   </nav>
 
   <!-- =================================================================
-       1. 미래적 하이테크 AI 터미널형
+       시안 A: 에디토리얼 매거진형
        ================================================================= -->
-  <section id="concept-1" class="concept-section sec-futuristic">
+  <section id="sec-a" class="concept-section sec-editorial">
     <div class="concept-label-bar">
-      <span class="concept-tag" style="background:#0284c7;">컨셉 1</span>
-      <span class="concept-summary">미래적 하이테크 AI 터미널형 — 다크 HUD 인터페이스와 시안 네온 글로우</span>
+      <span class="concept-tag" style="background:#b71935;">시안 A</span>
+      <span class="concept-summary">에디토리얼 매거진형 — 파이낸셜 리포트처럼 대담한 타이포그래피와 굵은 구분선</span>
     </div>
 
-    <div class="f1-shell">
-      <div class="f1-hud-top">
-        <div class="f1-brand">
-          <span class="f1-pulse"></span>
-          <span class="f1-brand-text">SK PLASMA <span>// BILLING AI AGENT v2.6</span></span>
-        </div>
-        <div class="f1-nav-btns">
-          <button type="button">★ 즐겨찾기</button>
-          <button type="button">매뉴얼</button>
-          <button type="button">의견 접수</button>
+    <div class="ed-wrap">
+      <div class="ed-masthead">
+        <span class="ed-brand">SK PLASMA · BILLING DESK</span>
+        <div class="ed-links">
+          <a href="#sec-a">즐겨찾기 안내</a>
+          <a href="#sec-a">사용 매뉴얼</a>
+          <a href="#sec-a">의견 남기기</a>
         </div>
       </div>
 
-      <div class="f1-glass-body">
-        <div class="f1-hero">
-          <div>
-            <h1>결제청구 자동 산출 에이전트</h1>
-            <p>MIS 거래원장 데이터 스트림을 붙여넣으면 기준월 청구서와 만기 집계를 즉시 연산합니다.</p>
-          </div>
-          <div class="f1-step-chips">
-            <span class="f1-chip">01. 원장 준비</span>
-            <span class="f1-chip">02. Ctrl+V 입력</span>
-            <span class="f1-chip">03. 실시간 연산</span>
-          </div>
-        </div>
+      <div class="ed-hero">
+        <h1>결제청구<br>에이전트</h1>
+        <p>
+          MIS 거래원장을 그대로 붙여넣어 기준월별 외상매출 정산과 결제청구서를 즉시 산출합니다. 모든 연산은 브라우저 내부에서만 수행됩니다.
+        </p>
+      </div>
 
-        <textarea
-          class="f1-terminal-box"
-          rows="7"
-          placeholder="> MIS 거래원장 전체 데이터를 붙여넣어 주세요 (헤더 포함 · 최근 10개월~1년 권장 · 행/열 순서 유지)..."
-        ></textarea>
-
-        <div class="f1-control-row">
-          <div class="f1-date-pill">
-            <span style="color:#94a3b8;">청구 기준월</span>
-            <input type="month" value="2026-11">
-            <span style="font-size:12px; color:#38bdf8;">기준일 2026-11-30</span>
+      <div class="ed-grid">
+        <aside class="ed-sidebar">
+          <div class="ed-step-item">
+            <span class="ed-step-num">STEP 01</span>
+            <strong>MIS 원장 준비</strong><br>
+            최근 10개월~1년 조회 권장
           </div>
+          <div class="ed-step-item">
+            <span class="ed-step-num">STEP 02</span>
+            <strong>전체 복사·붙여넣기</strong><br>
+            헤더 포함 · 행/열 순서 유지
+          </div>
+          <div class="ed-step-item" style="border-bottom:0;">
+            <span class="ed-step-num">STEP 03</span>
+            <strong>기준월 선택 및 산출</strong><br>
+            공휴일·만기일 자동 반영
+          </div>
+        </aside>
 
-          <button type="button" class="f1-btn-neon">
-            ⚡ 결제청구액 연산 실행
-          </button>
+        <div>
+          <textarea class="ed-textarea" rows="8" placeholder="여기에 거래원장 전체 데이터를 붙여넣어 주세요..."></textarea>
+
+          <div class="ed-action-strip">
+            <div style="font-size:13px;">
+              <strong>청구 기준월</strong>
+              <input type="month" value="2026-11" style="margin:0 8px; padding:6px 8px; border:1px solid #111;">
+              <span style="color:#666;">기준일: 2026-11-30</span>
+            </div>
+
+            <button type="button" class="ed-btn">결제청구액 계산하기 →</button>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- =================================================================
-       2. 클래식컬 유러피언 뱅킹·아카이브형
+       시안 B: 네오 브루탈리즘·모듈 그리드형
        ================================================================= -->
-  <section id="concept-2" class="concept-section sec-classical">
+  <section id="sec-b" class="concept-section sec-brutal">
     <div class="concept-label-bar">
-      <span class="concept-tag" style="background:#7c2d36;">컨셉 2</span>
-      <span class="concept-summary">클래식컬 유러피언 뱅킹·아카이브형 — 아이보리 페이퍼, 명조체, 버건디·골드 프레임</span>
+      <span class="concept-tag" style="background:#111;">시안 B</span>
+      <span class="concept-summary">네오 브루탈리즘·모듈 그리드형 — 선명한 프레임과 솔리드 그림자의 경쾌한 툴 UI</span>
     </div>
 
-    <div class="c2-frame">
-      <div class="c2-inner-border">
-        <div class="c2-top-meta">
-          <span>SK PLASMA FINANCE & SETTLEMENT ARCHIVE</span>
-          <div>
-            <a href="#concept-2">즐겨찾기 안내</a>
-            <a href="#concept-2">사용 매뉴얼</a>
-            <a href="#concept-2">의견 남기기</a>
-          </div>
-        </div>
-
-        <div class="c2-crest-head">
-          <div class="c2-crest-sub">SK plasma · Accounts Receivable</div>
-          <h1>결제청구 에이전트</h1>
-          <div class="c2-ornament"></div>
-        </div>
-
-        <div class="c2-steps-bar">
-          <div>
-            <strong>제 1 장 · 원장 준비</strong>
-            MIS 거래원장 엑셀 다운로드
-          </div>
-          <div>
-            <strong>제 2 장 · 원장 입력</strong>
-            헤더 포함 전체 복사·붙여넣기
-          </div>
-          <div>
-            <strong>제 3 장 · 청구 산출</strong>
-            기준월 선택 및 명세서 발행
-          </div>
-        </div>
-
-        <div style="margin-bottom:8px; font-size:13px; color:#4a3f33; font-weight:700;">
-          거래원장 원문 기재란 <span style="font-weight:400; font-size:12px; color:#786a58;">(최근 10개월~1년 조회 권장 · 행과 열의 순서 변경 금지)</span>
-        </div>
-
-        <textarea
-          class="c2-textarea"
-          rows="7"
-          placeholder="엑셀에서 복사하신 거래원장 전체 내역을 이곳에 붙여넣어 주십시오."
-        ></textarea>
-
-        <div class="c2-footer-row">
-          <div style="font-size:13px; color:#3d3328;">
-            <strong>청구 기준월 :</strong>
-            <input type="month" value="2026-11" style="padding:6px 10px; border:1px solid #bfb39f; background:#fff; margin:0 8px;">
-            <span style="font-size:12px; color:#6b5e4c;">(청구 기준일: 2026-11-30)</span>
-          </div>
-
-          <button type="button" class="c2-btn-burgundy">
-            결제청구서 산출하기
-          </button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =================================================================
-       3. 대한민국 공공·정부 포털 표준형
-       ================================================================= -->
-  <section id="concept-3" class="concept-section sec-gov">
-    <div class="concept-label-bar">
-      <span class="concept-tag" style="background:#003764;">컨셉 3</span>
-      <span class="concept-summary">공공·정부 포털 표준형 (KRDS 스타일) — 공식 누리집 배너와 정형화된 행정 민원 입력 서식</span>
-    </div>
-
-    <div class="g3-official-strip">
-      <span>🇰🇷</span>
-      <span>이 시스템은 사내 공식 정산·청구 업무 지원 포털입니다. (입력 데이터 외부 미전송)</span>
-    </div>
-
-    <header class="g3-header">
-      <div class="g3-logo-area">
-        <span class="g3-emblem">SK플라즈마</span>
-        <span class="g3-title">결제청구 에이전트</span>
-      </div>
-      <div class="g3-menu">
-        <button type="button">즐겨찾기 안내</button>
-        <button type="button">이용 매뉴얼</button>
-        <button type="button">개선의견 등록</button>
-      </div>
-    </header>
-
-    <div class="g3-body">
-      <div class="g3-guide-box">
-        <strong>[이용 안내]</strong><br>
-        ① MIS에서 조회 기간을 <strong>최근 10개월~1년</strong>으로 설정하여 거래원장 엑셀을 내려받으십시오.<br>
-        ② 엑셀의 <strong>헤더(제목 행)를 포함한 전체 영역</strong>을 복사(Ctrl+C)한 뒤 아래 입력란에 붙여넣기(Ctrl+V) 하십시오. (행·열 순서 변경 불가)
-      </div>
-
-      <table class="g3-form-table">
-        <tr>
-          <th>청구 기준월 <span class="g3-req">*</span></th>
-          <td>
-            <input type="month" value="2026-11" style="padding:7px 10px; border:1px solid #94a3b8; border-radius:4px;">
-            <span style="margin-left:12px; font-size:12.5px; color:#475569;">적용 청구 기준일: <strong>2026-11-30</strong></span>
-          </td>
-        </tr>
-        <tr>
-          <th>거래원장 데이터 <span class="g3-req">*</span></th>
-          <td>
-            <textarea
-              style="width:100%; padding:14px; border:1px solid #94a3b8; border-radius:4px; font-family:inherit; font-size:13px;"
-              rows="7"
-              placeholder="거래원장 전체 데이터를 붙여넣어 주십시오."
-            ></textarea>
-          </td>
-        </tr>
-      </table>
-
-      <div class="g3-btn-area">
-        <button type="button" class="g3-btn-reset">입력 초기화</button>
-        <button type="button" class="g3-btn-submit">결제청구액 계산하기</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- =================================================================
-       4. 글로벌 제약·바이오 엔터프라이즈형
-       ================================================================= -->
-  <section id="concept-4" class="concept-section sec-pharma">
-    <div class="concept-label-bar">
-      <span class="concept-tag" style="background:#006d77;">컨셉 4</span>
-      <span class="concept-summary">글로벌 제약·바이오 엔터프라이즈형 — 클리닉 틸·블루 컬러와 데이터 플랫폼 UI</span>
-    </div>
-
-    <div class="p4-container">
-      <div class="p4-card">
-        <div class="p4-top-banner">
-          <div>
-            <div style="font-size:12px; font-weight:700; letter-spacing:1px; opacity:0.85;">SK PLASMA · COMMERCIAL OPERATIONS</div>
-            <h1>결제청구 에이전트</h1>
-            <p>외상매출 거래원장 기반 자동 정산 및 결제청구서 생성 플랫폼</p>
-          </div>
-          <div class="p4-nav-group">
+    <div class="br-wrap">
+      <div class="br-card">
+        <div class="br-top">
+          <span class="br-badge">SK plasma 정산 툴</span>
+          <div class="br-nav">
             <button type="button">⭐ 즐겨찾기</button>
             <button type="button">📖 매뉴얼</button>
-            <button type="button">💬 피드백</button>
+            <button type="button">💬 의견 남기기</button>
           </div>
         </div>
 
-        <div class="p4-content">
-          <div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-              <strong style="font-size:15px; color:#004e64;">거래원장 데이터 입력 (Ledger Input)</strong>
-              <span style="font-size:11.5px; color:#007a8c; font-weight:700;">Ctrl+C → Ctrl+V</span>
-            </div>
+        <h1 class="br-title">결제청구 에이전트</h1>
 
-            <textarea
-              class="p4-textarea"
-              rows="9"
-              placeholder="MIS에서 다운로드한 거래원장 전체 데이터를 헤더 포함하여 붙여넣어 주세요..."
-            ></textarea>
+        <div class="br-steps">
+          <div class="br-step-box" style="background:#f3e8ff;">
+            1. MIS 원장 엑셀 준비<br><span style="font-weight:400; font-size:11.5px;">(최근 10개월~1년 권장)</span>
+          </div>
+          <div class="br-step-box" style="background:#ffedd5;">
+            2. 헤더 포함 전체 붙여넣기<br><span style="font-weight:400; font-size:11.5px;">(행·열 순서 변경 금지)</span>
+          </div>
+          <div class="br-step-box" style="background:#e0f2fe;">
+            3. 기준월 선택 후 계산<br><span style="font-weight:400; font-size:11.5px;">(로컬 브라우저 보안 연산)</span>
+          </div>
+        </div>
+
+        <textarea class="br-textarea" rows="7" placeholder="Ctrl+C 한 거래원장 데이터를 여기에 Ctrl+V 하세요!"></textarea>
+
+        <div class="br-footer">
+          <div class="br-month-pill">
+            📅 청구 기준월:
+            <input type="month" value="2026-11" style="border:1.5px solid #111; border-radius:6px; padding:4px 6px; margin:0 6px;">
+            <span style="font-size:11.5px;">(2026-11-30)</span>
           </div>
 
-          <div class="p4-side-panel">
-            <div>
-              <div style="font-size:14px; font-weight:800; color:#004e64; margin-bottom:12px;">정산 기준 및 가이드</div>
+          <button type="button" class="br-btn-cta">결제청구액 계산하기</button>
+        </div>
+      </div>
+    </div>
+  </section>
 
-              <div style="margin-bottom:14px;">
-                <label style="display:block; font-size:12px; font-weight:700; color:#334e58; margin-bottom:6px;">청구 기준월 선택</label>
-                <input type="month" value="2026-11" style="width:100%; padding:9px 10px; border:1px solid #b8d4de; border-radius:8px; background:#fff;">
-                <div style="margin-top:6px; font-size:11.5px; color:#006d77;">기준일: <strong>2026-11-30</strong></div>
-              </div>
+  <!-- =================================================================
+       시안 C: 웜 내추럴·세이지 그린 웰니스형
+       ================================================================= -->
+  <section id="sec-c" class="concept-section sec-nordic">
+    <div class="concept-label-bar">
+      <span class="concept-tag" style="background:#2c4c3b;">시안 C</span>
+      <span class="concept-summary">웜 내추럴·세이지 그린형 — 눈이 편안한 샌드 베이지와 차분한 포레스트 그린 포인트</span>
+    </div>
 
-              <div class="p4-kpi-item">
-                <strong>권장 조회 기간:</strong> 최근 10개월~1년
-              </div>
-              <div class="p4-kpi-item">
-                <strong>데이터 무결성:</strong> 원본 행·열 순서 유지
-              </div>
-              <div class="p4-kpi-item">
-                <strong>보안 정책:</strong> 로컬 브라우저 전용 연산
-              </div>
+    <div class="nd-wrap">
+      <div class="nd-card">
+        <div class="nd-header">
+          <span class="nd-logo">SK plasma · Settlement Studio</span>
+          <div class="nd-pills">
+            <a href="#sec-c">즐겨찾기 안내</a>
+            <a href="#sec-c">사용 매뉴얼</a>
+            <a href="#sec-c">의견 남기기</a>
+          </div>
+        </div>
+
+        <div class="nd-title-area">
+          <h1>결제청구 에이전트</h1>
+          <p>복잡한 외상매출 원장을 차분하고 정확하게 정리해 드립니다.</p>
+        </div>
+
+        <div class="nd-guide-strip">
+          <span>① 최근 10개월~1년 원장 준비</span>
+          <span>② 헤더 포함 전체 복사·붙여넣기</span>
+          <span>③ 브라우저 로컬 전용 보안 계산</span>
+        </div>
+
+        <textarea class="nd-textarea" rows="7" placeholder="거래원장 전체 데이터를 붙여넣어 주세요. (원본 행·열 순서 유지)"></textarea>
+
+        <div class="nd-bottom">
+          <div style="display:flex; align-items:center; gap:10px; font-size:13.5px; color:#233329;">
+            <strong>청구 기준월</strong>
+            <input type="month" value="2026-11" style="padding:8px 12px; border-radius:12px; border:1px solid #cfc8b8; background:#fff;">
+            <span style="font-size:12px; color:#636057;">기준일 2026-11-30</span>
+          </div>
+
+          <button type="button" class="nd-btn-sage">결제청구액 계산하기</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       시안 D: 사이드바 고정형 올인원 워크벤치
+       ================================================================= -->
+  <section id="sec-d" class="concept-section sec-workbench">
+    <div class="concept-label-bar">
+      <span class="concept-tag" style="background:#1e2430;">시안 D</span>
+      <span class="concept-summary">사이드바 고정형 올인원 워크벤치 — 노션/슬랙처럼 좌측 메뉴바와 우측 작업 캔버스 분리</span>
+    </div>
+
+    <div class="wb-app">
+      <div class="wb-window">
+        <aside class="wb-sidebar">
+          <div>
+            <div class="wb-brand">SK <span>plasma</span></div>
+            <ul class="wb-menu-list">
+              <li class="active">🧮 결제청구액 계산</li>
+              <li>📖 사용 매뉴얼 보기</li>
+              <li>⭐ 즐겨찾기 등록 안내</li>
+              <li>💬 개선 의견 남기기</li>
+            </ul>
+          </div>
+
+          <div class="wb-side-tip">
+            <strong style="color:#e2e8f0; display:block; margin-bottom:4px;">입력 체크리스트</strong>
+            • 최근 10개월~1년 조회 권장<br>
+            • 헤더 포함 전체 붙여넣기<br>
+            • 외부 서버 전송 없는 로컬 연산
+          </div>
+        </aside>
+
+        <div class="wb-canvas">
+          <div class="wb-canvas-head">
+            <h1>결제청구 에이전트</h1>
+            <span style="font-size:12px; color:#64748b;">MIS 거래원장 기반 자동 정산</span>
+          </div>
+
+          <label style="display:block; font-size:13px; font-weight:700; margin-bottom:8px; color:#334155;">
+            거래원장 데이터 붙여넣기 (Ctrl+C → Ctrl+V)
+          </label>
+          <textarea class="wb-textarea" rows="8" placeholder="엑셀에서 복사한 거래원장 전체 데이터를 붙여넣어 주세요..."></textarea>
+
+          <div class="wb-bar">
+            <div style="display:flex; align-items:center; gap:10px; font-size:13px;">
+              <strong>청구 기준월:</strong>
+              <input type="month" value="2026-11" style="padding:7px 10px; border:1px solid #cbd5e1; border-radius:6px;">
+              <span style="color:#64748b; font-size:12px;">(기준일: 2026-11-30)</span>
             </div>
 
-            <button type="button" class="p4-btn-teal" style="margin-top:14px;">
-              결제청구액 계산하기
-            </button>
+            <button type="button" class="wb-btn">결제청구액 계산하기</button>
           </div>
         </div>
       </div>
@@ -1065,75 +898,40 @@
   </section>
 
   <!-- =================================================================
-       5. 빅테크 포털·검색엔진 메인형 (Google / Naver Hub)
+       시안 E: 아쿠아 글래스 & 오로라 그라데이션형
        ================================================================= -->
-  <section id="concept-5" class="concept-section sec-portal">
+  <section id="sec-e" class="concept-section sec-aurora">
     <div class="concept-label-bar">
-      <span class="concept-tag" style="background:#b71935;">컨셉 5</span>
-      <span class="concept-summary">빅테크 포털·검색엔진 메인형 — 구글/네이버처럼 중앙 허브에 입력창과 퀵 숏컷을 배치</span>
+      <span class="concept-tag" style="background:#334155;">시안 E</span>
+      <span class="concept-summary">오로라 프로스트 글래스형 — 파스텔 오로라 배경 위의 반투명 유리 카드 디자인</span>
     </div>
 
-    <div class="pt5-wrap">
-      <div class="pt5-top-utility">
-        <a href="#concept-5">즐겨찾기 안내</a>
-        <a href="#concept-5">사용 매뉴얼</a>
-        <a href="#concept-5">의견 남기기</a>
-      </div>
-
-      <div class="pt5-center-brand">
-        <div class="pt5-wordmark">
-          <span class="sk-r">SK</span> <span class="sk-o">plasma</span> 결제청구
-        </div>
-        <div style="margin-top:6px; font-size:13px; color:#64748b;">
-          거래원장을 붙여넣고 기준월을 선택하면 청구서가 바로 완성됩니다
-        </div>
-      </div>
-
-      <div class="pt5-search-card">
-        <div class="pt5-search-header">
-          <span>📋 MIS 거래원장 전체 붙여넣기 (헤더 포함)</span>
-          <span>최근 10개월~1년 권장 · 행/열 순서 유지</span>
+    <div class="au-wrap">
+      <div class="au-glass">
+        <div class="au-top">
+          <strong style="font-size:15px; color:#b71935;">SK plasma</strong>
+          <div class="au-pill-nav">
+            <button type="button">⭐ 즐겨찾기</button>
+            <button type="button">📖 매뉴얼</button>
+            <button type="button">💬 의견</button>
+          </div>
         </div>
 
-        <textarea
-          class="pt5-textarea"
-          rows="6"
-          placeholder="여기에 엑셀에서 복사(Ctrl+C)한 거래원장 데이터를 붙여넣어(Ctrl+V) 주세요..."
-        ></textarea>
-      </div>
-
-      <div class="pt5-action-chips">
-        <div class="pt5-month-chip">
-          <span>📅 청구 기준월</span>
-          <input type="month" value="2026-11">
-          <span style="font-size:11.5px; color:#64748b;">(2026-11-30)</span>
+        <div class="au-hero">
+          <h1>결제청구 에이전트</h1>
+          <p>MIS 거래원장을 붙여넣고 기준월을 선택하면 청구서가 자동 생성됩니다</p>
         </div>
 
-        <button type="button" class="pt5-btn-submit">
-          결제청구액 계산하기
-        </button>
-      </div>
+        <textarea class="au-textarea" rows="7" placeholder="헤더 포함 거래원장 전체 데이터를 붙여넣어 주세요 (최근 10개월~1년 권장 · 행/열 순서 유지)"></textarea>
 
-      <div class="pt5-quick-shortcuts">
-        <div class="pt5-shortcut">
-          <span style="font-size:20px;">📥</span>
-          <strong>1. 원장 준비</strong>
-          <span style="font-size:11px; color:#64748b;">MIS 엑셀 다운로드</span>
-        </div>
-        <div class="pt5-shortcut">
-          <span style="font-size:20px;">📋</span>
-          <strong>2. 전체 붙여넣기</strong>
-          <span style="font-size:11px; color:#64748b;">Ctrl+C → Ctrl+V</span>
-        </div>
-        <div class="pt5-shortcut">
-          <span style="font-size:20px;">🧮</span>
-          <strong>3. 자동 정산</strong>
-          <span style="font-size:11px; color:#64748b;">공휴일·만기 자동 반영</span>
-        </div>
-        <div class="pt5-shortcut">
-          <span style="font-size:20px;">🔒</span>
-          <strong>서버 미전송</strong>
-          <span style="font-size:11px; color:#64748b;">로컬 브라우저 보안</span>
+        <div class="au-footer">
+          <div style="display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.75); padding:10px 16px; border-radius:14px; font-size:13px;">
+            <strong>청구 기준월</strong>
+            <input type="month" value="2026-11" style="border:0; background:transparent; font-weight:700;">
+            <span style="font-size:11.5px; color:#64748b;">2026-11-30</span>
+          </div>
+
+          <button type="button" class="au-btn-grad">결제청구액 계산하기 ✨</button>
         </div>
       </div>
     </div>
