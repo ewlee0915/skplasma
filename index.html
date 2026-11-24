@@ -2664,6 +2664,92 @@
         gap: 7px;
       }
     }
+    /* 방문 통계: 제목과 그래프만 표시하는 소형 팝업 */
+    #visitor-history-dialog {
+      width: 320px;
+      max-width: calc(100vw - 24px);
+      padding: 18px;
+      border-radius: 14px;
+    }
+
+    .visitor-history-heading {
+      align-items: center;
+      gap: 8px;
+    }
+
+    #visitor-history-title {
+      font-size: 15px;
+      letter-spacing: -0.5px;
+      line-height: 1.5;
+    }
+
+    #visitor-history-close {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      font-size: 20px;
+    }
+
+    /* 부제는 화면에서 숨기되 접근성 설명으로 유지 */
+    #visitor-history-subtitle {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    #visitor-history-dialog .visitor-history-summary,
+    #visitor-history-dialog .visitor-history-guide {
+      display: none;
+    }
+
+    #visitor-history-dialog .visitor-history-chart {
+      gap: 12px;
+      margin: 18px 0 2px;
+    }
+
+    #visitor-history-dialog .visitor-history-row {
+      grid-template-columns: 64px minmax(0, 1fr) 48px;
+      gap: 8px;
+      font-size: 11px;
+    }
+
+    .visitor-history-track {
+      height: 9px;
+    }
+
+    .visitor-history-value {
+      font-size: 11px;
+    }
+
+    .visitor-history-row.is-untracked .visitor-history-value {
+      font-size: 10px;
+    }
+
+    #visitor-history-status {
+      margin: 16px 0 4px;
+      font-size: 11px;
+    }
+
+    /* 조회 완료 문구는 숨기고 로딩·오류 안내만 표시 */
+    #visitor-history-dialog:has(
+      #visitor-history-content:not([hidden])
+    ) #visitor-history-status {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
   </style>
 </head>
 
@@ -3508,7 +3594,7 @@
     <div class="visitor-history-heading">
       <div>
         <h2 id="visitor-history-title" tabindex="-1">
-          최근 방문 통계
+          최근 7일간 방문자 통계
         </h2>
         <p
           id="visitor-history-subtitle"
@@ -7560,6 +7646,12 @@
 
           todayElement.textContent = data.today.toLocaleString("ko-KR");
           totalElement.textContent = data.total.toLocaleString("ko-KR");
+          counter.setAttribute(
+            "aria-label",
+            `오늘 방문 ${data.today.toLocaleString("ko-KR")}회, ` +
+            `누적 방문 ${data.total.toLocaleString("ko-KR")}회. ` +
+            "직전 7일 방문 통계 보기"
+          );
 
           counter.title = visitorId
             ? `한국시간 ${data.date} 기준 · 동일 브라우저 하루 1회`
