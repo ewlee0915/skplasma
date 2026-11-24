@@ -2418,6 +2418,252 @@
         break-inside: avoid;
       }
     }
+    /* 전월 미결제액: 연한 붉은 배경으로 구분 */
+    #report-sheet .detail tbody tr.previous-unpaid-row > td {
+      border-color: #e8c7cf;
+      background: #fff3f5;
+      color: #9f2941;
+    }
+
+    #report-sheet .detail tbody tr.previous-unpaid-row > td:first-child {
+      font-weight: 700;
+    }
+
+    #report-sheet .detail tbody tr.previous-unpaid-row > td.amount {
+      background: #fbe5eb;
+      color: #a8223d;
+      font-weight: 700;
+    }
+
+    #report-sheet .previous-unpaid-row .note-input {
+      border-color: #e8c7cf;
+      background: #fffafb;
+      color: #9f2941;
+    }
+    /* ========================================
+       방문 통계 팝업
+       ======================================== */
+
+    #visitor-counter {
+      gap: 9px;
+      flex-shrink: 0;
+      font-weight: 400;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    #visitor-counter:hover {
+      border-color: #d98292;
+      background: #fff7f8;
+    }
+
+    #visitor-history-dialog {
+      width: 480px;
+      max-width: calc(100vw - 24px);
+      max-height: 85vh;
+      margin: auto;
+      padding: 24px;
+      overflow: auto;
+      border: 1px solid #dce3ec;
+      border-radius: 18px;
+      background: #fff;
+      color: #25354a;
+      font-family: inherit;
+      box-shadow: 0 16px 60px #16283b26;
+    }
+
+    #visitor-history-dialog::backdrop {
+      background: rgba(18, 32, 50, 0.4);
+    }
+
+    .visitor-history-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    #visitor-history-title {
+      margin: 0;
+      color: var(--navy);
+      font-size: 20px;
+      letter-spacing: -0.5px;
+      line-height: 1.5;
+    }
+
+    .visitor-history-subtitle {
+      margin: 5px 0 0;
+      color: #738096;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    #visitor-history-close {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border: 1px solid #dce3ec;
+      border-radius: 10px;
+      background: #f7f9fc;
+      color: #526276;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    #visitor-history-close:hover {
+      background: #edf2f8;
+    }
+
+    #visitor-history-close:focus-visible,
+    #visitor-history-retry:focus-visible {
+      outline: 2px solid var(--navy);
+      outline-offset: 3px;
+    }
+
+    .visitor-history-summary {
+      margin-top: 20px;
+      padding: 16px 18px;
+      border: 1px solid #efd4da;
+      border-radius: 12px;
+      background: linear-gradient(120deg, #fff8fa, #fff3ef);
+    }
+
+    #visitor-history-period {
+      margin: 0 0 7px;
+      color: #738096;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .visitor-history-total-line {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      color: #526276;
+      font-size: 12px;
+    }
+
+    #visitor-history-total {
+      color: #a8223d;
+      font-size: 26px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .visitor-history-chart {
+      display: grid;
+      gap: 16px;
+      margin: 22px 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .visitor-history-row {
+      display: grid;
+      grid-template-columns: 76px minmax(0, 1fr) 64px;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+    }
+
+    .visitor-history-date {
+      color: #526276;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .visitor-history-track {
+      height: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #f0f3f7;
+    }
+
+    .visitor-history-bar {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #dca0ad, #bc536b);
+    }
+
+    .visitor-history-row.is-peak .visitor-history-bar {
+      background: linear-gradient(90deg, #cc627a, #b71935);
+    }
+
+    .visitor-history-row.is-peak .visitor-history-value {
+      color: #a8223d;
+    }
+
+    .visitor-history-value {
+      color: #244568;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: right;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .visitor-history-row.is-untracked .visitor-history-track {
+      border: 1px dashed #dce3ec;
+      background: #fafbfd;
+    }
+
+    .visitor-history-row.is-untracked .visitor-history-value {
+      color: #929ba8;
+      font-size: 11px;
+      font-weight: 400;
+    }
+
+    .visitor-history-guide {
+      margin: 0;
+      padding-top: 14px;
+      border-top: 1px solid #e8edf3;
+      color: #738096;
+      font-size: 11px;
+      line-height: 1.9;
+      word-break: keep-all;
+    }
+
+    #visitor-history-status {
+      margin: 20px 0;
+      color: #65758a;
+      font-size: 13px;
+      line-height: 1.8;
+      text-align: center;
+    }
+
+    #visitor-history-status:empty {
+      display: none;
+    }
+
+    #visitor-history-status.is-error {
+      color: #a8223d;
+    }
+
+    #visitor-history-retry {
+      display: block;
+      margin: 0 auto;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: #526276;
+      font-size: 12px;
+    }
+
+    @media screen and (max-width: 480px) {
+      #visitor-counter {
+        gap: 7px;
+        padding: 6px 8px;
+      }
+
+      #visitor-history-dialog {
+        padding: 20px 16px;
+      }
+
+      .visitor-history-row {
+        grid-template-columns: 70px minmax(0, 1fr) 62px;
+        gap: 7px;
+      }
+    }
   </style>
 </head>
 
@@ -2426,13 +2672,13 @@
     <!-- 메인 입력 화면 -->
     <section class="panel input-panel no-print">
       <div class="main-quick-actions">
-        <div
+        <button
           id="visitor-counter"
           class="visitor-counter"
-          role="status"
-          aria-label="방문 통계"
-          aria-live="polite"
-          aria-atomic="true"
+          type="button"
+          aria-label="방문 통계: 직전 7일 방문 수 보기"
+          aria-haspopup="dialog"
+          aria-controls="visitor-history-dialog"
         >
           <span class="visitor-counter-item">
             <span class="visitor-counter-label">Today</span>
@@ -2448,7 +2694,7 @@
             <span class="visitor-counter-label">Total</span>
             <strong id="visitor-total">-</strong>
           </span>
-        </div>
+        </button>
 
         <div class="main-quick-right">
           <button
@@ -2965,7 +3211,7 @@
       </div>
 
       <p class="small version">
-        사내 업무용 · <strong>Version. 2.5</strong> · 2026.11.22. 배포
+        사내 업무용 · <strong>Version. 2.6</strong> · 2026.11.23. 배포
       </p>
 
       <div class="update-note-link">
@@ -2990,6 +3236,19 @@
     </h2>
 
     <div class="update-note-history">
+      <section>
+        <h3>Ver. 2.6 - 2026.11.23.</h3>
+        <p>청구 내역 구분 및 계산 로직 개선</p>
+        <ul>
+          <li>
+            기타에 포함되던 전월 이월 미결제액을 ‘전월 미결제액’ 항목으로 분리
+          </li>
+          <li>
+            당월 확정된 결제액은 전월 미결제액부터 우선 차감하도록 개선
+          </li>
+        </ul>
+      </section>
+
       <section>
         <h3>Ver. 2.5 - 2026.11.22.</h3>
         <p>메인 화면에 방문 카운터 기능 추가</p>
@@ -3050,9 +3309,7 @@
 
       <section>
         <h3>Ver. 2.0 - 2026.11.16.</h3>
-        <p>
-          SK플라즈마 결제청구 에이전트(Web) 개발 완료 및 배포용 버전 생성 완료
-        </p>
+        <p>SK플라즈마 결제청구 에이전트(Web) 개발 완료 및 배포용 버전 생성 완료</p>
       </section>
 
       <section>
@@ -3238,6 +3495,64 @@
       <button id="gb-close" class="gb-secondary" type="button">
         닫기
       </button>
+    </div>
+  </dialog>
+
+  <!-- 직전 7일 방문 통계 -->
+  <dialog
+    id="visitor-history-dialog"
+    class="no-print"
+    aria-labelledby="visitor-history-title"
+    aria-describedby="visitor-history-subtitle"
+  >
+    <div class="visitor-history-heading">
+      <div>
+        <h2 id="visitor-history-title" tabindex="-1">
+          최근 방문 통계
+        </h2>
+        <p
+          id="visitor-history-subtitle"
+          class="visitor-history-subtitle"
+        >
+          오늘을 제외한 직전 7일 · 한국시간 기준
+        </p>
+      </div>
+
+      <button
+        id="visitor-history-close"
+        type="button"
+        aria-label="방문 통계 닫기"
+      >×</button>
+    </div>
+
+    <p id="visitor-history-status" role="status"></p>
+
+    <button id="visitor-history-retry" type="button" hidden>
+      다시 불러오기
+    </button>
+
+    <div id="visitor-history-content" hidden>
+      <div class="visitor-history-summary">
+        <p id="visitor-history-period"></p>
+
+        <div class="visitor-history-total-line">
+          <span id="visitor-history-total-label">기간 내 방문 합계</span>
+          <strong id="visitor-history-total">-</strong>
+        </div>
+      </div>
+
+      <ul
+        id="visitor-history-chart"
+        class="visitor-history-chart"
+        aria-label="날짜별 방문 수"
+      ></ul>
+
+      <p class="visitor-history-guide">
+        동일 브라우저의 방문을 하루 1회 집계합니다.<br>
+        합계는 일별 방문 수의 합이며, 7일간의 고유 방문자 수와는 다릅니다.<br>
+        가장 방문이 많은 날을 진한 색으로 표시합니다.
+        <span id="visitor-history-start-note"></span>
+      </p>
     </div>
   </dialog>
 
@@ -3763,8 +4078,6 @@
       "어음(1개월)"
     ];
 
-    const PRIORITY = [5, 4, 1, 2, 3];
-
     function conditionPart(text, index) {
       const characters = Array.from(text);
 
@@ -3972,6 +4285,7 @@
 
         if (
           !reissue ||
+          reissue.line !== cancel.line + 1 ||
           reissue.type !== "판매" ||
           reissue.amt <= 0 ||
           String(reissue.remark ?? "").trim() !== ""
@@ -4225,6 +4539,22 @@
       if (prev === null) {
         throw new Error("전월말 LOOKUP 대상 행의 잔고가 비어 있습니다.");
       }
+      // 전월 말 기준 아직 청구기일이 도래하지 않은 매출
+      const previousCarry = sum(
+        rows.filter(row =>
+          row.date <= prevEnd &&
+          row.billing !== null &&
+          row.billing > prevEnd
+        ),
+        row => row.amt
+      );
+
+      // 전월 말 잔고에서 미도래 매출을 제외한 누적 미결제액.
+      // 음수인 경우 별도 미결제액은 0원이며, 기존 기타 잔액에 반영됩니다.
+      const previousUnpaid = Math.max(
+        safe(prev - previousCarry),
+        0
+      );
 
       const current = rows.filter(row =>
         prevEnd < row.date && row.date <= base
@@ -4265,9 +4595,8 @@
             row.bill_months === label.slice(3, -1);
       }
 
-      const details = LABELS.map((label, index) => ({
+      const details = LABELS.map(label => ({
         label,
-        priority: PRIORITY[index],
         contract: sum(
           due.filter(row => saleCategory(row, label)),
           row => row.amt
@@ -4285,15 +4614,117 @@
         row => row.rec
       );
 
+      // 집계표의 실제 수금 분류는 변경하지 않습니다.
+      // 청구서용 기타에서 전월 미결제액만 분리합니다.
       const otherContract = safe(
-        contractTotal - sum(details, row => row.contract)
+        safe(contractTotal - sum(details, row => row.contract)) -
+        previousUnpaid
       );
 
-      const other = safe(otherContract - otherReceived);
-
+      // 수금 대사는 전월 미결제액 배분 전 원래 분류로 수행합니다.
       const detailedReceived = safe(
         sum(details, row => row.received) + otherReceived
       );
+
+      // 당월 양수 결제액을 원장 순서대로 전월 미결제액에 우선 배분합니다.
+      let previousUnpaidRemaining = previousUnpaid;
+      let previousUnpaidApplied = 0;
+      let otherAppliedToPrevious = 0;
+      let unclassifiedAppliedToPrevious = 0;
+
+      const previousPaymentAllocations = [];
+
+      for (const detail of details) {
+        detail.applied_to_previous = 0;
+      }
+
+      for (const payment of current) {
+        if (
+          EXCHANGE.has(payment.code) ||
+          payment.rec <= 0 ||
+          previousUnpaidRemaining === 0
+        ) {
+          continue;
+        }
+
+        const allocated = Math.min(
+          payment.rec,
+          previousUnpaidRemaining
+        );
+
+        const matchedDetail = details.find(detail =>
+          receivedCategory(payment, detail.label)
+        );
+
+        if (matchedDetail) {
+          matchedDetail.applied_to_previous = safe(
+            matchedDetail.applied_to_previous + allocated
+          );
+        } else if (payment.kind === "기타") {
+          otherAppliedToPrevious = safe(
+            otherAppliedToPrevious + allocated
+          );
+        } else {
+          // 청구서에 없는 수금 분류는 임의로 기타에 넣지 않습니다.
+          unclassifiedAppliedToPrevious = safe(
+            unclassifiedAppliedToPrevious + allocated
+          );
+        }
+
+        previousUnpaidRemaining = safe(
+          previousUnpaidRemaining - allocated
+        );
+
+        previousUnpaidApplied = safe(
+          previousUnpaidApplied + allocated
+        );
+
+        previousPaymentAllocations.push({
+          line: payment.line,
+          date: iso(payment.date),
+          code: payment.code,
+          amount: allocated
+        });
+      }
+
+      if (unclassifiedAppliedToPrevious > 0) {
+        reportErrors.push(
+          "전월 미결제액에 배분한 결제액 중 청구서에서 분류하지 못한 금액이 있습니다.\n" +
+          `미분류 배분액: ${money(unclassifiedAppliedToPrevious)}원\n` +
+          "어음(0개월), 지원 범위 밖의 어음 개월수 또는 미분류 수금 코드를 확인해 주세요."
+        );
+      }
+
+      // 원래 수금액은 보존하고, 당월 조건별로 차감할 금액만 별도 계산합니다.
+      // 음수 수금도 원래 부호를 유지합니다.
+      for (const detail of details) {
+        detail.received_after_previous = safe(
+          detail.received - detail.applied_to_previous
+        );
+      }
+
+      const otherReceivedAfterPrevious = safe(
+        otherReceived - otherAppliedToPrevious
+      );
+
+      const other = safe(
+        otherContract - otherReceivedAfterPrevious
+      );
+
+      // 배분한 결제액이 원래 결제액에서 한 번만 빠졌는지 검증합니다.
+      const allocatedReceivedTotal = safe(
+        safe(
+          sum(details, row => row.received_after_previous) +
+          otherReceivedAfterPrevious
+        ) + previousUnpaidApplied
+      );
+
+      if (
+        unclassifiedAppliedToPrevious === 0 &&
+        allocatedReceivedTotal !== detailedReceived
+      ) {
+        throw new Error("전월 미결제액 배분 합계가 일치하지 않습니다.");
+      }
 
       if (detailedReceived !== received) {
         reportErrors.push(
@@ -4308,6 +4739,12 @@
       // 청구서 전용 상계
       const settlementItems = [
         {
+          label: "전월 미결제액",
+          net: previousUnpaidRemaining,
+          final: 0,
+          detail: null
+        },
+        {
           label: "기타",
           net: other,
           final: 0,
@@ -4315,7 +4752,7 @@
         },
         ...details.map(row => ({
           label: row.label,
-          net: safe(row.contract - row.received),
+          net: safe(row.contract - row.received_after_previous),
           final: 0,
           detail: row
         }))
@@ -4329,6 +4766,7 @@
       let remainingAdjustment = adjustment;
 
       const settlementOrder = [
+        "전월 미결제액",
         "기타",
         "어음(3개월)",
         "어음(2개월)",
@@ -4365,6 +4803,13 @@
       }
 
       const otherFinal = settlementByLabel.get("기타").final;
+
+      const previousUnpaidFinal =
+        settlementByLabel.get("전월 미결제액").final;
+
+      const previousUnpaidAdjustment = safe(
+        previousUnpaidRemaining - previousUnpaidFinal
+      );
 
       if (remainingAdjustment > 0) {
         warnings.push(
@@ -4490,7 +4935,8 @@
       };
 
       const finalTotal = safe(
-        sum(details, row => row.final) + otherFinal
+        safe(sum(details, row => row.final) + otherFinal) +
+        previousUnpaidFinal
       );
 
       if (finalTotal !== requestTotal) {
@@ -4516,6 +4962,13 @@
           request: requestTotal
         },
         details,
+        previous_carry: previousCarry,
+        previous_unpaid: previousUnpaid,
+        previous_unpaid_applied: previousUnpaidApplied,
+        previous_unpaid_adjustment: previousUnpaidAdjustment,
+        previous_unpaid_final: previousUnpaidFinal,
+        previous_payment_allocations: previousPaymentAllocations,
+        other_received_after_previous: otherReceivedAfterPrevious,
         other,
         other_contract: otherContract,
         other_received: otherReceived,
@@ -4817,13 +5270,28 @@
             <input class="note-input" aria-label="기타 비고">
           </td>
         </tr>
+        <tr class="previous-unpaid-row">
+          <td>전월 미결제액</td>
+          <td class="amount">
+            ${displayMoney(data.previous_unpaid_final)}
+          </td>
+          <td class="pattern"></td>
+          <td class="pattern"></td>
+          <td>
+            <input
+              class="note-input"
+              aria-label="전월 미결제액 비고"
+            >
+          </td>
+        </tr>
       `;
 
       const detailRows = [...$("details").querySelectorAll("tr")];
 
       const finalAmounts = [
         ...data.details.map(row => row.final),
-        data.other_final
+        data.other_final,
+        data.previous_unpaid_final
       ];
 
       detailRows.forEach((row, index) => {
@@ -4873,14 +5341,29 @@
         `처리 거래 ${data.rows}건 · ` +
         `조건별 음수 잔액 상계 대상 ${money(data.adjustment)}원`;
 
+      const previousAllocationText =
+        data.previous_payment_allocations.length
+          ? data.previous_payment_allocations.map(item =>
+            `${item.line}행(${item.date}, ${item.code}) ` +
+            `${money(item.amount)}원`
+          ).join(" / ")
+          : "없음";
+
       $("hidden-values").textContent =
         `금월 매출액 ${money(summary.sales)}원 / ` +
         `당월 기수금액 ${money(summary.received)}원 / ` +
         `계약상 합계 ${money(data.contract_total)}원 / ` +
-        `기타 청구액 ${money(data.other_contract)}원 / ` +
-        `기타 결제액 ${money(data.other_received)}원 / ` +
+        `전월 말 미도래 매출 ${money(data.previous_carry)}원 / ` +
+        `전월 말 누적 미결제액 ${money(data.previous_unpaid)}원 / ` +
+        `당월 결제액 중 전월 미결제액 배분 ${money(data.previous_unpaid_applied)}원 / ` +
+        `전월 미결제액 추가 상계 ${money(data.previous_unpaid_adjustment)}원 / ` +
+        `전월 미결제액 최종 ${money(data.previous_unpaid_final)}원 / ` +
+        `기타 청구액(전월 미결제액 분리 후) ${money(data.other_contract)}원 / ` +
+        `기타 실제 결제액 ${money(data.other_received)}원 / ` +
+        `기타 결제액(전월 배분 후) ${money(data.other_received_after_previous)}원 / ` +
         `기타 결제 후 잔액 ${money(data.other)}원 / ` +
-        `상세 기수금액 합계 ${money(data.detailed_received)}원`;
+        `상세 기수금액 합계 ${money(data.detailed_received)}원 / ` +
+        `전월 미결제액 결제 배분 근거: ${previousAllocationText}`;
 
       $("audit").innerHTML = data.audit.map(row => {
         const values = [
@@ -7092,6 +7575,380 @@
       }
 
       void updateVisitorCounter();
+    })();
+  </script>
+  <script>
+    /* ========================================
+       17. 직전 7일 방문 통계 팝업
+       기존 방문 등록과 독립적으로 조회만 수행합니다.
+       ======================================== */
+
+    (() => {
+      "use strict";
+
+      const API =
+        "https://skplasma-visitors.eunwook.workers.dev/api/history";
+
+      const ALLOWED_ORIGIN = "https://ewlee0915.github.io";
+      const byId = id => document.getElementById(id);
+
+      const trigger = byId("visitor-counter");
+      const dialog = byId("visitor-history-dialog");
+      const status = byId("visitor-history-status");
+      const content = byId("visitor-history-content");
+      const chart = byId("visitor-history-chart");
+      const retry = byId("visitor-history-retry");
+
+      const DAY = 86400000;
+      let activeController = null;
+      let startedOutside = false;
+
+      function parseDay(value) {
+        if (
+          typeof value !== "string" ||
+          !/^\d{4}-\d{2}-\d{2}$/.test(value)
+        ) {
+          throw new Error("날짜 형식이 올바르지 않습니다.");
+        }
+
+        const time = Date.parse(`${value}T00:00:00Z`);
+
+        if (
+          !Number.isFinite(time) ||
+          new Date(time).toISOString().slice(0, 10) !== value
+        ) {
+          throw new Error("날짜 값이 올바르지 않습니다.");
+        }
+
+        return time;
+      }
+
+      function shiftDate(value, offset) {
+        return new Date(parseDay(value) + offset * DAY)
+          .toISOString()
+          .slice(0, 10);
+      }
+
+      function formatDay(value) {
+        const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
+        const date = new Date(parseDay(value));
+
+        return `${value.slice(5).replace("-", ".")} (${weekdays[date.getUTCDay()]})`;
+      }
+
+      function validatePayload(data) {
+        if (
+          !data ||
+          data.success !== true ||
+          data.timezone !== "Asia/Seoul" ||
+          !Array.isArray(data.days) ||
+          data.days.length !== 7 ||
+          typeof data.trackingStartKnown !== "boolean"
+        ) {
+          throw new Error("방문 통계 응답 형식을 확인해 주세요.");
+        }
+
+        parseDay(data.today);
+
+        if (
+          data.startDate !== shiftDate(data.today, -7) ||
+          data.endDate !== shiftDate(data.today, -1)
+        ) {
+          throw new Error("방문 통계 조회 기간이 올바르지 않습니다.");
+        }
+
+        if (data.trackingStartKnown) {
+          parseDay(data.trackingStartDate);
+
+          if (data.trackingStartDate > data.today) {
+            throw new Error("집계 시작일을 확인해 주세요.");
+          }
+        } else if (data.trackingStartDate !== null) {
+          throw new Error("집계 시작일 응답을 확인해 주세요.");
+        }
+
+        let total = 0;
+
+        data.days.forEach((day, index) => {
+          if (
+            !day ||
+            day.date !== shiftDate(data.today, -(index + 1))
+          ) {
+            throw new Error("날짜별 방문 통계 순서가 올바르지 않습니다.");
+          }
+
+          const beforeTracking =
+            data.trackingStartKnown &&
+            day.date < data.trackingStartDate;
+
+          if (beforeTracking) {
+            if (
+              day.status !== "before_tracking" ||
+              day.visits !== null
+            ) {
+              throw new Error("집계 이전 날짜의 응답을 확인해 주세요.");
+            }
+          } else if (day.status === "tracked") {
+            if (
+              !Number.isSafeInteger(day.visits) ||
+              day.visits < 0
+            ) {
+              throw new Error("방문 수가 올바르지 않습니다.");
+            }
+
+            total += day.visits;
+          } else if (
+            day.status !== "unknown" ||
+            data.trackingStartKnown ||
+            day.visits !== null
+          ) {
+            throw new Error("집계 상태가 올바르지 않습니다.");
+          }
+        });
+
+        if (
+          !Number.isSafeInteger(total) ||
+          total !== data.totalVisits
+        ) {
+          throw new Error("방문 통계 합계가 일치하지 않습니다.");
+        }
+
+        return data;
+      }
+
+      function renderHistory(data) {
+        chart.replaceChildren();
+
+        byId("visitor-history-period").textContent =
+          `${data.startDate.replaceAll("-", ".")} ~ ` +
+          data.endDate.replaceAll("-", ".");
+
+        const hasUnknown = data.days.some(day =>
+          day.status === "unknown"
+        );
+
+        byId("visitor-history-total-label").textContent =
+          hasUnknown ? "확인된 방문 합계" : "기간 내 방문 합계";
+
+        byId("visitor-history-total").textContent =
+          `${data.totalVisits.toLocaleString("ko-KR")}회`;
+
+        const maximum = Math.max(
+          0,
+          ...data.days.map(day => day.visits ?? 0)
+        );
+
+        for (const day of data.days) {
+          const row = document.createElement("li");
+          row.className = "visitor-history-row";
+
+          const tracked = day.status === "tracked";
+
+          row.classList.toggle("is-untracked", !tracked);
+          row.classList.toggle(
+            "is-peak",
+            tracked && maximum > 0 && day.visits === maximum
+          );
+
+          const date = document.createElement("time");
+          date.className = "visitor-history-date";
+          date.dateTime = day.date;
+          date.textContent = formatDay(day.date);
+          date.title = day.date;
+
+          const track = document.createElement("div");
+          track.className = "visitor-history-track";
+          track.setAttribute("aria-hidden", "true");
+
+          const bar = document.createElement("div");
+          bar.className = "visitor-history-bar";
+
+          const percentage =
+            tracked && maximum > 0
+              ? day.visits / maximum * 100
+              : 0;
+
+          bar.style.width = `${percentage}%`;
+          track.appendChild(bar);
+
+          const value = document.createElement("span");
+          value.className = "visitor-history-value";
+
+          value.textContent = tracked
+            ? `${day.visits.toLocaleString("ko-KR")}회`
+            : day.status === "before_tracking"
+              ? "집계 전"
+              : "확인 불가";
+
+          row.append(date, track, value);
+          chart.appendChild(row);
+        }
+
+        byId("visitor-history-start-note").textContent =
+          data.trackingStartKnown
+            ? ` 집계 시작일: ${data.trackingStartDate.replaceAll("-", ".")}.`
+            : " 집계 시작일이 설정되지 않아 기록 없는 날짜는 ‘확인 불가’로 표시합니다.";
+
+        content.hidden = false;
+      }
+
+      async function loadHistory() {
+        if (activeController) return;
+
+        content.hidden = true;
+        retry.hidden = true;
+        status.classList.remove("is-error");
+
+        if (location.origin !== ALLOWED_ORIGIN) {
+          status.textContent =
+            "방문 통계는 정식 배포된 GitHub Pages 주소에서 확인해 주세요.";
+          return;
+        }
+
+        const controller = new AbortController();
+        activeController = controller;
+
+        content.setAttribute("aria-busy", "true");
+        status.textContent = "최근 방문 통계를 불러오고 있습니다…";
+
+        const timer = setTimeout(
+          () => controller.abort(),
+          10000
+        );
+
+        try {
+          const response = await fetch(API, {
+            method: "GET",
+            mode: "cors",
+            credentials: "omit",
+            cache: "no-store",
+            referrerPolicy: "no-referrer",
+            signal: controller.signal
+          });
+
+          const data = await response.json();
+
+          if (!response.ok || data?.success !== true) {
+            throw new Error("방문 통계를 불러오지 못했습니다.");
+          }
+
+          const validated = validatePayload(data);
+
+          // 팝업을 닫았거나 새 조회로 바뀐 경우 이전 결과를 표시하지 않습니다.
+          if (
+            activeController !== controller ||
+            !dialog.open
+          ) {
+            return;
+          }
+
+          renderHistory(validated);
+          status.textContent = "최근 7일 방문 통계를 불러왔습니다.";
+        } catch (error) {
+          if (
+            activeController !== controller ||
+            !dialog.open
+          ) {
+            return;
+          }
+
+          status.classList.add("is-error");
+          status.textContent = error.name === "AbortError"
+            ? "조회 시간이 초과되었습니다. 다시 시도해 주세요."
+            : "방문 통계를 불러오지 못했습니다. 연결 상태를 확인하고 다시 시도해 주세요.";
+
+          retry.hidden = false;
+        } finally {
+          clearTimeout(timer);
+
+          if (activeController === controller) {
+            activeController = null;
+            content.setAttribute("aria-busy", "false");
+          }
+        }
+      }
+
+      function cancelLoading() {
+        const controller = activeController;
+        activeController = null;
+        controller?.abort();
+        content.setAttribute("aria-busy", "false");
+      }
+
+      function closeHistory() {
+        cancelLoading();
+
+        if (dialog.open) {
+          dialog.close();
+        }
+      }
+
+      function isOutside(event) {
+        const rect = dialog.getBoundingClientRect();
+
+        return (
+          event.clientX < rect.left ||
+          event.clientX > rect.right ||
+          event.clientY < rect.top ||
+          event.clientY > rect.bottom
+        );
+      }
+
+      trigger.addEventListener("click", () => {
+        if (dialog.open) return;
+
+        dialog.showModal();
+        byId("visitor-history-title").focus({ preventScroll: true });
+        dialog.scrollTop = 0;
+        void loadHistory();
+      });
+
+      byId("visitor-history-close").addEventListener(
+        "click",
+        closeHistory
+      );
+
+      retry.addEventListener("click", () => {
+        void loadHistory();
+      });
+
+      dialog.addEventListener("cancel", event => {
+        event.preventDefault();
+        closeHistory();
+      });
+
+      dialog.addEventListener("close", () => {
+        startedOutside = false;
+
+        if (!dialog.open) {
+          cancelLoading();
+        }
+      });
+
+      dialog.addEventListener("pointerdown", event => {
+        startedOutside =
+          event.isPrimary &&
+          event.button === 0 &&
+          event.target === dialog &&
+          isOutside(event);
+      });
+
+      dialog.addEventListener("click", event => {
+        const shouldClose =
+          startedOutside &&
+          event.target === dialog &&
+          isOutside(event);
+
+        startedOutside = false;
+
+        if (shouldClose) {
+          closeHistory();
+        }
+      });
+
+      dialog.addEventListener("pointercancel", () => {
+        startedOutside = false;
+      });
     })();
   </script>
 </body>
