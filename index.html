@@ -3254,7 +3254,7 @@
             <div>
               당월 결제액 중 원장에 반영된 금액은 위 결제청구액에서 제외되었습니다.<br>
               <span id="holiday-date-guide">
-                어음 발행·만기 요청일은 결제조건에 따라 산정하며,
+                어음 발행·만기 요청일은 계약조건에 따라 산정하며,
                 <u>주말·공휴일이면 직전 영업일로 안내</u>드립니다.
               </span>
             </div>
@@ -5532,8 +5532,8 @@
         : "";
 
       $("holiday-date-guide").textContent = data.weekendOnly
-        ? "어음 발행·만기 요청일은 결제조건에 따라 산정하며, 주말만 제외했습니다. 공휴일은 반영되지 않았습니다."
-        : "어음 발행·만기 요청일은 결제조건에 따라 산정하며, 주말·공휴일이면 직전 영업일로 안내드립니다.";
+        ? "어음 발행·만기 요청일은 계약조건에 따라 산정하며, 주말만 제외했습니다. 공휴일은 반영되지 않았습니다."
+        : "어음 발행·만기 요청일은 계약조건에 따라 산정하며, 주말·공휴일이면 직전 영업일로 안내드립니다.";
 
       renderAggregation(data);
 
@@ -5809,11 +5809,10 @@
         state.selected[column.key] !== undefined
       );
 
-      // 원장 소계는 실제 표시된 거래만 합산합니다.
       let html = `
         <tr>
           <td>소계</td>
-          <td>${filtered ? "필터 적용 내역" : "원장 내역"}</td>
+          <td>${filtered ? "필터 적용 내역" : "위 거래내역 합계"}</td>
           <td></td>
           <td id="aggregate-filter-sales-total">
             ${displayMoney(sales)}
@@ -5829,7 +5828,9 @@
       function adjustmentRow(label, value, note, className = "") {
         return `
           <tr class="ledger-adjustment-row ${className}">
-            <td>청구 조정</td>
+            <td style="white-space: normal; word-break: keep-all;">
+              청구 금액 조정
+            </td>
             <td>${escapeHtml(label)}</td>
             <td></td>
             <td class="ledger-adjustment-value">
@@ -5842,13 +5843,12 @@
       }
 
       if (basis && !filtered && basis.valid) {
-        // 원장 매출에 포함되지 않은 청구 구성액입니다.
-        // 전월 이월액은 별도 행에 표시합니다.
+        // 원장 소계에 포함되지 않은 청구 구성액
         const otherAdjustment = safe(
           safe(basis.contract - sales) - basis.previous
         );
 
-        // 추가 결제 차감은 음수, 차감 제외는 양수로 표시합니다.
+        // 추가 결제 차감은 음수, 차감 제외는 양수
         const paymentAdjustment = safe(paid - basis.received);
 
         const net = safe(
@@ -5859,7 +5859,7 @@
           ) + paymentAdjustment
         );
 
-        // 음수 청구액은 기존 계산처럼 0원으로 처리합니다.
+        // 음수 청구액은 기존 계산처럼 0원으로 처리
         const zeroFloorAdjustment = net < 0 ? safe(-net) : 0;
         const final = safe(net + zeroFloorAdjustment);
 
@@ -5867,7 +5867,7 @@
           html += `
             <tr>
               <td colspan="7" class="error">
-                세부내역 조정 합계와 청구액이 일치하지 않습니다.
+                세부내역 합계와 청구서 금액이 다릅니다.
                 계산 근거를 확인해 주세요.
               </td>
             </tr>
@@ -5875,9 +5875,9 @@
         } else {
           if (otherAdjustment !== 0) {
             html += adjustmentRow(
-              "기타 조정",
+              "기타 금액 반영",
               otherAdjustment,
-              "원장 소계 미포함 청구액 가감"
+              "위 거래내역에 포함되지 않은 금액 반영"
             );
           }
 
@@ -5885,24 +5885,24 @@
             html += adjustmentRow(
               "전월 미결제액",
               basis.previous,
-              "당월 결제 차감 전 이월액",
+              "지난달까지 결제되지 않은 금액",
               "ledger-previous-row"
             );
           }
 
           if (paymentAdjustment !== 0) {
             html += adjustmentRow(
-              "결제액 반영 조정",
+              "추가 결제 반영",
               paymentAdjustment,
-              "원장 소계와 실제 반영 결제액의 차이"
+              "위 결제액과 실제 결제액의 차이 반영"
             );
           }
 
           if (zeroFloorAdjustment !== 0) {
             html += adjustmentRow(
-              "초과 결제 등 조정",
+              "청구금액 0원 조정",
               zeroFloorAdjustment,
-              "음수 청구액을 0원으로 처리"
+              "차감액이 더 커 청구금액을 0원으로 표시"
             );
           }
 
@@ -5910,10 +5910,10 @@
             <tr class="ledger-request-total">
               <td colspan="3">최종 청구 합계</td>
               <td class="ledger-adjustment-value">
-                ${displayMoney(final)}
+                ${money(final)}
               </td>
               <td colspan="3">
-                매출 − 결제 + 청구 조정
+                결제 및 조정 금액 반영 후 청구액
               </td>
             </tr>
           `;
@@ -5924,8 +5924,8 @@
             <td colspan="7" class="ledger-reconcile-notice">
               ${
                 filtered
-                  ? "필터 적용 중에는 부분 소계만 표시하며, 전체 청구 조정은 생략합니다."
-                  : "검증 오류가 있어 최종 청구 합계 표시는 제한됩니다."
+                  ? "필터 적용 중에는 선택한 내역의 소계만 표시합니다. 전체 청구금액은 필터를 해제해 확인해 주세요."
+                  : "검증 오류가 있어 최종 청구 합계를 표시하지 않습니다."
               }
             </td>
           </tr>
