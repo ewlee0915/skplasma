@@ -2797,6 +2797,10 @@
     .aggregate-ledger tfoot > tr:first-child > td {
       border-bottom: 2px solid #bac9da;
     }
+    /* 소계 아래 반영 항목의 금액은 일반 굵기로 표시 */
+    .aggregate-ledger tfoot .ledger-adjustment-row > td.ledger-adjustment-value {
+      font-weight: 400;
+    }
   </style>
 </head>
 
@@ -5944,7 +5948,7 @@
                 ${money(final)}
               </td>
               <td colspan="3">
-                결제 및 합산·차감 내역 반영 후 금액
+                매출액 - 결제액 + 합산액 - 차감액 (0원 미만은 0원)
               </td>
             </tr>
           `;
