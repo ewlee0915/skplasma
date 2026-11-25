@@ -3382,6 +3382,9 @@
           <li>
             세부내역 하단에 기타 조정·전월 미결제액 등 가감 내역과 최종 청구 합계를 표시하도록 개선
           </li>
+          <li>
+            세부내역의 합산·차감 항목 구분 및 안내 문구 개선
+          </li>
         </ul>
       </section>
 
@@ -5825,16 +5828,38 @@
         </tr>
       `;
 
-      function adjustmentRow(label, value, note, className = "") {
+      // 일반 항목은 부호에 따라 합산·차감을 구분합니다.
+      // 0원 적용 행은 실제 추가 청구가 아니므로 별도로 표시합니다.
+      function adjustmentRow(
+        label,
+        value,
+        note,
+        className = "",
+        isZeroFloor = false
+      ) {
+        const category = isZeroFloor
+          ? "청구액 표시"
+          : value > 0
+            ? "합산 항목"
+            : "차감 항목";
+
+        const amountText = isZeroFloor
+          ? money(value)
+          : value > 0
+            ? `+${money(value)}`
+            : value < 0
+              ? `−${money(Math.abs(value))}`
+              : "0";
+
         return `
           <tr class="ledger-adjustment-row ${className}">
             <td style="white-space: normal; word-break: keep-all;">
-              청구 금액 조정
+              ${escapeHtml(category)}
             </td>
             <td>${escapeHtml(label)}</td>
             <td></td>
             <td class="ledger-adjustment-value">
-              ${displayMoney(value)}
+              ${escapeHtml(amountText)}
             </td>
             <td></td>
             <td colspan="2">${escapeHtml(note)}</td>
@@ -5843,12 +5868,12 @@
       }
 
       if (basis && !filtered && basis.valid) {
-        // 원장 소계에 포함되지 않은 청구 구성액
+        // 기존 계산식 유지: 원장 소계 미포함 청구 구성액
         const otherAdjustment = safe(
           safe(basis.contract - sales) - basis.previous
         );
 
-        // 추가 결제 차감은 음수, 차감 제외는 양수
+        // 기존 계산식 유지: 추가 차감은 음수, 차감 제외는 양수
         const paymentAdjustment = safe(paid - basis.received);
 
         const net = safe(
@@ -5859,7 +5884,7 @@
           ) + paymentAdjustment
         );
 
-        // 음수 청구액은 기존 계산처럼 0원으로 처리
+        // 기존 계산식 유지: 음수 청구액은 0원으로 표시
         const zeroFloorAdjustment = net < 0 ? safe(-net) : 0;
         const final = safe(net + zeroFloorAdjustment);
 
@@ -5875,9 +5900,11 @@
         } else {
           if (otherAdjustment !== 0) {
             html += adjustmentRow(
-              "기타 금액 반영",
+              "기타 반영액",
               otherAdjustment,
-              "위 거래내역에 포함되지 않은 금액 반영"
+              otherAdjustment > 0
+                ? "청구금액에 합산되는 금액"
+                : "청구금액에서 차감되는 금액"
             );
           }
 
@@ -5885,35 +5912,39 @@
             html += adjustmentRow(
               "전월 미결제액",
               basis.previous,
-              "지난달까지 결제되지 않은 금액",
+              "전월에서 이월된 미결제액",
               "ledger-previous-row"
             );
           }
 
           if (paymentAdjustment !== 0) {
             html += adjustmentRow(
-              "추가 결제 반영",
+              "결제 반영액",
               paymentAdjustment,
-              "위 결제액과 실제 결제액의 차이 반영"
+              paymentAdjustment < 0
+                ? "위 소계에 포함되지 않은 결제액 차감"
+                : "위 소계의 결제액 중 청구 계산에서 제외되는 금액"
             );
           }
 
           if (zeroFloorAdjustment !== 0) {
             html += adjustmentRow(
-              "청구금액 0원 조정",
+              "청구금액 0원 적용",
               zeroFloorAdjustment,
-              "차감액이 더 커 청구금액을 0원으로 표시"
+              "차감 후 금액이 0원 미만으로, 청구할 금액 없음",
+              "",
+              true
             );
           }
 
           html += `
             <tr class="ledger-request-total">
-              <td colspan="3">최종 청구 합계</td>
+              <td colspan="3">최종 청구금액</td>
               <td class="ledger-adjustment-value">
                 ${money(final)}
               </td>
               <td colspan="3">
-                결제 및 조정 금액 반영 후 청구액
+                결제 및 합산·차감 내역 반영 후 금액
               </td>
             </tr>
           `;
@@ -5925,7 +5956,7 @@
               ${
                 filtered
                   ? "필터 적용 중에는 선택한 내역의 소계만 표시합니다. 전체 청구금액은 필터를 해제해 확인해 주세요."
-                  : "검증 오류가 있어 최종 청구 합계를 표시하지 않습니다."
+                  : "검증 오류가 있어 최종 청구금액을 표시하지 않습니다."
               }
             </td>
           </tr>
