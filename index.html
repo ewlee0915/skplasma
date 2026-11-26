@@ -2801,6 +2801,48 @@
     .aggregate-ledger tfoot .ledger-adjustment-row > td.ledger-adjustment-value {
       font-weight: 400;
     }
+    /* 업데이트 노트·의견 게시판 페이지 이동 */
+    .history-pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .history-pagination button {
+      min-width: 64px;
+      padding: 7px 12px;
+      border: 1px solid #d5dde7;
+      border-radius: 7px;
+      background: #f5f8fc;
+      color: #526276;
+      font-size: 12px;
+    }
+
+    .history-pagination button:disabled,
+    #guestbook-dialog .history-pagination button:disabled {
+      background: #eef1f5;
+      color: #929ba8;
+      cursor: not-allowed;
+    }
+
+    .history-pagination button:focus-visible {
+      outline: 2px solid var(--navy);
+      outline-offset: 2px;
+    }
+
+    .history-pagination span {
+      min-width: 48px;
+      color: #526276;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    /* 페이지 첫 항목의 위쪽 점선 제거 */
+    .update-note-history section.is-page-first {
+      border-top: 0;
+    }
   </style>
 </head>
 
@@ -3372,7 +3414,7 @@
       Update Note
     </h2>
 
-    <div class="update-note-history">
+    <div id="update-note-history-content" class="update-note-history">
       <section>
         <h3>Ver. 2.6 - 2026.11.23.</h3>
         <p>청구 내역 구분 및 계산 로직 개선</p>
@@ -3475,6 +3517,23 @@
         <p>배포용 버전 생성 완료</p>
       </section>
     </div>
+    <nav class="history-pagination" aria-label="업데이트 노트 페이지 이동">
+      <button
+        id="update-note-prev"
+        type="button"
+        aria-controls="update-note-history-content"
+        disabled
+      >〈 이전</button>
+
+      <span id="update-note-page" aria-live="polite">1 / 1</span>
+
+      <button
+        id="update-note-next"
+        type="button"
+        aria-controls="update-note-history-content"
+        disabled
+      >다음 〉</button>
+    </nav>
 
     <div class="update-note-actions">
       <button id="close-update-note" type="button">닫기</button>
@@ -3628,11 +3687,28 @@
     </div>
 
     <p class="gb-help">
-      최신 의견 20개를 표시합니다.
+      최신 의견 20개를 페이지당 4개씩 표시합니다.
       댓글은 원글별로 최대 100개까지 표시합니다.
     </p>
 
     <div id="gb-list" aria-label="등록된 의견 목록"></div>
+    <nav class="history-pagination" aria-label="의견 목록 페이지 이동">
+      <button
+        id="gb-page-prev"
+        type="button"
+        aria-controls="gb-list"
+        disabled
+      >〈 이전</button>
+
+      <span id="gb-page-info" aria-live="polite">1 / 1</span>
+
+      <button
+        id="gb-page-next"
+        type="button"
+        aria-controls="gb-list"
+        disabled
+      >다음 〉</button>
+    </nav>
 
     <div class="gb-close-actions">
       <button id="gb-close" class="gb-secondary" type="button">
@@ -7029,17 +7105,74 @@
       aggregateFilterDialog.close();
     });
 
-    $("open-update-note").addEventListener("click", () => {
-      if (!updateNoteDialog.open) {
-        updateNoteDialog.showModal();
-      }
+    // 업데이트 노트: 버전 내역 4개씩 표시
+    const UPDATE_NOTE_PAGE_SIZE = 4;
+    let updateNotePage = 1;
 
-      $("update-note-title").focus({ preventScroll: true });
+    function renderUpdateNotePage() {
+      const sections = [
+        ...document.querySelectorAll(
+          "#update-note-history-content > section"
+        )
+      ];
+
+      const totalPages = Math.max(
+        1,
+        Math.ceil(sections.length / UPDATE_NOTE_PAGE_SIZE)
+      );
+
+      updateNotePage = Math.min(
+        Math.max(updateNotePage, 1),
+        totalPages
+      );
+
+      const start = (updateNotePage - 1) * UPDATE_NOTE_PAGE_SIZE;
+      const end = start + UPDATE_NOTE_PAGE_SIZE;
+
+      sections.forEach((section, index) => {
+        section.hidden = index < start || index >= end;
+        section.classList.toggle("is-page-first", index === start);
+      });
+
+      $("update-note-page").textContent =
+        `${updateNotePage} / ${totalPages}`;
+
+      $("update-note-prev").disabled = updateNotePage === 1;
+      $("update-note-next").disabled = updateNotePage === totalPages;
+    }
+
+    function resetUpdateNoteScroll() {
       updateNoteDialog.scrollTop = 0;
 
       requestAnimationFrame(() => {
         updateNoteDialog.scrollTop = 0;
       });
+    }
+
+    $("open-update-note").addEventListener("click", () => {
+      updateNotePage = 1;
+      renderUpdateNotePage();
+
+      if (!updateNoteDialog.open) {
+        updateNoteDialog.showModal();
+      }
+
+      $("update-note-title").focus({ preventScroll: true });
+      resetUpdateNoteScroll();
+    });
+
+    $("update-note-prev").addEventListener("click", () => {
+      updateNotePage--;
+      renderUpdateNotePage();
+      $("update-note-title").focus({ preventScroll: true });
+      resetUpdateNoteScroll();
+    });
+
+    $("update-note-next").addEventListener("click", () => {
+      updateNotePage++;
+      renderUpdateNotePage();
+      $("update-note-title").focus({ preventScroll: true });
+      resetUpdateNoteScroll();
     });
 
     $("close-update-note").addEventListener("click", () => {
@@ -7104,13 +7237,17 @@
       const byId = id => document.getElementById(id);
       const dialog = byId("guestbook-dialog");
 
+      const ENTRY_PAGE_SIZE = 4;
+
       const state = {
         type: "entry",
         action: "create",
         id: null,
         entryId: null,
         busy: false,
-        listPromise: null
+        listPromise: null,
+        entries: [],
+        page: 1
       };
 
       function isAllowedOrigin() {
@@ -7125,14 +7262,32 @@
       function updateControls() {
         byId("gb-editor").disabled = state.busy;
         byId("gb-submit").disabled = state.busy || !isAllowedOrigin();
+
         byId("gb-refresh").disabled =
           state.busy || Boolean(state.listPromise) || !isAllowedOrigin();
+
         byId("gb-close").disabled = state.busy;
 
         byId("gb-list").querySelectorAll("button")
           .forEach(button => {
             button.disabled = state.busy;
           });
+
+        const totalPages = Math.max(
+          1,
+          Math.ceil(state.entries.length / ENTRY_PAGE_SIZE)
+        );
+
+        const pageLocked =
+          state.busy ||
+          Boolean(state.listPromise) ||
+          !isAllowedOrigin();
+
+        byId("gb-page-prev").disabled =
+          pageLocked || state.page <= 1;
+
+        byId("gb-page-next").disabled =
+          pageLocked || state.page >= totalPages;
       }
 
       function updateCount() {
@@ -7448,6 +7603,98 @@
         return card;
       }
 
+      // 조회된 최신 의견을 페이지당 4개씩 표시
+      function renderEntryPage() {
+        const list = byId("gb-list");
+
+        const totalPages = Math.max(
+          1,
+          Math.ceil(state.entries.length / ENTRY_PAGE_SIZE)
+        );
+
+        state.page = Math.min(
+          Math.max(state.page, 1),
+          totalPages
+        );
+
+        list.replaceChildren();
+
+        if (!state.entries.length) {
+          list.append(
+            createElement(
+              "p",
+              "gb-empty",
+              "아직 등록된 의견이 없습니다. 첫 의견을 남겨주세요!"
+            )
+          );
+        } else {
+          const start = (state.page - 1) * ENTRY_PAGE_SIZE;
+
+          state.entries
+            .slice(start, start + ENTRY_PAGE_SIZE)
+            .forEach(row => {
+              list.append(createCard(row, "entry"));
+            });
+        }
+
+        byId("gb-page-info").textContent =
+          `${state.page} / ${totalPages}`;
+
+        updateControls();
+      }
+
+      function changeEntryPage(offset) {
+        if (
+          state.busy ||
+          state.listPromise ||
+          !isAllowedOrigin()
+        ) {
+          return;
+        }
+
+        const totalPages = Math.max(
+          1,
+          Math.ceil(state.entries.length / ENTRY_PAGE_SIZE)
+        );
+
+        const nextPage = state.page + offset;
+
+        if (nextPage < 1 || nextPage > totalPages) {
+          return;
+        }
+
+        state.page = nextPage;
+        renderEntryPage();
+
+        // 페이지를 바꾸면 의견 목록의 시작 부분으로 이동
+        const heading = dialog.querySelector(".gb-list-heading");
+
+        if (heading) {
+          heading.setAttribute("tabindex", "-1");
+          heading.focus({ preventScroll: true });
+
+          const dialogRect = dialog.getBoundingClientRect();
+          const headingRect = heading.getBoundingClientRect();
+
+          dialog.scrollTop = Math.max(
+            0,
+            dialog.scrollTop +
+            headingRect.top -
+            dialogRect.top -
+            dialog.clientTop -
+            12
+          );
+        }
+      }
+
+      byId("gb-page-prev").addEventListener("click", () => {
+        changeEntryPage(-1);
+      });
+
+      byId("gb-page-next").addEventListener("click", () => {
+        changeEntryPage(1);
+      });
+
       function loadEntries() {
         if (state.listPromise) {
           return state.listPromise;
@@ -7463,21 +7710,8 @@
             throw new Error("의견 목록 응답 형식이 올바르지 않습니다.");
           }
 
-          list.replaceChildren();
-
-          if (!result.entries.length) {
-            list.append(
-              createElement(
-                "p",
-                "gb-empty",
-                "아직 등록된 의견이 없습니다. 첫 의견을 남겨주세요!"
-              )
-            );
-          } else {
-            result.entries.forEach(row => {
-              list.append(createCard(row, "entry"));
-            });
-          }
+          state.entries = result.entries;
+          renderEntryPage();
         })().finally(() => {
           state.listPromise = null;
           list.setAttribute("aria-busy", "false");
@@ -7497,6 +7731,10 @@
         dialog.scrollTop = 0;
         setStatus();
         setEditor();
+
+        // 게시판을 열 때마다 최신 의견이 있는 1페이지 표시
+        state.page = 1;
+        renderEntryPage();
 
         if (!isAllowedOrigin()) {
           setStatus(
@@ -7599,6 +7837,9 @@
         try {
           const result = await apiRequest("/api/action", body);
 
+          // 보관 중인 목록도 먼저 1페이지로 맞춘 뒤 서버에서 갱신
+          state.page = 1;
+          renderEntryPage();
           setEditor();
           setStatus(result.message || "처리되었습니다.");
 
