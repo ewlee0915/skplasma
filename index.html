@@ -8515,5 +8515,162 @@
       });
     })();
   </script>
+<style>
+  #surveyPopup {
+    width: min(420px, calc(100% - 40px));
+    padding: 28px;
+    border: none;
+    border-radius: 16px;
+    box-sizing: border-box;
+    font-family: inherit;
+    color: #222;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  }
+
+  #surveyPopup::backdrop {
+    background: rgba(0, 0, 0, 0.45);
+  }
+
+  #surveyPopup h2 {
+    margin: 0 0 14px;
+    font-size: 21px;
+    line-height: 1.5;
+  }
+
+  #surveyPopup p {
+    margin: 0 0 20px;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .survey-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .survey-actions a,
+  .survey-actions button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font: inherit;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  #surveyJoin {
+    background: #007f83;
+    color: #fff;
+  }
+
+  #surveyLater {
+    background: #f0f2f4;
+    color: #333;
+  }
+
+  .survey-hide {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 18px;
+    font-size: 13px;
+    color: #555;
+  }
+</style>
+
+<dialog
+  id="surveyPopup"
+  aria-labelledby="surveyTitle"
+  aria-describedby="surveyDescription"
+>
+  <h2 id="surveyTitle">
+    결제청구 에이전트,<br>
+    사용해 보니 어떠셨나요?
+  </h2>
+
+  <p id="surveyDescription">
+    더 편리한 서비스를 위해 약 1분만 의견을 들려주세요.
+    응답은 익명으로 수집되며, 아직 사용하지 않으신 분도
+    참여하실 수 있습니다.
+  </p>
+
+  <div class="survey-actions">
+    <a
+      id="surveyJoin"
+      href="https://forms.cloud.microsoft/r/qsq51L6Epc"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      설문 참여하기 ↗
+    </a>
+    <button id="surveyLater" type="button" autofocus>
+      나중에 참여하기
+    </button>
+  </div>
+
+  <label class="survey-hide">
+    <input id="surveyHideToday" type="checkbox">
+    오늘 하루 보지 않기
+  </label>
+</dialog>
+
+<script>
+  (() => {
+    const popup = document.getElementById("surveyPopup");
+    const hideToday = document.getElementById("surveyHideToday");
+    const storageKey = "billingSurveyHiddenDate";
+
+    // 설문 운영을 종료하려면 false로 변경해 주세요.
+    const surveyEnabled = true;
+
+    function localDate() {
+      const now = new Date();
+      return [
+        now.getFullYear(),
+        String(now.getMonth() + 1).padStart(2, "0"),
+        String(now.getDate()).padStart(2, "0")
+      ].join("-");
+    }
+
+    let hiddenDate = null;
+    try {
+      hiddenDate = localStorage.getItem(storageKey);
+    } catch {
+      // 저장소가 제한되어도 팝업은 정상 동작합니다.
+    }
+
+    function savePreference() {
+      if (hideToday.checked) {
+        try {
+          localStorage.setItem(storageKey, localDate());
+        } catch {
+          // 저장소가 제한된 경우 숨김 설정은 유지되지 않습니다.
+        }
+      }
+    }
+
+    function closePopup() {
+      savePreference();
+      popup.close();
+    }
+
+    document.getElementById("surveyLater")
+      .addEventListener("click", closePopup);
+
+    document.getElementById("surveyJoin")
+      .addEventListener("click", closePopup);
+
+    // Esc 키로 닫을 때도 체크한 설정을 저장합니다.
+    popup.addEventListener("cancel", savePreference);
+
+    if (surveyEnabled && hiddenDate !== localDate()) {
+      popup.showModal();
+    }
+  })();
+</script>
 </body>
 </html>
